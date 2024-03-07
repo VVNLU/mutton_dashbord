@@ -6,6 +6,7 @@ import components from './components'
 // Quasar
 import { Quasar, QInput, QIcon } from 'quasar'
 import 'quasar/dist/quasar.css'
+import '@quasar/extras/material-icons/material-icons.css'
 
 const app = createApp(App)
 

@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@quasar/extras": "^1.16.9",
     "@quasar/vite-plugin": "^1.6.0",
     "quasar": "^2.14.6",
     "vue": "^3.4.19",
