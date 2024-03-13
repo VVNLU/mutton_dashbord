@@ -15,6 +15,7 @@
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^10.9.0",
     "dayjs": "^1.11.10",
+    "pinia": "^2.1.7",
     "quasar": "^2.14.6",
     "vue": "^3.4.19",
     "vue-router": "^4.3.0"

@@ -11,11 +11,16 @@ import '@quasar/extras/material-icons/material-icons.css'
 // plugins
 import { useVuelidate } from './plugins/vuelidate'
 
+// Pinia
+import { createPinia } from 'pinia'
+
 const app = createApp(App)
+const pinia = createPinia()
 
 app.use(Quasar, { components: { QInput, QIcon } })
 app.use(router)
 app.use(components)
 app.use(useVuelidate)
+app.use(pinia)
 
 app.mount('#app')
