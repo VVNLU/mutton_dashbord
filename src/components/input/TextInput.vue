@@ -9,7 +9,6 @@
 
 <script setup>
 import { computed, ref, toRefs, defineProps, defineEmits } from 'vue'
-import { useVModel } from '@vueuse/core'
 import { vuelidate } from '@/plugins/vuelidate'
 
 const props = defineProps({
