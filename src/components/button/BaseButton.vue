@@ -1,16 +1,25 @@
 <template>
-    <div class="q-gutter-y-md">
-        <q-btn :style="{ width: width }" :color="color" :text-color="textColor" :label="label" />
-    </div>
+    <q-btn no-caps class="shadow-1" :label="label" :outline="outline" :rounded="rounded" :color="color" :icon="icon"
+        :size="size" :loading="isloading" />
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { computed, defineProps } from 'vue'
+import { useApp } from '@/stores/app';
+
+const storeApp = useApp()
 
 const props = defineProps({
     label: { type: String },
-    textColor: { type: String, default: 'white' },
+    outline: { type: Boolean, default: false },
+    rounded: { type: Boolean, default: false },
     color: { type: String, default: 'primary' },
-    width: { type: String, default: '60px' }
+    icon: { type: String },
+    size: { type: String, default: 'md' },
+    useLoading: { type: Boolean, default: true }
+})
+
+const isloading = computed(() => {
+    return props.useLoading && (storeApp.isCreate || storeApp.isUpdate || storeApp.isDelete)
 })
 </script>
