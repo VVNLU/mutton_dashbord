@@ -8,10 +8,14 @@ import { Quasar, QInput, QIcon } from 'quasar'
 import 'quasar/dist/quasar.css'
 import '@quasar/extras/material-icons/material-icons.css'
 
+// plugins
+import { useVuelidate } from './plugins/vuelidate'
+
 const app = createApp(App)
 
 app.use(Quasar, { components: { QInput, QIcon } })
 app.use(router)
 app.use(components)
+app.use(useVuelidate)
 
 app.mount('#app')
