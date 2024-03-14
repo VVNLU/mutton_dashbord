@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps } from 'vue'
+import { defineProps } from 'vue'
 
 const props = defineProps({
     label: { type: String },
