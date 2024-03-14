@@ -1,6 +1,6 @@
 <template>
     <q-btn no-caps class="shadow-1" :label="label" :outline="outline" :rounded="rounded" :color="color" :icon="icon"
-        :size="size" :loading="isloading" />
+        :size="size" :loading="isLoading" />
 </template>
 
 <script setup>
@@ -19,7 +19,7 @@ const props = defineProps({
     useLoading: { type: Boolean, default: true }
 })
 
-const isloading = computed(() => {
+const isLoading = computed(() => {
     return props.useLoading && (storeApp.isCreate || storeApp.isUpdate || storeApp.isDelete)
 })
 </script>
