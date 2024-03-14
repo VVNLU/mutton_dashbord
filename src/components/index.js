@@ -1,3 +1,4 @@
+import BaseForm from './input/BaseForm.vue'
 import TextInput from './input/TextInput.vue'
 import PasswordInput from './input/PasswordInput.vue'
 import BaseButton from './button/BaseButton.vue'
@@ -6,6 +7,7 @@ import CancelButton from './button/CancelButton.vue'
 
 export default {
   install(app) {
+    app.component('BaseForm', BaseForm)
     app.component('TextInput', TextInput)
     app.component('PasswordInput', PasswordInput)
     app.component('BaseButton', BaseButton)
