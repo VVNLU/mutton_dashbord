@@ -9,9 +9,13 @@
                         </div>
                     </q-card-section>
                     <q-card-section>
-                        <account-input />
-                        <password-input />
-                        <confirm-button :width="'100%'" />
+                        <base-form ref="form">
+                            <text-input v-model="formData.account" :label="'帳號'" :placeholder="'請輸入帳號'" lazy-rules
+                                :rules="[$rules.required('帳號必填')]" />
+                            <password-input v-model="formData.password" @keyup.enter="handleLogin" />
+                            <confirm-button class="q-mb-md" style="width: 100%" :label="'登入'"
+                                @click.prevent="handleLogin" />
+                        </base-form>
                     </q-card-section>
                 </q-card>
             </q-page>
@@ -19,15 +23,34 @@
     </q-layout>
 </template>
 
-<style scoped>
-.bg-page {
-    background-image: linear-gradient(180deg,
-            #e9dac6 0%,
-            #d3c2a5 50%,
-            #C5A883 100%);
+<script setup>
+import { reactive, nextTick, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import useCRUD from '@/hooks/useCRUD'
+
+const router = useRouter()
+const formData = reactive({
+    account: '',
+    password: '',
+})
+
+const handleLogin = async () => {
+    form.value.validate().then(async (success) => {
+        if (success) {
+            router.push({ path: '/' })
+        }
+    })
 }
 
-.bg-card {
-    background-color: #efe4d4;
+const { form } = useCRUD({
+    createSuccess: '登入成功'
+})
+</script>
+
+<style scoped>
+.bg-page {
+    background-image: url('@/assets/login-image.jpg');
+    background-size: cover;
+    opacity: 0.9;
 }
 </style>
