@@ -13,10 +13,8 @@ export default defineComponent({
     props: {},
     emits: ['submit', 'reset'],
     setup(props, { emit }) {
-        // data
         const form = ref()
 
-        // methods
         const validate = () => {
             return form.value.validate()
         }
