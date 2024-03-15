@@ -3,6 +3,8 @@ import vue from '@vitejs/plugin-vue'
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 import { fileURLToPath, URL } from 'url'
 import WindiCSS from 'vite-plugin-windicss'
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
+import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,6 +16,11 @@ export default defineConfig({
       sassVariables: 'src/quasar-variables.sass',
     }),
     WindiCSS(),
+    VueI18nPlugin({
+      compositionOnly: false,
+      runtimeOnly: false,
+      include: ['./src/locales/**/*.json'],
+    }),
   ],
   resolve: {
     alias: {
