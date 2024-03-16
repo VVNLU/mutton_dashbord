@@ -36,7 +36,7 @@ const filterAsyncRoutes = (routes, roles, permissions) => {
   return res
 }
 
-export const uerPermission = defineStore({
+export const usePermission = defineStore({
   id: 'permission',
   state: () => ({
     routes: [],
