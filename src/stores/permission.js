@@ -1,4 +1,4 @@
-import { asyncRoutes, constantRoutes } from '@/router'
+import { constantRoutes } from '@/router'
 import { defineStore } from 'pinia'
 
 const canAccess = (roles, permissions, route) => {
@@ -47,9 +47,9 @@ export const usePermission = defineStore({
       return new Promise((resolve) => {
         let accessedRoutes = []
         if (roles.includes('admin')) {
-          accessedRoutes = asyncRoutes || []
+          accessedRoutes = constantRoutes || []
         } else {
-          accessedRoutes = filterAsyncRoutes(asyncRoutes, roles, permissions)
+          accessedRoutes = filterAsyncRoutes(constantRoutes, roles, permissions)
         }
         this.setRoutes(accessedRoutes)
         resolve(accessedRoutes)
