@@ -4,7 +4,7 @@ import router from './router'
 import components from './components'
 
 // Quasar
-import { Quasar, QInput, QIcon } from 'quasar'
+import quasar from '@/plugins/quasar'
 import 'quasar/dist/quasar.css'
 import '@quasar/extras/material-icons/material-icons.css'
 
@@ -22,7 +22,7 @@ import '@/styles/index.scss'
 const app = createApp(App)
 const pinia = createPinia()
 
-app.use(Quasar, { components: { QInput, QIcon } })
+app.use(quasar)
 app.use(router)
 app.use(components)
 app.use(useVuelidate)
