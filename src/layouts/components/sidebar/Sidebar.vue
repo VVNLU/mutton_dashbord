@@ -1,5 +1,5 @@
 <template>
-    <q-drawer show-if-above bordered :width="260" class="bg-grey-3 shadow-7 text-blue-grey-7">
+    <q-drawer v-model="sidebarOpened" show-if-above bordered :width="260" class="bg-grey-3 shadow-7 text-blue-grey-7">
         <q-item-label header class="text-center text-h6 header-titles">羊肉盧後台管理</q-item-label>
         <q-scroll-area class="h-[calc(95%_-_50px)]" style="border-right: 1px solid #ddd;">
             <q-list>
