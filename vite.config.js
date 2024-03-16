@@ -13,7 +13,7 @@ export default defineConfig({
       template: { transformAssetUrls },
     }),
     quasar({
-      sassVariables: 'src/quasar-variables.sass',
+      sassVariables: 'src/styles/abstracts/quasar-variables.scss',
     }),
     WindiCSS(),
     VueI18nPlugin({

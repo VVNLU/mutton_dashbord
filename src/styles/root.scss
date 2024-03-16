@@ -1,0 +1,15 @@
+@import "./abstracts/quasar-variables.scss";
+
+:root {
+  /* function color */
+  --color-primary: #{$primary};
+  --color-secondary: #{$secondary};
+  --color-accent: #{$accent};
+  --color-dark: #{$dark};
+  --color-positive: #{$positive};
+  --color-negative: #{$negative};
+  --color-info: #{$info};
+  --color-warning: #{$warning};
+
+  --color-func-focus: var(--color-accent);
+}
