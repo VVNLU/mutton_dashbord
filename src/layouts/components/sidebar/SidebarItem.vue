@@ -17,28 +17,30 @@
 </template>
 
 <script setup>
-import { computed, defineProps, onMounted, ref, toRefs } from 'vue';
-import { useRouter } from 'vue-router';
-import path from 'path'
-import useEventBus from '@/hooks/useEventBus'
 import SidebarLink from './SidebarLink.vue'
+import path from 'path'
+import { ref, toRefs, computed, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import useEventBus from '@/hooks/useEventBus'
 
 const props = defineProps({
     item: { type: Object },
     activeHeaderClass: { type: String },
     activeExpandIconClass: { type: String },
     isNest: { type: Boolean, default: false },
-    basePath: { type: String }
+    basePath: { type: String },
 })
 
-const { emit: busEmit, bus } = useEventBus()
-const route = useRouter()
+const route = useRoute()
 const { item, activeHeaderClass, activeExpandIconClass, basePath } = toRefs(props)
 const open = ref(false)
 const active = ref(false)
 const headerClassDefault = ref('bg-primary text-white')
+const expandIconClassDefault = ref('text-white')
 const headerClassActive = ref('')
 const expandIconClassActive = ref('')
+
+const { emit: busEmit, bus } = useEventBus()
 
 const visibleChildren = computed(() => {
     return item.value.children.filter((item) => !item.hidden)
@@ -53,7 +55,7 @@ const onlyOneChild = computed(() => {
         if (!item.hidden) {
             oneChild = item
         }
-        return
+        return !item.hidden
     })
     if (item.value.meta.slug === 'link') return oneChild
     if (item.value.meta.slug === 'dropdown' && showingChildren.length !== 0) { return false }
@@ -97,7 +99,7 @@ const changeActiveHeaderStyle = (currentItem) => {
         return
     }
     headerClassActive.value = activeHeaderClass.value ? activeHeaderClass.value : headerClassDefault.value
-    expandIconClassActive.value = activeExpandIconClass.value ? activeExpandIconClass.value : expandIconClassActive.value
+    expandIconClassActive.value = activeExpandIconClass.value ? activeExpandIconClass.value : expandIconClassDefault.value
 }
 
 // 解析絕對路徑
