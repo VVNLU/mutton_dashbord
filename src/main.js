@@ -15,7 +15,7 @@ import { useVuelidate } from './plugins/vuelidate'
 import { createPinia } from 'pinia'
 
 // i18n
-import i18n from './plugins/i18n'
+// import i18n from './plugins/i18n'
 
 import '@/styles/index.scss'
 
@@ -27,6 +27,6 @@ app.use(router)
 app.use(components)
 app.use(useVuelidate)
 app.use(pinia)
-app.use(i18n)
+// app.use(i18n)
 
 app.mount('#app')
