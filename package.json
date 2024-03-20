@@ -17,6 +17,8 @@
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^10.9.0",
     "dayjs": "^1.11.10",
+    "nprogress": "^0.2.0",
+    "path-browserify": "^1.0.1",
     "pinia": "^2.1.7",
     "quasar": "^2.14.6",
     "stylelint-config-standard-scss": "^13.0.0",
@@ -32,6 +34,8 @@
     "sass-loader": "^14.1.1",
     "vite": "^5.1.4",
     "vite-plugin-windicss": "^1.9.3",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4",
     "windicss": "^3.5.6"
   }
 }
