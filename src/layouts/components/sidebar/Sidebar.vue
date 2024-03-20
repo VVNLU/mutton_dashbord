@@ -1,6 +1,6 @@
 <template>
-    <q-drawer v-model="sidebarOpened" show-if-above bordered :width="260" class="bg-grey-3 shadow-7 text-blue-grey-7">
-        <q-item-label header class="text-center text-h6 header-title">羊肉盧後台管理</q-item-label>
+    <q-drawer v-model="sidebarOpened" show-if-above bordered :width="260" class="bg-orange-11 shadow-7">
+        <q-item-label header class="text-white text-center text-h6 header-title">羊肉盧後台管理</q-item-label>
         <q-separator />
 
         <!--<q-scroll-area class="h-[calc(95%_-_50px)]" style="border-right: 1px solid #ddd;"> -->
@@ -35,3 +35,9 @@ const sidebarOpened = computed({
 // })
 
 </script>
+
+<style scoped>
+.header-title {
+    text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
+}
+</style>
