@@ -1,16 +1,16 @@
 <template>
     <div v-if="!item.hidden && item.children && !onlyOneChild?.noShowingChildren">
         <template v-if="onlyOneChild && !item.alwaysShow">
-            <sidebar-link :key="onlyOneChild.path" :to="resolvePath(onlyOneChild.path)"
-                :title="$t(onlyOneChild.meta.title)" :icon="onlyOneChild.meta.icon" @click="onclick(onlyOneChild)" />
+            <sidebar-link :key="onlyOneChild.path" :to="resolvePath(onlyOneChild.path)" :title="onlyOneChild.meta.title"
+                :icon="onlyOneChild.meta.icon" @click="onclick(onlyOneChild)" />
         </template>
         <q-expansion-item v-else v-model="open" :key="item.groupName" :group="item.groupName" :icon="item.meta.icon"
-            :label="$t(item.meta.title)" :header-class="headerClassActive" :expand-icon-class="expandIconClassActive">
+            :label="item.meta.title" :header-class="headerClassActive" :expand-icon-class="expandIconClassActive">
             <q-list v-for="(childItem, childIndex) in visibleChildren" :key="childIndex" class="q-pl-lg">
                 <sidebar-item v-if="childItem.children && childItem.children.length > 0" :is-nest="true"
                     :item="childItem" :base-path="resolvePath(childItem.path)" />
                 <sidebar-link v-else :key="childItem.path" :to="resolvePath(childItem.path)"
-                    :title="$t(childItem.meta.title)" :icon="childItem.meta.icon" @click="onclick(childItem)" />
+                    :title="childItem.meta.title" :icon="childItem.meta.icon" @click="onclick(childItem)" />
             </q-list>
         </q-expansion-item>
     </div>
@@ -43,7 +43,8 @@ const expandIconClassActive = ref('')
 const { emit: busEmit, bus } = useEventBus()
 
 const visibleChildren = computed(() => {
-    return item.value.children.filter((item) => !item.hidden)
+    const children = item.value.children.filter((item) => !item.hidden)
+    return children
 })
 
 const onlyOneChild = computed(() => {
