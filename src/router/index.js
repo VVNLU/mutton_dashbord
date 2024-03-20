@@ -2,7 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import MainLayout from '@/layouts/MainLayout.vue'
 
-const constantRoutes = [
+/* Router Modules */
+import carouselRouter from './modules/carousel'
+
+export const constantRoutes = [
   {
     path: '/login',
     component: () => import('@/pages/login/index.vue'),
@@ -13,7 +16,7 @@ const constantRoutes = [
     redirect: '/dashboard',
     children: [
       {
-        path: 'dashboard',
+        path: '/dashboard',
         component: () => import('@/pages/dashboard/index.vue'),
         name: 'Dashboard',
       },
@@ -21,11 +24,21 @@ const constantRoutes = [
   },
 ]
 
-const asyncRoutes = []
+export const asyncRoutes = [carouselRouter]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [...constantRoutes, ...asyncRoutes],
+  routes: [...constantRoutes, ...asyncRoutes]
 })
+
+// export function addRoutes(routes = [], { parent = '' }) {
+//   routes.forEach((route) => {
+//     if (parent) {
+//       router.addRoute(parent, route)
+//     } else {
+//       router.addRoute(route)
+//     }
+//   })
+// }
 
 export default router
