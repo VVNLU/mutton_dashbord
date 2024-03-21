@@ -9,6 +9,8 @@ export const useApp = defineStore({
     },
     isLoading: false,
     isCreate: false,
+    isRead: false,
+    isReadList: false,
     isUpdate: false,
     isDelete: false,
   }),
