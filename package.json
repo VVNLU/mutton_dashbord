@@ -17,6 +17,7 @@
     "@vuelidate/validators": "^2.0.4",
     "@vueuse/core": "^10.9.0",
     "dayjs": "^1.11.10",
+    "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
     "path-browserify": "^1.0.1",
     "pinia": "^2.1.7",
