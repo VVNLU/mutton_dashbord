@@ -8,6 +8,7 @@ import CancelButton from './button/CancelButton.vue'
 import Pagination from './Pagination.vue'
 import VxeServerTable from './VxeServerTable.vue'
 import SvgIcon from './SvgIcon.vue'
+import PageHeader from './PageHeader.vue'
 
 export default {
   install(app) {
@@ -21,5 +22,6 @@ export default {
     app.component('Pagination', Pagination)
     app.component('VxeServerTable', VxeServerTable)
     app.component('SvgIcon', SvgIcon)
+    app.component('PageHeader', PageHeader)
   },
 }
