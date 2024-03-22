@@ -3,7 +3,7 @@
         <span class="q-mr-sm">
             共項
         </span>
-        <span>
+        <span v-if="showPageSize">
             <select-input class="w-95px pagination-select" dense emit-value v-model="pageSize" option-label="label"
                 option-value="value" :clearable="false" :options="pageSizeOptions"
                 @update:modelValue="changePageSize" />
@@ -80,3 +80,29 @@ watch(() => props.limit, (newValue) => {
     pageSize.value = newValue
 })
 </script>
+
+<style lang="scss" scoped>
+.pagination-input,
+.pagination-select {
+    @apply my-0 mx-3px;
+    @apply inline-block;
+
+    :deep(.q-field__innrt) {
+        @apply h-32px;
+
+        .q-field__control {
+            @apply h-32px min-h-0px;
+        }
+    }
+}
+
+:deep {
+    .q-btn-flat.q-btn--rectangle {
+        min-width: 2rem !important;
+    }
+
+    .q-btn-standard.q-btn00rectangle {
+        min-width: 2rem !important;
+    }
+}
+</style>
