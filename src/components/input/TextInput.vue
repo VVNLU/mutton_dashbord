@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { computed, ref, toRefs, defineProps, defineEmits } from 'vue'
+import { computed, ref, toRefs, defineProps } from 'vue'
 import { vuelidate } from '@/plugins/vuelidate'
 
 const props = defineProps({
