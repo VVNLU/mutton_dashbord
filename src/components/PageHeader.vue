@@ -6,7 +6,7 @@
                 <slot />
             </h1>
         </div>
-        <div v-if="$slot.action">
+        <div v-if="$slots.action">
             <slot name="action" />
         </div>
     </div>
