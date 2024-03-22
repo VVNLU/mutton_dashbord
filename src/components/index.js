@@ -7,6 +7,7 @@ import ConfirmButton from './button/ConfirmButton.vue'
 import CancelButton from './button/CancelButton.vue'
 import Pagination from './Pagination.vue'
 import VxeServerTable from './VxeServerTable.vue'
+import SvgIcon from './SvgIcon.vue'
 
 export default {
   install(app) {
@@ -19,5 +20,6 @@ export default {
     app.component('CancelButton', CancelButton)
     app.component('Pagination', Pagination)
     app.component('VxeServerTable', VxeServerTable)
+    app.component('SvgIcon', SvgIcon)
   },
 }
