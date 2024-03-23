@@ -9,7 +9,7 @@ import Pagination from './Pagination.vue'
 import VxeServerTable from './VxeServerTable.vue'
 import SvgIcon from './SvgIcon.vue'
 import PageHeader from './PageHeader.vue'
-import ImageColumn from './table-column/ImageColumn'
+import ImageColumn from './table-column/ImageColumn.vue'
 
 export default {
   install(app) {
