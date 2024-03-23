@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center justify-left">
-        <span class="q-mr-sm">
+        <span class="q-ml-sm">
             共 {{ total }} 項
         </span>
         <span v-if="showPageSize">
