@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center justify-left">
         <span class="q-mr-sm">
-            共項
+            共 {{ total }} 項
         </span>
         <span v-if="showPageSize">
             <select-input class="w-95px pagination-select" dense emit-value v-model="pageSize" option-label="label"
@@ -9,14 +9,13 @@
                 @update:modelValue="changePageSize" />
         </span>
         <q-pagination boundary-links v-model="observeCurrent" :max="maxSize" :max-page="4" :boundary-number="false"
-            icon-first="keyboard_double_arrow_left" icon-last="keyboard_double_arrow_right"
+            color="brown-5" icon-first="keyboard_double_arrow_left" icon-last="keyboard_double_arrow_right"
             @update:modelValue="handleCurrentChange" />
-        <div>
-            <span>前往</span>
-            <text-input class="w-55px pagination-input" dense v-model.lazy="toPage" :clearable="false"
-                @change="changeToPage" @keyup.enter="changeToPage" />
-            <span>頁</span>
-        </div>
+        <span>前往</span>
+        <!-- 待修正style  -->
+        <text-input class="w-55px pagination-input" dense v-model.lazy="toPage" :clearable="false"
+            @change="changeToPage" @keyup.enter="changeToPage" />
+        <span>頁</span>
     </div>
 </template>
 
@@ -87,7 +86,7 @@ watch(() => props.limit, (newValue) => {
     @apply my-0 mx-3px;
     @apply inline-block;
 
-    :deep(.q-field__innrt) {
+    :deep(.q-field__inner) {
         @apply h-32px;
 
         .q-field__control {
@@ -97,11 +96,11 @@ watch(() => props.limit, (newValue) => {
 }
 
 :deep {
-    .q-btn-flat.q-btn--rectangle {
+    .q-btn--flat.q-btn--rectangle {
         min-width: 2rem !important;
     }
 
-    .q-btn-standard.q-btn00rectangle {
+    .q-btn--standard.q-btn--rectangle {
         min-width: 2rem !important;
     }
 }
