@@ -9,6 +9,7 @@ import Pagination from './Pagination.vue'
 import VxeServerTable from './VxeServerTable.vue'
 import SvgIcon from './SvgIcon.vue'
 import PageHeader from './PageHeader.vue'
+import ImageColumn from './table-column/ImageColumn'
 
 export default {
   install(app) {
@@ -23,5 +24,6 @@ export default {
     app.component('VxeServerTable', VxeServerTable)
     app.component('SvgIcon', SvgIcon)
     app.component('PageHeader', PageHeader)
+    app.component('ImageColumn', ImageColumn)
   },
 }
