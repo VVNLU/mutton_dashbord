@@ -3,6 +3,7 @@ import TextInput from './input/TextInput.vue'
 import PasswordInput from './input/PasswordInput.vue'
 import SelectInput from './input/SelectInput.vue'
 import ToggleInput from './input/ToggleInput.vue'
+import SkeletonSquare from './skeleton/SkeletonSquare.vue'
 import AddButton from './button/AddButton.vue'
 import BaseButton from './button/BaseButton.vue'
 import BaseIconButton from './button/BaseIconButton.vue'
@@ -24,6 +25,7 @@ export default {
     app.component('PasswordInput', PasswordInput)
     app.component('SelectInput', SelectInput)
     app.component('ToggleInput', ToggleInput)
+    app.component('SkeletonSquare', SkeletonSquare)
     app.component('AddButton', AddButton)
     app.component('BaseButton', BaseButton)
     app.component('BaseIconButton', BaseIconButton)
