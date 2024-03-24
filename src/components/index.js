@@ -10,6 +10,7 @@ import ConfirmButton from './button/ConfirmButton.vue'
 import CancelButton from './button/CancelButton.vue'
 import DeleteIconButton from './button/DeleteIconButton.vue'
 import EditIconButton from './button/EditIconButton.vue'
+import BaseDialog from './dialog/BaseDialog.vue'
 import Pagination from './Pagination.vue'
 import VxeServerTable from './VxeServerTable.vue'
 import SvgIcon from './SvgIcon.vue'
@@ -30,6 +31,7 @@ export default {
     app.component('CancelButton', CancelButton)
     app.component('DeleteIconButton', DeleteIconButton)
     app.component('EditIconButton', EditIconButton)
+    app.component('BaseDialog', BaseDialog)
     app.component('Pagination', Pagination)
     app.component('VxeServerTable', VxeServerTable)
     app.component('SvgIcon', SvgIcon)
