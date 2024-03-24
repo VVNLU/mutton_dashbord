@@ -5,6 +5,7 @@ import SelectInput from './input/SelectInput.vue'
 import ToggleInput from './input/ToggleInput.vue'
 import AddButton from './button/AddButton.vue'
 import BaseButton from './button/BaseButton.vue'
+import BaseIconButton from './button/BaseIconButton.vue'
 import ConfirmButton from './button/ConfirmButton.vue'
 import CancelButton from './button/CancelButton.vue'
 import Pagination from './Pagination.vue'
@@ -22,6 +23,7 @@ export default {
     app.component('ToggleInput', ToggleInput)
     app.component('AddButton', AddButton)
     app.component('BaseButton', BaseButton)
+    app.component('BaseIconButton', BaseIconButton)
     app.component('ConfirmButton', ConfirmButton)
     app.component('CancelButton', CancelButton)
     app.component('Pagination', Pagination)
