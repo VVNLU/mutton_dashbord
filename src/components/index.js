@@ -3,6 +3,7 @@ import TextInput from './input/TextInput.vue'
 import PasswordInput from './input/PasswordInput.vue'
 import SelectInput from './input/SelectInput.vue'
 import ToggleInput from './input/ToggleInput.vue'
+import AddButton from './input/AddButton.vue'
 import BaseButton from './button/BaseButton.vue'
 import ConfirmButton from './button/ConfirmButton.vue'
 import CancelButton from './button/CancelButton.vue'
@@ -19,6 +20,7 @@ export default {
     app.component('PasswordInput', PasswordInput)
     app.component('SelectInput', SelectInput)
     app.component('ToggleInput', ToggleInput)
+    app.component('AddButton', AddButton)
     app.component('BaseButton', BaseButton)
     app.component('ConfirmButton', ConfirmButton)
     app.component('CancelButton', CancelButton)
