@@ -8,3 +8,13 @@ export const readFileAsText = (file) => {
         reader.readAsText(file)
     })
 }
+
+export const fetchBlobData = (fileSrc, fileOption = null) => {
+    return new Promise((resolve) => {
+        fetch(fileSrc, fileOption)
+            .then((res) => res.blob())
+            .then((blob) => {
+                resolve(readFileAsText(blob))
+            })
+    })
+}
