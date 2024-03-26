@@ -2,7 +2,6 @@ import { useAsyncState } from '@vueuse/core'
 import { useApp } from '@/stores/app.js'
 import { ref, computed } from 'vue'
 import useNotify from './useNotify'
-import { not } from '@vuelidate/validators'
 
 export default function useCRUD({
   createFetch,
