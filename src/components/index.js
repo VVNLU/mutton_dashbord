@@ -13,6 +13,7 @@ import DeleteIconButton from './button/DeleteIconButton.vue'
 import EditIconButton from './button/EditIconButton.vue'
 import BaseDialog from './dialog/BaseDialog.vue'
 import ImagePreviewDialog from './dialog/ImagePreviewDialog.vue'
+import BaseImage from './image/BaseImage.vue'
 import Pagination from './Pagination.vue'
 import VxeServerTable from './VxeServerTable.vue'
 import SvgIcon from './SvgIcon.vue'
@@ -36,6 +37,7 @@ export default {
     app.component('EditIconButton', EditIconButton)
     app.component('BaseDialog', BaseDialog)
     app.component('ImagePreviewDialog', ImagePreviewDialog)
+    app.component('BaseImage', BaseImage)
     app.component('Pagination', Pagination)
     app.component('VxeServerTable', VxeServerTable)
     app.component('SvgIcon', SvgIcon)
