@@ -1,5 +1,5 @@
 import { onMounted, reactive, ref } from "vue";
-import { useSessionStorage } from "./useSessionStorage";
+import useSessionStorage from "./useSessionStorage";
 import { mapKeys } from "lodash-es";
 
 export default function useVxeServerDataTable({
