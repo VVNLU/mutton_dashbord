@@ -1,4 +1,5 @@
 import BaseForm from './input/BaseForm.vue'
+import DateRangeInput from './input/DateRangeInput.vue'
 import TextInput from './input/TextInput.vue'
 import PasswordInput from './input/PasswordInput.vue'
 import SearchInput from './input/SearchInput.vue'
@@ -25,6 +26,7 @@ import ImageColumn from './table-column/ImageColumn.vue'
 export default {
   install(app) {
     app.component('BaseForm', BaseForm)
+    app.component('DateRangeInput', DateRangeInput)
     app.component('TextInput', TextInput)
     app.component('PasswordInput', PasswordInput)
     app.component('SearchInput', SearchInput)
