@@ -11,6 +11,7 @@ import '@quasar/extras/material-icons/material-icons.css'
 // plugins
 import { useVuelidate } from './plugins/vuelidate'
 import vxeTable from './plugins/vxe-table'
+import { useDayjs } from '@/plugins/dayjs'
 
 // Pinia
 import { createPinia } from 'pinia'
@@ -28,6 +29,7 @@ app.use(router)
 app.use(components)
 app.use(useVuelidate)
 app.use(vxeTable)
+app.use(useDayjs)
 app.use(pinia)
 // app.use(i18n)
 
