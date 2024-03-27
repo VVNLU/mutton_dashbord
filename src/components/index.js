@@ -15,6 +15,7 @@ import EditIconButton from './button/EditIconButton.vue'
 import BaseDialog from './dialog/BaseDialog.vue'
 import ImagePreviewDialog from './dialog/ImagePreviewDialog.vue'
 import BaseImage from './image/BaseImage.vue'
+import ListSearchBlock from './ListSearchBlock.vue'
 import Pagination from './Pagination.vue'
 import VxeServerTable from './VxeServerTable.vue'
 import SvgIcon from './SvgIcon.vue'
@@ -26,7 +27,7 @@ export default {
     app.component('BaseForm', BaseForm)
     app.component('TextInput', TextInput)
     app.component('PasswordInput', PasswordInput)
-    app.component('SearchInput', SearchInput)
+    app.component('SearchInput', PasswordInput)
     app.component('SelectInput', SelectInput)
     app.component('ToggleInput', ToggleInput)
     app.component('SkeletonSquare', SkeletonSquare)
@@ -40,6 +41,7 @@ export default {
     app.component('BaseDialog', BaseDialog)
     app.component('ImagePreviewDialog', ImagePreviewDialog)
     app.component('BaseImage', BaseImage)
+    app.component('ListSearchBlock', ListSearchBlock)
     app.component('Pagination', Pagination)
     app.component('VxeServerTable', VxeServerTable)
     app.component('SvgIcon', SvgIcon)
