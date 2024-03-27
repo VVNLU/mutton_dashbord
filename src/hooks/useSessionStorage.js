@@ -5,7 +5,7 @@ export default function useSessionStorage() {
     }
     // 獲取
     const getSessionStorage = (key) => {
-        const json = window.sessionStorage.getItem(vel)
+        const json = window.sessionStorage.getItem(key)
         return JSON.parse(json)
     }
     // 移除部分
