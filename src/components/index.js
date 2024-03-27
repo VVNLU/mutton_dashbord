@@ -27,7 +27,7 @@ export default {
     app.component('BaseForm', BaseForm)
     app.component('TextInput', TextInput)
     app.component('PasswordInput', PasswordInput)
-    app.component('SearchInput', PasswordInput)
+    app.component('SearchInput', SearchInput)
     app.component('SelectInput', SelectInput)
     app.component('ToggleInput', ToggleInput)
     app.component('SkeletonSquare', SkeletonSquare)
