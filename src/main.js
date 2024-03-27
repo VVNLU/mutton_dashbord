@@ -10,6 +10,7 @@ import '@quasar/extras/material-icons/material-icons.css'
 
 // plugins
 import { useVuelidate } from './plugins/vuelidate'
+import vxeTable from './plugins/vxe-table'
 
 // Pinia
 import { createPinia } from 'pinia'
@@ -26,6 +27,7 @@ app.use(quasar)
 app.use(router)
 app.use(components)
 app.use(useVuelidate)
+app.use(vxeTable)
 app.use(pinia)
 // app.use(i18n)
 
