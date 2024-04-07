@@ -19,6 +19,7 @@ import EditIconButton from './button/EditIconButton.vue'
 import BaseDialog from './dialog/BaseDialog.vue'
 import ImagePreviewDialog from './dialog/ImagePreviewDialog.vue'
 import BaseImage from './image/BaseImage.vue'
+import ImageCropper from './ImageCropper.vue'
 import ListSearchBlock from './ListSearchBlock.vue'
 import Pagination from './Pagination.vue'
 import VxeServerTable from './VxeServerTable.vue'
@@ -49,6 +50,7 @@ export default {
     app.component('BaseDialog', BaseDialog)
     app.component('ImagePreviewDialog', ImagePreviewDialog)
     app.component('BaseImage', BaseImage)
+    app.component('ImageCropper', ImageCropper)
     app.component('ListSearchBlock', ListSearchBlock)
     app.component('Pagination', Pagination)
     app.component('VxeServerTable', VxeServerTable)
