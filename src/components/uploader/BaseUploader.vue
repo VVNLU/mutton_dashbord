@@ -22,14 +22,15 @@
     </div>
 </template>
 
-<script>
-import { defineProps, ref } from 'vue-demi'
+<script setup>
+import { defineProps, ref } from 'vue'
+
 const props = defineProps({
     accept: { type: String },
     imgSrc: { type: String },
     maxFileSize: { type: Number },
     multiple: { type: Boolean },
-    disable: { type: Boolean, defalut: false },
+    disable: { type: Boolean, default: false },
 })
 const emit = defineEmits(['rejected', 'added'])
 
