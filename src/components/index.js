@@ -26,6 +26,7 @@ import VxeServerTable from './VxeServerTable.vue'
 import SvgIcon from './SvgIcon.vue'
 import PageHeader from './PageHeader.vue'
 import ImageColumn from './table-column/ImageColumn.vue'
+import BaseUploader from './uploader/BaseUploader.vue'
 
 export default {
   install(app) {
@@ -57,5 +58,6 @@ export default {
     app.component('SvgIcon', SvgIcon)
     app.component('PageHeader', PageHeader)
     app.component('ImageColumn', ImageColumn)
+    app.component('BaseUploader', BaseUploader)
   },
 }
