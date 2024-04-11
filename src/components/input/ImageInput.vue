@@ -1,0 +1,156 @@
+<template>
+    <q-field v-model="observeValue" :outlined="outlined" class="h-full full-width">
+        <template #control>
+            <div class="mt-1rem input-image">
+                <div class="cursor-pointer flex min-h-34 items-center justify-center" @click="showDialog = true">
+                    <img v-if="preview" class="w-full transform scale-98" :scr="preview" alt="">
+                    <q-icon v-else name="add" size="2em" />
+                </div>
+                <!-- ANCHOR 上傳 -->
+                <base-dialog v-model="showDialog" title="上傳圖片：" @show="onOpen" @save="onSave" @cancel="onCancelCropper">
+                    <base-form ref="form">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <q-item>
+                                    <q-item-section>
+                                        <image-uploader ref="imageUpload" class="full-width" :image-src="uploadPreview"
+                                            @onFile="onFile" />
+                                    </q-item-section>
+                                </q-item>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <q-item>
+                                    <text-input v-model="state.title" class="full-width" label="圖片標題"
+                                        placeholder="請輸入圖片標題" />
+                                </q-item>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <q-item>
+                                    <text-input v-model="state.alt" class="full-width" label="圖片描述文字"
+                                        placeholder="請輸入圖片描述文字" hint="作為圖片替代文字，用來描述圖片內容，當圖片失效時有會顯示" />
+                                </q-item>
+                            </div>
+                        </div>
+                    </base-form>
+                </base-dialog>
+                <base-dialog v-model="showCropper" title="裁切圖片：" @save="onCropper" @cancel="onCancelCropper">
+                    <image-cropper ref="cropper" :source="tempCropper" :aspect-ratio="aspect" />
+                </base-dialog>
+            </div>
+        </template>
+    </q-field>
+</template>
+
+<script setup>
+import { computed, defineProps, reactive, ref } from 'vue';
+import useImgStorage from '@/hooks/useImgStorage'
+
+const props = defineProps({
+    modelValue: { type: [Object, File, String] },
+    error: { type: String, default: '' },
+    accept: { type: String, default: 'image/png, image/jpeg, image/jpg' },
+    aspect: { type: Number },
+    outlined: { type: Boolean, default: true },
+    useCropper: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:modelValue'])
+
+const imageUpload = ref()
+const cropper = ref()
+const showDialog = ref(false)
+const tempCropper = ref(null) // cropper 暫存圖片資料
+const showCropper = ref(false)
+let tempRaw = null // 存放圖片原始資料(type, name)
+const state = reactive({
+    alt: '',
+    title: '',
+    image: '',
+})
+
+const observeValue = computed({
+    get() {
+        return props.modelValue
+    },
+    set(value) {
+        emit('update:modelValue', value)
+    }
+})
+
+const preview = computed(() => {
+    const { blobURL, url, filename } = observeValue.value || {}
+    if (blobURL) return blobURL
+    if (url) return url
+    return getImageSrc({ filename, size: '200x' })
+})
+
+const uploadPreview = computed(() => {
+    const { blobURL, url, filename } = state.value || {}
+    if (blobURL) return blobURL
+    if (url) return url
+    return getImageSrc({ filename, size: '200x' })
+})
+
+const { getImageSrc } = useImgStorage()
+
+const onFile = (fileObj) => {
+    const { file, base64 } = fileObj
+    tempCropper.value = base64
+    tempRaw = file
+    if (props.useCropper) {
+        showCropper.value = true
+    } else {
+        setImage(URL.createObjectURL(file), file, base64)
+    }
+    imageUpload.value.removeQueuedFiles()
+}
+
+const onCropper = async () => {
+    const { canvas } = await cropper.value.getResult()
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, tempRaw.type))
+    const base64 = canvas.toDataURL(tempRaw.type)
+    const file = new file(
+        [blob],
+        tempRaw.name,
+        { type: tempRaw.type }
+    )
+    setImage(URL.createObjectURL(blob), file, base64)
+    showCropper.value = false
+}
+
+const onOpen = () => {
+    state.image = props.modelValue
+    if (props.modelValue !== null) {
+        const { alt, title } = props.modelValue
+        state.alt = alt
+        state.title = title
+    }
+}
+
+const onSave = () => {
+    const { image, alt, title } = state
+    observeValue.value = { ...image, alt, title }
+    showDialog.value = false
+}
+
+const onCancelCropper = () => {
+    tempRaw = null
+    tempCropper.value = null
+    showCropper.value = false
+}
+
+const setImage = (blobURL, file, base64) => {
+    state.image = {
+        blobURL: blobURL,
+        raw: file,
+        base64: base64
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.input-image {
+    @apply w-full;
+
+    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%' fill='none' stroke='%23aaaaaa' stroke-width='5' stroke-dasharray='9%2c 18' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+}
+</style>

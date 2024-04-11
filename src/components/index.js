@@ -1,6 +1,7 @@
 import BaseForm from './input/BaseForm.vue'
 import DateInput from './input/DateInput.vue'
 import DateRangeInput from './input/DateRangeInput.vue'
+import ImageInput from './input/ImageInput.vue'
 import NumberInput from './input/NumberInput.vue'
 import TextInput from './input/TextInput.vue'
 import PasswordInput from './input/PasswordInput.vue'
@@ -34,6 +35,7 @@ export default {
     app.component('BaseForm', BaseForm)
     app.component('DateInput', DateInput)
     app.component('DateRangeInput', DateRangeInput)
+    app.component('ImageInput', ImageInput)
     app.component('NumberInput', NumberInput)
     app.component('TextInput', TextInput)
     app.component('PasswordInput', PasswordInput)
