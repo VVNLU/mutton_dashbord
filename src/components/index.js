@@ -17,6 +17,7 @@ import ConfirmButton from './button/ConfirmButton.vue'
 import CancelButton from './button/CancelButton.vue'
 import DeleteIconButton from './button/DeleteIconButton.vue'
 import EditIconButton from './button/EditIconButton.vue'
+import CardBody from './card/CardBody.vue'
 import CardHeader from './card/CardHeader.vue'
 import BaseDialog from './dialog/BaseDialog.vue'
 import ImagePreviewDialog from './dialog/ImagePreviewDialog.vue'
@@ -53,6 +54,7 @@ export default {
     app.component('CancelButton', CancelButton)
     app.component('DeleteIconButton', DeleteIconButton)
     app.component('EditIconButton', EditIconButton)
+    app.component('CardBody', CardBody)
     app.component('CardHeader', CardHeader)
     app.component('BaseDialog', BaseDialog)
     app.component('ImagePreviewDialog', ImagePreviewDialog)
