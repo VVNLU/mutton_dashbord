@@ -3,43 +3,43 @@
         :map-options="mapOptions" :emit-value="emitValue" :fill-input="fillInput" :input-Debounce="inputDebounce"
         :transition-show="transitionShow" :transition-hide="transitionHide" :option-label="optionLabelFn"
         :option-value="optionValueFn" :hide-selected="hideSelected" @filter="filterFn" @clear="clearFn">
-        <template v-if="$slot.default" #default>
+        <template v-if="$slots.default" #default>
             <slot name="default" />
         </template>
-        <template v-if="$slot.prepend" #prepend>
+        <template v-if="$slots.prepend" #prepend>
             <slot name="prepend" />
         </template>
-        <template v-if="$slot.append" #append>
+        <template v-if="$slots.append" #append>
             <slot name="append" />
         </template>
-        <template v-if="$slot.before" #before>
+        <template v-if="$slots.before" #before>
             <slot name="before" />
         </template>
-        <template v-if="$slot.after" #after>
+        <template v-if="$slots.after" #after>
             <slot name="after" />
         </template>
-        <template v-if="$slot.label" #label>
+        <template v-if="$slots.label" #label>
             <slot name="label" />
         </template>
-        <template v-if="$slot.error" #error>
+        <template v-if="$slots.error" #error>
             <slot name="error" />
         </template>
-        <template v-if="$slot.hint" #hint>
+        <template v-if="$slots.hint" #hint>
             <slot name="hint" />
         </template>
-        <template v-if="$slot.counter" #counter>
+        <template v-if="$slots.counter" #counter>
             <slot name="counter" />
         </template>
-        <template v-if="$slot.loading" #loading>
+        <template v-if="$slots.loading" #loading>
             <slot name="loading" />
         </template>
-        <template v-if="$slot.selected" #selected>
+        <template v-if="$slots.selected" #selected>
             <slot name="selected" />
         </template>
-        <template v-if="$slot.beforeOptions" #before-options>
+        <template v-if="$slots.beforeOptions" #before-options>
             <slot name="before-options" />
         </template>
-        <template v-if="$slot.afterOptions" #after-options>
+        <template v-if="$slots.afterOptions" #after-options>
             <slot name="after-options" />
         </template>
         <template #no-option>
@@ -47,10 +47,10 @@
                 無此結果
             </q-item-select>
         </template>
-        <template v-if="$slot.selectedItem" #selected-item>
+        <template v-if="$slots.selectedItem" #selected-item>
             <slot name="selected-item" />
         </template>
-        <template v-if="$slot.option" #option>
+        <template v-if="$slots.option" #option>
             <slot name="option" />
         </template>
     </q-select>

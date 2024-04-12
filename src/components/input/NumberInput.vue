@@ -1,33 +1,33 @@
 <template>
     <text-input v-model="observeValue" type="number" :label="label" :rules="ruleList" @clear="clearFn">
-        <template v-if="$slot.default" #default>
+        <template v-if="$slots.default" #default>
             <slot name="default" />
         </template>
-        <template v-if="$slot.prepend" #prepend>
+        <template v-if="$slots.prepend" #prepend>
             <slot name="prepend" />
         </template>
-        <template v-if="$slot.append" #append>
+        <template v-if="$slots.append" #append>
             <slot name="append" />
         </template>
-        <template v-if="$slot.before" #before>
+        <template v-if="$slots.before" #before>
             <slot name="before" />
         </template>
-        <template v-if="$slot.after" #after>
+        <template v-if="$slots.after" #after>
             <slot name="after" />
         </template>
-        <template v-if="$slot.label" #label>
+        <template v-if="$slots.label" #label>
             <slot name="label" />
         </template>
-        <template v-if="$slot.error" #error>
+        <template v-if="$slots.error" #error>
             <slot name="error" />
         </template>
-        <template v-if="$slot.hint" #hint>
+        <template v-if="$slots.hint" #hint>
             <slot name="hint" />
         </template>
-        <template v-if="$slot.counter" #counter>
+        <template v-if="$slots.counter" #counter>
             <slot name="counter" />
         </template>
-        <template v-if="$slot.loading" #loading>
+        <template v-if="$slots.loading" #loading>
             <slot name="loading" />
         </template>
 
@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { defineProps, computed } from 'vue';
+import { defineProps, computed, toRefs } from 'vue';
 import { vuelidate } from '@/plugins/vuelidate'
 
 const props = defineProps({

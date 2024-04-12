@@ -4,7 +4,7 @@
         <template #append>
             <q-icon name="event" />
         </template>
-        <template v-if="$slot.hint" #hint>
+        <template v-if="$slots.hint" #hint>
             <slot name="hint" />
         </template>
         <template #default>
