@@ -2,11 +2,11 @@
     <div class="fixed-footer">
         <div class="row items-center justify-between q-px-lg q-py-md">
             <div>
-                <cancel-button v-if="showCancel" :color="cancelButtonColor" :label="cancelButtonText" @click="onCancel"
+                <confirm-button v-if="showSave" :color="confirmButtonColor" :label="confirmButtonText" @click="onSave"
                     class="q-mr-md q-px-xl q-mb-xs" />
                 <slot name="button" />
-                <confirm-button v-if="showSave" :color="confirmButtonColor" :label="confirmButtonText" @click="onSave"
-                    class="q-px-xl q-mb-xs" />
+                <cancel-button v-if="showCancel" :color="cancelButtonColor" :label="cancelButtonText" @click="onCancel"
+                    class="q-px-xl q-mb-xs text-black" />
             </div>
         </div>
         <div class="q-layout__shadow absolute-full overflow-hidden no-pointer-events" />
@@ -14,13 +14,13 @@
 </template>
 
 <script setup>
-import { defineProps, toRefs } from 'vue';
+import { defineProps } from 'vue';
 import useGoBack from '@/hooks/useGoBack'
 
 const props = defineProps({
-    cancelButtonColor: { type: String, default: 'primary' },
+    cancelButtonColor: { type: String, default: 'orange-1' },
     cancelButtonText: { type: String },
-    confirmButtonColor: { type: String, default: 'primary' },
+    confirmButtonColor: { type: String, default: 'brown-5' },
     confirmButtonText: { type: String },
     goBackRoute: { type: String, default: '' },
     autoBack: { type: Boolean, default: true },
