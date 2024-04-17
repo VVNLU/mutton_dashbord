@@ -1,7 +1,7 @@
 <template>
     <q-dialog v-model="observeValue" :persistent="persistent" @show="onShow" @hide="onHide">
         <q-card :class="sizeClass">
-            <q-card-section class="bg-primary text-white row items-center dialog-header">
+            <q-card-section class="bg-orange-11 text-white row items-center dialog-header">
                 <slot name="title">
                     <div class="text-h6">{{ title }}</div>
                 </slot>
@@ -15,10 +15,10 @@
             <q-separator />
             <q-card-action class="q-dialog-footer" align="right">
                 <slot name="footer" class="text-primary">
-                    <cancel-button v-if="showCancel" v-close-popup class="q-mr-xs" padding="sm 2.5em"
+                    <confirm-button v-if="showSave" padding="sm 2.5em" class="q-mr-sm text-black"
+                        :color="confirmButtonColor" :label="confirmButtonText" @click="onSave" />
+                    <cancel-button v-if="showCancel" v-close-popup class="text-black" padding="sm 2.5em"
                         :color="cancelButtonColor" :label="cancelButtonText" @click="onCancel" />
-                    <confirm-button v-if="showSave" padding="sm 2.5em" :color="confirmButtonColor"
-                        :label="confirmButtonText" @click="onSave" />
                 </slot>
             </q-card-action>
         </q-card>
@@ -33,9 +33,9 @@ const props = defineProps({
     modelValue: { type: Boolean, default: false },
     title: { type: String, default: '標題' },
     cancelButtonText: { type: String },
-    cancelButtonColor: { type: String, default: 'primary' },
+    cancelButtonColor: { type: String, default: 'white' },
     confirmButtonText: { type: String },
-    confirmButtonColor: { type: String, default: 'primary' },
+    confirmButtonColor: { type: String, default: 'orange-11' },
     persistent: { type: Boolean, default: false },
     size: { type: String },
     showCancel: { type: Boolean, default: true },
@@ -69,3 +69,11 @@ const onHide = () => {
     emit('hide')
 }
 </script>
+
+<style lang="scss" scoped>
+.q-card {
+    .q-dialog-body {
+        @apply max-h-40em;
+    }
+}
+</style>
