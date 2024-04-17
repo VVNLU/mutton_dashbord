@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import components from './components'
+import 'virtual:svg-icons-register'
 
 // Quasar
 import quasar from '@/plugins/quasar'
