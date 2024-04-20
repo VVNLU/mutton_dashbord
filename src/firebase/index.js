@@ -14,7 +14,7 @@ const firebaseConfig = {
 
 const app = firebase.initializeApp(firebaseConfig) // 初始化
 const auth = firebase.auth() // 取得身份驗證機制
-const database = firebase.database() // 取得資料庫
-const analytics = firebase.analytics() // 取得分析
+const database = firebase.database(app) // 取得資料庫
+const analytics = firebase.analytics(app) // 取得分析
 
 export { auth, database, analytics }
