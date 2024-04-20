@@ -1,5 +1,5 @@
 <template>
-    <q-field v-model="observeValue" :outlined="outlined" class="h-full full-width">
+    <q-field v-model="observeValue" :outlined="outlined" class="h-full w-full">
         <template #control>
             <div class="mt-1rem input-image">
                 <div class="cursor-pointer flex min-h-34 items-center justify-center" @click="showDialog = true">
@@ -7,26 +7,27 @@
                     <q-icon v-else name="add" size="2em" />
                 </div>
                 <!-- ANCHOR 上傳 -->
-                <base-dialog v-model="showDialog" title="上傳圖片：" @show="onOpen" @save="onSave" @cancel="onCancelCropper">
+                <base-dialog v-model="showDialog" :confirmButtonText="'送出'" :cancelButtonText="'取消'" title="上傳圖片"
+                    @show="onOpen" @save="onSave" @cancel="onCancelCropper">
                     <base-form ref="form">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <q-item>
                                     <q-item-section>
-                                        <image-uploader ref="imageUpload" class="full-width" :image-src="uploadPreview"
+                                        <image-uploader ref="imageUpload" class="w-full" :image-src="uploadPreview"
                                             @onFile="onFile" />
                                     </q-item-section>
                                 </q-item>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <q-item>
-                                    <text-input v-model="state.title" class="full-width" label="圖片標題"
+                                    <text-input v-model="state.title" class="w-full" label="圖片標題"
                                         placeholder="請輸入圖片標題" />
                                 </q-item>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
                                 <q-item>
-                                    <text-input v-model="state.alt" class="full-width" label="圖片描述文字"
+                                    <text-input v-model="state.alt" class="w-full" label="圖片描述文字"
                                         placeholder="請輸入圖片描述文字" hint="作為圖片替代文字，用來描述圖片內容，當圖片失效時有會顯示" />
                                 </q-item>
                             </div>
@@ -118,6 +119,7 @@ const onCropper = async () => {
 }
 
 const onOpen = () => {
+    console.log(props.modelValue)
     state.image = props.modelValue
     if (props.modelValue !== null) {
         const { alt, title } = props.modelValue

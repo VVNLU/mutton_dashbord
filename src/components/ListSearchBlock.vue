@@ -2,10 +2,10 @@
     <div class="row q-col-gutter-x-md q-col-gutter-y-xs">
         <slot name="default" />
         <div v-if="showInputSearch" :class="inputSearchCol">
-            <search-input v-model="sourceData.keyword" class="full-width" dense @update:modelValue="onChangeFilter" />
+            <search-input v-model="sourceData.keyword" class="w-full" dense @update:modelValue="onChangeFilter" />
         </div>
         <div v-if="showResetButton" :class="resetButtonCol">
-            <base-button class="full-width" @click="onReset" text-color="black" :label="'清除'" color="white" />
+            <base-button class="w-full" @click="onReset" text-color="black" :label="'清除'" color="white" />
         </div>
     </div>
 </template>
