@@ -2,6 +2,11 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import components from './components'
+
+// windi css
+import 'virtual:windi.css'
+
+// svg icons
 import 'virtual:svg-icons-register'
 
 // Quasar
