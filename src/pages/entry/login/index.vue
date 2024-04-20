@@ -2,7 +2,7 @@
     <q-layout>
         <q-page-container>
             <q-page class="bg-page flex flex-center">
-                <q-card class="bg-card q-pb- w-3/10 <sm:w-4/5 <md:w-3/5">
+                <q-card class="w-3/10 <sm:w-4/5 <md:w-3/5">
                     <q-card-section>
                         <div class="text-center q-pt-lg">
                             <span class="text-h4 text-bold">羊肉爐後台管理</span>
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { reactive, nextTick, onMounted } from 'vue';
+import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import useCRUD from '@/hooks/useCRUD'
 

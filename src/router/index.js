@@ -8,7 +8,7 @@ import carouselRouter from './modules/carousel'
 export const constantRoutes = [
   {
     path: '/login',
-    component: () => import('@/pages/login/index.vue'),
+    component: () => import('@/pages/entry/login/index.vue'),
   },
   {
     path: '/',
