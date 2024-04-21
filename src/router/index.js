@@ -8,6 +8,7 @@ import carouselRouter from './modules/carousel'
 export const constantRoutes = [
   {
     path: '/login',
+    name: 'login',
     component: () => import('@/pages/entry/login/index.vue'),
   },
   {
@@ -18,7 +19,7 @@ export const constantRoutes = [
       {
         path: '/dashboard',
         component: () => import('@/pages/dashboard/index.vue'),
-        name: 'Dashboard',
+        name: 'dashboard',
       },
     ],
   },
@@ -29,6 +30,21 @@ export const asyncRoutes = [carouselRouter]
 const router = createRouter({
   history: createWebHistory(),
   routes: [...constantRoutes, ...asyncRoutes]
+})
+
+router.beforeEach((to) => {
+  if (
+    to.name !== 'login' &&
+    to.name !== 'register' &&
+    localStorage.getItem("firebaseToken") === null
+  ) {
+    return { name: 'login' || 'register' }
+  }
+})
+router.beforeEach((to) => {
+  if (to.name === 'login' && localStorage.getItem("firebaseToken") !== null) {
+    return { name: 'dashboard' }
+  }
 })
 
 // export function addRoutes(routes = [], { parent = '' }) {
