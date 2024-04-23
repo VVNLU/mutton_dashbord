@@ -13,14 +13,14 @@
                 <slot />
             </q-card-section>
             <q-separator />
-            <q-card-action class="q-dialog-footer" align="right">
+            <q-card-actions class="q-dialog-footer" align="right">
                 <slot name="footer" class="text-primary">
                     <confirm-button v-if="showSave" padding="sm 2.5em" class="q-mr-sm text-black"
                         :color="confirmButtonColor" :label="confirmButtonText" @click="onSave" />
                     <cancel-button v-if="showCancel" v-close-popup class="text-black" padding="sm 2.5em"
                         :color="cancelButtonColor" :label="cancelButtonText" @click="onCancel" />
                 </slot>
-            </q-card-action>
+            </q-card-actions>
         </q-card>
     </q-dialog>
 </template>
