@@ -121,4 +121,13 @@ export default function useDialog({
         deleteSuccess,
         readListSuccess
     })
+
+    return {
+        form,
+        mode,
+        data,
+        isShowDialog,
+        showDialog,
+        save,
+    }
 }
