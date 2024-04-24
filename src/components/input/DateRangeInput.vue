@@ -38,62 +38,6 @@ const inputDateRange = ref()
 const datePicker = ref()
 const show = ref(false)
 const { min, max } = toRefs(props)
-// const pickerOptions = {
-//     shortcuts: [
-//         {
-//             text: '今天',
-//             onClick() {
-//                 const start = $dayjs().format('YYYY-MM-DD')
-//                 const end = $dayjs().format('YYYY-MM-DD')
-//                 datePicker.value.setEditingRange(start, end)
-//             }
-//         },
-//         {
-//             text: '前七天',
-//             onClick() {
-//                 let start = new Date()
-//                 const end = $dayjs()
-//                 start.setTime(
-//                     start.getTime() - 3600 * 1000 * 24 * 7
-//                 )
-//                 start = $$dayjs(start)
-//                 const startObj = {
-//                     year: start.year(),
-//                     month: start.month() + 1,
-//                     day: start.date()
-//                 }
-//                 const endObj = {
-//                     year: end.year(),
-//                     month: end.month() + 1,
-//                     day: end.date()
-//                 }
-//                 datePicker.value.setEditingRange({ from: startObj, to: endObj })
-//             }
-//         },
-//         {
-//             text: '前三十天',
-//             onClick() {
-//                 const start = new Date()
-//                 const end = $dayjs().format('YYYY-MM-DD')
-//                 start.setTime(
-//                     start.getTime() - 3600 * 1000 * 24 * 30,
-//                 )
-//                 observeValue.value = { from: $dayjs(start).format('YYYY-MM-DD'), to: end }
-//             }
-//         },
-//         {
-//             text: '前一年',
-//             onClick() {
-//                 const start = new Date()
-//                 const end = $dayjs().format('YYYY-MM-DD')
-//                 start.setTime(
-//                     start.getTime() - 3600 * 1000 * 24 * 365,
-//                 )
-//                 observeValue.value = { from: $dayjs(start).format('YYYY-MM-DD'), to: end }
-//             }
-//         }
-//     ]
-// }
 
 const observeValue = computed(() => {
     return props.modelValue ? `${props.modelValue?.from} - ${props.modelValue?.to}` : ''
