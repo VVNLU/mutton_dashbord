@@ -40,17 +40,17 @@ import { vuelidate } from '@/plugins/vuelidate'
 
 const props = defineProps({
     label: { type: String },
-    modelValue: { type: [String, Number], default: 0 },
+    modelValue: { type: [String, Number] },
     rules: { type: Array, default() { return [] } }
 })
 const emit = defineEmits(['update:modelValue'])
 
 const { rules } = toRefs(props)
-const observeValue = useVModel
+const observeValue = useVModel(props, 'modelValue', emit)
 
 const ruleList = computed(() => {
     const rule = [
-        vuelidate.url('無效的網址，確保URL格式正確，範例：https://前綴'),
+        vuelidate.url('無效的網址，確保 URL 格式正確。範例：https://前綴'),
     ]
     return rule.concat(rules.value)
 })
