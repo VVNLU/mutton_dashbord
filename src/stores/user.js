@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
 import { auth } from '@/firebase'
 import { setToken, getToken, removeToken } from '@/utils/auth'
 
@@ -10,7 +11,7 @@ export const useUser = defineStore({
   }),
   actions: {
     login(email, password) {
-      return auth.signInWithEmailAndPassword(email, password)
+      return signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           this.user = userCredential.user;
           setToken(userCredential.user.accessToken);
@@ -18,7 +19,7 @@ export const useUser = defineStore({
         })
     },
     logout() {
-      return auth.signOut()
+      return signOut(auth)
         .then(() => {
           this.user = null;
           removeToken();
@@ -26,7 +27,7 @@ export const useUser = defineStore({
         })
     },
     register(email, password) {
-      return auth.createUserWithEmailAndPassword(email, password)
+      return createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           this.user = userCredential.user;
           setToken(userCredential.user.accessToken);
@@ -34,7 +35,7 @@ export const useUser = defineStore({
         })
     },
     forgotPassword(email) {
-      return auth.sendPasswordResetEmail(email)
+      return sendPasswordResetEmail(auth, email)
         .then((res) => {
           return res
         })
