@@ -17,7 +17,7 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [
       {
-        path: '/dashboard',
+        path: 'dashboard',
         component: () => import('@/pages/dashboard/index.vue'),
         name: 'dashboard',
       },
