@@ -37,6 +37,7 @@
 <script setup>
 import { computed, ref, toRefs, defineProps } from 'vue'
 import { vuelidate } from '@/plugins/vuelidate'
+import { useVModel } from '@vueuse/core'
 
 const props = defineProps({
     label: { type: String },
@@ -50,8 +51,8 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const { rules, maxLength } = toRefs(props)
-const observeValue = ref('')
 const input = ref()
+const observeValue = useVModel(props, 'modelValue', emit)
 
 const ruleList = computed(() => {
     const rule = []
