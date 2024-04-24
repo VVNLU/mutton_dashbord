@@ -12,6 +12,11 @@ export const constantRoutes = [
     component: () => import('@/pages/entry/login/index.vue'),
   },
   {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/pages/entry/register/index.vue'),
+  },
+  {
     path: '/',
     component: MainLayout,
     redirect: '/dashboard',
