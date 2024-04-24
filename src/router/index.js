@@ -41,13 +41,13 @@ router.beforeEach((to) => {
   if (
     to.name !== 'login' &&
     to.name !== 'register' &&
-    localStorage.getItem("firebaseToken") === null
+    localStorage.getItem("Dashboard-Rwd-Base-Token") === null
   ) {
     return { name: 'login' || 'register' }
   }
 })
 router.beforeEach((to) => {
-  if (to.name === 'login' && localStorage.getItem("firebaseToken") !== null) {
+  if (to.name === 'login' && localStorage.getItem("Dashboard-Rwd-Base-Token") !== null) {
     return { name: 'dashboard' }
   }
 })
