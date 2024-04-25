@@ -32,7 +32,7 @@ import SvgIcon from './SvgIcon.vue'
 import PageHeader from './PageHeader.vue'
 import ImageColumn from './table-column/ImageColumn.vue'
 import BaseUploader from './uploader/BaseUploader.vue'
-import ImageUpload from './uploader/ImageUpload.vue'
+import ImageUploader from './uploader/ImageUploader.vue'
 
 export default {
   install(app) {
@@ -70,6 +70,6 @@ export default {
     app.component('PageHeader', PageHeader)
     app.component('ImageColumn', ImageColumn)
     app.component('BaseUploader', BaseUploader)
-    app.component('ImageUpload', ImageUpload)
+    app.component('ImageUploader', ImageUploader)
   },
 }
