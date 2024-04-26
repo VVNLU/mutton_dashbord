@@ -36,6 +36,6 @@ const onCancel = () => {
 }
 
 const onSave = () => {
-    emit(['save'])
+    emit('save')
 }
 </script>
