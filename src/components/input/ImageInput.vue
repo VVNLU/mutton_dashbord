@@ -100,7 +100,7 @@ const onFile = (fileObj) => {
   } else {
     setImage(URL.createObjectURL(file), file, base64)
   }
-  imageUpload.value.removeQueuedFiles()
+  // imageUpload.value.removeQueuedFiles()
 }
 
 const onCropper = async () => {
