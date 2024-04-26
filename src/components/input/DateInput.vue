@@ -9,10 +9,10 @@
     </template>
     <template #default>
       <q-popup-proxy v-model="show" class="flex justify-center" transition-show="scale" transition-hide="scale">
-        <q-date v-model="observeValue" :title="dateTitle" :subtitle="dateSubtitle" :options="observeOptions"
+        <q-date v-model="observeValue" minimal :title="dateTitle" :subtitle="dateSubtitle" :options="observeOptions"
           @update:modelValue="updateModelValue">
           <div class="row items-center justify-end">
-            <q-btn v-close-popup label="Close" color="primary" flat />
+            <q-btn v-close-popup label="Close" color="orange-14" flat />
           </div>
         </q-date>
       </q-popup-proxy>
@@ -39,7 +39,7 @@ const emit = defineEmits(['update:modelValue'])
 const inputData = ref()
 const show = ref(false)
 const { min, max, options, rules } = toRefs(props)
-const observeValue = useVModel(props, 'update:modelValue', emit)
+const observeValue = useVModel(props, 'modelValue', emit)
 
 const dateTitle = computed(() => {
   return !observeValue.value ? ' ' : ''
