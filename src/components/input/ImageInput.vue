@@ -7,7 +7,7 @@
           <q-icon v-else name="add" size="2em" />
         </div>
         <!-- ANCHOR 上傳 -->
-        <base-dialog v-model="showDialog" title="上傳圖片" @show="onOpen" @save="onSave" @cancel="onCancelCopper"
+        <base-dialog v-model="showDialog" title="上傳圖片" @show="onOpen" @save="onSave" @cancel="onCancelCropper"
           :confirmButtonText="'送出'" :cancelButtonText="'取消'">
           <base-form ref="form">
             <div class="row">
@@ -32,7 +32,7 @@
             </div>
           </base-form>
         </base-dialog>
-        <base-dialog v-model="showCropper" title="裁切圖片 : " @save="onCopper" @cancel="onCancelCopper">
+        <base-dialog v-model="showCropper" title="裁切圖片" @save="onCropper" @cancel="onCancelCropper">
           <image-cropper ref="cropper" :source="tempCropper" :aspect-ratio="aspect" />
         </base-dialog>
       </div>
@@ -42,7 +42,7 @@
 
 <script setup>
 import { computed, defineProps, reactive, ref } from 'vue';
-import useImgStorage from '@/hooks/useImgStorage'
+// import useImgStorage from '@/hooks/useImgStorage'
 
 const props = defineProps({
   modelValue: { type: [Object, File, String] },
@@ -79,17 +79,17 @@ const preview = computed(() => {
   const { blobURL, url, filename } = observeValue.value || {}
   if (blobURL) return blobURL
   if (url) return url
-  return getImageSrc({ filename, size: '200x' })
+  // return getImageSrc({ filename, size: '200x' })
 })
 
 const uploadPreview = computed(() => {
   const { blobURL, url, filename } = state.image || {}
   if (blobURL) return blobURL
   if (url) return url
-  return getImageSrc({ filename, size: '200x' })
+  // return getImageSrc({ filename, size: '200x' })
 })
 
-const { getImageSrc } = useImgStorage()
+// const { getImageSrc } = useImgStorage()
 
 const onFile = (fileObj) => {
   const { file, base64 } = fileObj
