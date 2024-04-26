@@ -65,8 +65,8 @@ const observeOptions = computed(() => {
 
 const ruleList = computed(() => {
   const rule = []
-  min.value && rule.push(vuelidate.dayjIsSameOrAfter(min.value, `必需比${min.value}晚`))
-  max.value && rule.push(vuelidate.dayjIsSameOrBefore(max.value, `必需比${max.value}早`))
+  min.value && rule.push(vuelidate.dayjIsSameOrAfter(min.value, `必須比${min.value}晚`))
+  max.value && rule.push(vuelidate.dayjIsSameOrBefore(max.value, `必須比${max.value}早`))
   return rule.concat(rules.value)
 })
 
