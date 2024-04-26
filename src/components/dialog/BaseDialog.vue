@@ -1,7 +1,7 @@
 <template>
     <q-dialog v-model="observeValue" :persistent="persistent" @show="onShow" @hide="onHide">
         <q-card :class="sizeClass">
-            <q-card-section class="bg-orange-11 text-white row items-center dialog-header">
+            <q-card-section class="bg-orange-11 text-brown-14 row items-center dialog-header">
                 <slot name="title">
                     <div class="text-h6">{{ title }}</div>
                 </slot>

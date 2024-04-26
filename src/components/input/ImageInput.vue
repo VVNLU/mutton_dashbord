@@ -1,5 +1,5 @@
 <template>
-  <q-field v-model="observeValue" :outlined="outlined" class="h-full full-width">
+  <q-field v-model="observeValue" :outlined="outlined" class="h-full full-width" color="brown-13">
     <template #control>
       <div class="mt-1rem input-image">
         <div class="cursor-pointer flex min-h-34 items-center justify-center" @click="showDialog = true">
@@ -7,7 +7,7 @@
           <q-icon v-else name="add" size="2em" />
         </div>
         <!-- ANCHOR 上傳 -->
-        <base-dialog v-model="showDialog" title="上傳圖片 : " @show="onOpen" @save="onSave" @cancel="onCancelCopper"
+        <base-dialog v-model="showDialog" title="上傳圖片" @show="onOpen" @save="onSave" @cancel="onCancelCopper"
           :confirmButtonText="'送出'" :cancelButtonText="'取消'">
           <base-form ref="form">
             <div class="row">
