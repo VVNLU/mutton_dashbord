@@ -1,8 +1,8 @@
 import { unref } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 
 export default function useGoBack(options = { autoBack: true, fallBack: '/' }) {
-    const router = useRoute()
+    const router = useRouter()
 
     const { autoBack = true, fallBack = '/' } = options
     const goBack = () => {
