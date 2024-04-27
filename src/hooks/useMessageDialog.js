@@ -22,7 +22,7 @@ export default function useMessageDialog() {
         cancelButtonColor: cancelButtonColor || 'primary'
     })
 
-    const messageCancel = ({ title, message, cancelButtonText, cancelButtonColor }) => store.alert({
+    const messageDelete = ({ title, message, cancelButtonText, cancelButtonColor }) => store.alert({
         title,
         status: 'error',
         message,
@@ -37,6 +37,6 @@ export default function useMessageDialog() {
     return {
         messageAlert,
         messageConfirm,
-        messageCancel
+        messageDelete
     }
 }
