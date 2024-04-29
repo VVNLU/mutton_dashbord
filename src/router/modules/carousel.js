@@ -28,21 +28,20 @@ const carouselRouter = {
       name: 'CarouselCreate',
       meta: {
         title: '輪播圖詳情',
-        icon: 'fas fa-genderless',
         permissions: ['create carousel'],
       },
       hidden: true
     },
-    // {
-    //   path: 'edit/:id(\\d+)',
-    //   component: () => import('@/pages/carousel/CarouselEdit.vue'),
-    //   name: 'CarouselEdit',
-    //   meta: {
-    //     title: '輪播圖詳情',
-    //     icon: 'fas fa-genderless',
-    //     permissions: ['update carousel'],
-    //   },
-    // },
+    {
+      path: 'edit/:id([A-Za-z0-9_]+)',
+      component: () => import('@/pages/carousel/CarouselEdit.vue'),
+      name: 'CarouselEdit',
+      meta: {
+        title: '輪播圖詳情',
+        permissions: ['update carousel'],
+      },
+      hidden: true
+    },
   ],
 }
 
