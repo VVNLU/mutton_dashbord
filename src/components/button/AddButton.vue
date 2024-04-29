@@ -1,5 +1,5 @@
 <template>
-    <base-button :label="label" icon="add_circle" :color="'orange-11'" />
+    <base-button :label="label" icon="add_circle" :color="'orange-12'" />
 </template>
 
 <script setup>
