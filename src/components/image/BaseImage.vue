@@ -17,7 +17,7 @@
 <script setup>
 import { defineProps, ref } from 'vue';
 import { asyncComputed } from '@vueuse/core'
-import { getToken } from '@/utils/auth'
+import { getAuthData } from '@/utils/auth'
 import { fetchBlobData, fetchBlobDataAsDataUrl } from '@/utils/blob'
 
 const props = defineProps({
@@ -43,7 +43,7 @@ const observeSrc = asyncComputed(async () => {
         isReading.value = true
         const src = props.src
         const options = {
-            headers: props.headers || { Authorization: `Bearer ${getToken()}` }
+            headers: props.headers || { Authorization: `Bearer ${getAuthData()}` }
         }
         const fetchObj = {
             text: () => { return fetchBlobData(src, options) },
