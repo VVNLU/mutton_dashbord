@@ -22,6 +22,7 @@ import CardBody from './card/CardBody.vue'
 import CardHeader from './card/CardHeader.vue'
 import BaseDialog from './dialog/BaseDialog.vue'
 import ImagePreviewDialog from './dialog/ImagePreviewDialog.vue'
+import MessageDialog from './dialog/MessageDialog.vue'
 import BaseImage from './image/BaseImage.vue'
 import FixedFooter from './FixedFooter.vue'
 import ImageCropper from './ImageCropper.vue'
@@ -60,6 +61,7 @@ export default {
     app.component('CardHeader', CardHeader)
     app.component('BaseDialog', BaseDialog)
     app.component('ImagePreviewDialog', ImagePreviewDialog)
+    app.component('MessageDialog', MessageDialog)
     app.component('BaseImage', BaseImage)
     app.component('FixedFooter', FixedFooter)
     app.component('ImageCropper', ImageCropper)
