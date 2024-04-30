@@ -13,6 +13,7 @@ import UrlInput from './input/UrlInput.vue'
 import SkeletonSquare from './skeleton/SkeletonSquare.vue'
 import AddButton from './button/AddButton.vue'
 import BaseButton from './button/BaseButton.vue'
+import BaseFlatButton from './button/BaseFlatButton.vue'
 import BaseIconButton from './button/BaseIconButton.vue'
 import ConfirmButton from './button/ConfirmButton.vue'
 import CancelButton from './button/CancelButton.vue'
@@ -52,6 +53,7 @@ export default {
     app.component('SkeletonSquare', SkeletonSquare)
     app.component('AddButton', AddButton)
     app.component('BaseButton', BaseButton)
+    app.component('BaseFlatButton', BaseFlatButton)
     app.component('BaseIconButton', BaseIconButton)
     app.component('ConfirmButton', ConfirmButton)
     app.component('CancelButton', CancelButton)
