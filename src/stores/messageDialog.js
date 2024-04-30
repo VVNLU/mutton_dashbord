@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia'
 
 export const useMessageDialogStore = defineStore({
   id: 'messageDialog',
@@ -12,7 +12,7 @@ export const useMessageDialogStore = defineStore({
     cancelButtonText: '',
     cancelButtonColor: 'primary',
     showCancel: true,
-    resolve: null
+    resolve: null,
   }),
   actions: {
     alert({
@@ -23,15 +23,15 @@ export const useMessageDialogStore = defineStore({
       confirmButtonColor,
       cancelButtonText,
       cancelButtonColor,
-      showCancel
+      showCancel,
     }) {
       this.title = title
       this.message = message
       this.persistent = persistent || this.persistent
       this.confirmButtonText = confirmButtonText
-      this.confirmButtonColor = confirmButtonColor
+      this.confirmButtonColor = confirmButtonColor || this.confirmButtonColor
       this.cancelButtonText = cancelButtonText
-      this.cancelButtonColor = cancelButtonColor
+      this.cancelButtonColor = cancelButtonColor || this.cancelButtonColor
       this.showCancel = showCancel
       this.show = true
       return new Promise(resolve => {
