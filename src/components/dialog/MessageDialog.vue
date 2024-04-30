@@ -10,10 +10,10 @@
       <q-card-section class="scroll q-dialog-body">
         {{ message }}
       </q-card-section>
-      <q-card-action class="q-dialog-footer" align="right">
+      <q-card-actions class="q-dialog-footer" align="right">
         <base-flat-button :color="cancelButtonColor" :label="cancelButtonText" @click="onConfirm" />
         <base-flat-button :color="confirmButtonColor" :label="confirmButtonText" @click="onCancel" />
-      </q-card-action>
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
