@@ -23,16 +23,16 @@ export default function useMessageDialog() {
     cancelButtonColor: cancelButtonColor || 'primary',
   })
 
-  const messageDelete = ({ title, message, confirmButtonText, cancelButtonText, cancelButtonColor }) => store.alert({
+  const messageDelete = ({ title, message, confirmButtonText, confirmButtonColor, cancelButtonText }) => store.alert({
     title: title,
     status: 'error',
     message,
     persistent: true,
     confirmButtonText: confirmButtonText,
-    confirmButtonColor: 'negative',
+    confirmButtonColor: confirmButtonColor || 'brown-13',
     showCancel: true,
     cancelButtonText: cancelButtonText,
-    cancelButtonColor: cancelButtonColor || 'primary',
+    cancelButtonColor: 'negative',
   })
 
   return {

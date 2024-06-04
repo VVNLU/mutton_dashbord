@@ -11,8 +11,8 @@
         {{ message }}
       </q-card-section>
       <q-card-actions class="q-dialog-footer" align="right">
-        <base-flat-button :color="cancelButtonColor" :label="cancelButtonText" @click="onConfirm" />
-        <base-flat-button :color="confirmButtonColor" :label="confirmButtonText" @click="onCancel" />
+        <base-flat-button :color="confirmButtonColor" :label="confirmButtonText" @click="onConfirm" />
+        <base-flat-button :color="cancelButtonColor" :label="cancelButtonText" @click="onCancel" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -41,6 +41,6 @@ const onConfirm = () => {
 }
 
 const onCancel = () => {
-  store.cancel()
+  store.close()
 }
 </script>
