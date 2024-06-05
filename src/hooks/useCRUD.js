@@ -51,7 +51,7 @@ export default function useCRUD({
     if (reqCreate.error.value) {
       storeApp.isLoading = false
       storeApp.isCreate = false
-      const message = JSON.parse(reqCreate.error.value.request.responseText)?.error?.message || reqCreate.error.value.response.data.message || reqCreate.error.value
+      const message = JSON.stringify(reqUpdate.error.value)
       isShowCreateFail && notifyAPIError({ message })
       return [null, reqCreate.error.value]
     } else {
@@ -69,7 +69,7 @@ export default function useCRUD({
     if (reqRead.error.value) {
       storeApp.isLoading = false
       storeApp.isReading = false
-      const message = JSON.parse(reqRead.error.value.request.responseText)?.error?.message || reqRead.error.value.response.data.message || reqRead.error.value
+      const message = JSON.stringify(reqUpdate.error.value)
       isShowReadFail && notifyAPIError({ message })
       return [null, reqRead.error.value]
     } else {
@@ -79,14 +79,14 @@ export default function useCRUD({
     }
   }
 
-  const callUpdateFetch = async (id = null, payload = null) => {
+  const callUpdateFetch = async (id, payload = null) => {
     storeApp.isLoading = true
     storeApp.isUpdate = true
     const res = await reqUpdate.execute(0, id, payload)
     if (reqUpdate.error.value) {
       storeApp.isLoading = false
       storeApp.isUpdate = false
-      const message = JSON.parse(reqUpdate.error.value.request.responseText)?.error?.message || reqUpdate.error.value.response.data.message || reqUpdate.error.value
+      const message = JSON.stringify(reqUpdate.error.value)
       isShowUpdateFail && notifyAPIError({ message })
       return [null, reqUpdate.error.value]
     } else {
@@ -104,7 +104,7 @@ export default function useCRUD({
     if (reqDelete.error.value) {
       storeApp.isLoading = false
       storeApp.isDelete = false
-      const message = JSON.parse(reqDelete.error.value.request.responseText)?.error?.message || reqDelete.error.value.response.data.message || reqDelete.error.value
+      const message = JSON.stringify(reqUpdate.error.value)
       isShowDeleteFail && notifyAPIError({ message })
       return [null, reqDelete.error.value]
     } else {
@@ -120,7 +120,7 @@ export default function useCRUD({
     const res = await reqReadList.execute(0, id, payload)
     if (reqReadList.error.value) {
       storeApp.isReadingList = false
-      const message = JSON.parse(reqReadList.error.value.request.responseText)?.error?.message || reqReadList.error.value.response.data.message || reqReadList.error.value
+      const message = JSON.stringify(reqUpdate.error.value)
       isShowReadListFail && notifyAPIError({ message })
       return [null, reqReadList.error.value]
     } else {
@@ -129,20 +129,12 @@ export default function useCRUD({
     }
   }
 
-  const isLoading = computed(
-    () =>
-      reqCreate.isLoading.value ||
-      reqRead.isLoading.value ||
-      reqUpdate.isLoading.value ||
-      reqDelete.isLoading.value ||
-      reqReadList.isLoading.value
-  )
+  const isLoading = computed(() => reqCreate.isLoading.value || reqRead.isLoading.value || reqUpdate.isLoading.value || reqDelete.isLoading.value || reqReadList.isLoading.value)
   const isCreate = computed(() => reqCreate.isLoading.value)
   const isReading = computed(() => reqRead.isLoading.value)
   const isUpdate = computed(() => reqUpdate.isLoading.value)
   const isDelete = computed(() => reqDelete.isLoading.value)
-  const isReadList = computed(() => reqReadList.isLoading.value)
-
+  const isReadingList = computed(() => reqReadList.isLoading.value)
   return {
     form,
     isLoading,
@@ -150,7 +142,7 @@ export default function useCRUD({
     isReading,
     isUpdate,
     isDelete,
-    isReadList,
+    isReadingList,
     callCreateFetch,
     callReadFetch,
     callUpdateFetch,
