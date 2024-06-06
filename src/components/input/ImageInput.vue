@@ -1,5 +1,5 @@
 <template>
-  <q-field v-model="observeValue" :outlined="outlined" class="h-full full-width" color="brown-13">
+  <q-field v-model="observeValue" :outlined="outlined" class="h-full full-width">
     <template #control>
       <div class="mt-1rem input-image">
         <div class="cursor-pointer flex min-h-34 items-center justify-center" @click="showDialog = true">

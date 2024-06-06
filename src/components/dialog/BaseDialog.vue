@@ -1,7 +1,7 @@
 <template>
     <q-dialog v-model="observeValue" :persistent="persistent" @show="onShow" @hide="onHide">
         <q-card :class="sizeClass">
-            <q-card-section class="bg-orange-11 text-brown-14 row items-center dialog-header">
+            <q-card-section class="bg-primary text-white row items-center dialog-header">
                 <slot name="title">
                     <div class="text-h6">{{ title }}</div>
                 </slot>
@@ -15,8 +15,8 @@
             <q-separator />
             <q-card-actions class="q-dialog-footer" align="right">
                 <slot name="footer" class="text-primary">
-                    <confirm-button v-if="showSave" padding="sm 2.5em" class="q-mr-sm text-black"
-                        :color="confirmButtonColor" :label="confirmButtonText" @click="onSave" />
+                    <confirm-button v-if="showSave" padding="sm 2.5em" class="q-mr-sm" :color="confirmButtonColor"
+                        :label="confirmButtonText" @click="onSave" />
                     <cancel-button v-if="showCancel" v-close-popup class="text-black" padding="sm 2.5em"
                         :color="cancelButtonColor" :label="cancelButtonText" @click="onCancel" />
                 </slot>
@@ -35,7 +35,7 @@ const props = defineProps({
     cancelButtonText: { type: String },
     cancelButtonColor: { type: String, default: 'white' },
     confirmButtonText: { type: String },
-    confirmButtonColor: { type: String, default: 'orange-11' },
+    confirmButtonColor: { type: String, default: 'primary' },
     persistent: { type: Boolean, default: false },
     size: { type: String },
     showCancel: { type: Boolean, default: true },

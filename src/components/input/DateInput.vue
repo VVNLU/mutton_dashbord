@@ -12,7 +12,7 @@
         <q-date v-model="observeValue" minimal :title="dateTitle" :subtitle="dateSubtitle" :options="observeOptions"
           @update:modelValue="updateModelValue">
           <div class="row items-center justify-end">
-            <q-btn v-close-popup label="Close" color="orange-14" flat />
+            <q-btn v-close-popup label="Close" color="primary" flat />
           </div>
         </q-date>
       </q-popup-proxy>

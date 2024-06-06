@@ -29,7 +29,7 @@ export default function useMessageDialog() {
     message,
     persistent: true,
     confirmButtonText: confirmButtonText,
-    confirmButtonColor: confirmButtonColor || 'brown-13',
+    confirmButtonColor: confirmButtonColor || 'primary',
     showCancel: true,
     cancelButtonText: cancelButtonText,
     cancelButtonColor: 'negative',

@@ -2,7 +2,7 @@
     <q-layout view="lHh Lpr lFf">
         <Header />
         <Sidebar />
-        <q-page-container class="bg-orange-1 !pb-16">
+        <q-page-container>
             <router-view v-slot="{ Component, route }">
                 <transition name="slide-fade">
                     <div :key="route">

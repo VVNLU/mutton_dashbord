@@ -3,10 +3,9 @@
     <page-header showPrev>
       輪播圖詳情
       <template #action>
-        <toggle-input v-model="formData.is_enable" class="q-mr-xs" :label="formData.is_enable ? '啟用' : '不啟用'"
-          color="orange-13" />
+        <toggle-input v-model="formData.is_enable" class="q-mr-xs" :label="formData.is_enable ? '啟用' : '不啟用'" />
         <toggle-input v-model="formData.is_link_blank" class="q-mr-xs"
-          :label="formData.is_link_blank ? '另開視窗' : '不另開視窗'" color="orange-13" />
+          :label="formData.is_link_blank ? '另開視窗' : '不另開視窗'" />
       </template>
     </page-header>
     <base-form ref="form">

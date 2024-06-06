@@ -1,5 +1,5 @@
 <template>
-    <q-item v-ripple :to="to" clickable class="text-brown-5">
+    <q-item v-ripple :to="to" clickable class="text-white">
         <q-item-section avatar>
             <q-icon :name="icon" size="1.8rem" />
         </q-item-section>

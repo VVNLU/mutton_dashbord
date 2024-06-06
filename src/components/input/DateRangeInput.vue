@@ -10,9 +10,9 @@
     <template #default>
       <q-popup-proxy v-model="show" class="flex justify-center" transition-show="scale" transition-hide="scale">
         <q-date ref="datePicker" range v-model="dateRangeValue" :title="dateTitle" :subtitle="dateSubtitle"
-          :options="options" @update:modelValue="updateModelValue" color="orange-12">
+          :options="options" @update:modelValue="updateModelValue">
           <div class="row items-center justify-end">
-            <q-btn v-close-popup flat label="Close" color="orange-14" />
+            <q-btn v-close-popup flat label="Close" />
           </div>
         </q-date>
       </q-popup-proxy>

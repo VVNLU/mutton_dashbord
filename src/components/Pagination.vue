@@ -9,7 +9,7 @@
                 @update:modelValue="changePageSize" />
         </span>
         <q-pagination boundary-links v-model="observeCurrent" :max="maxSize" :max-page="4" :boundary-number="false"
-            color="brown-5" icon-first="keyboard_double_arrow_left" icon-last="keyboard_double_arrow_right"
+            icon-first="keyboard_double_arrow_left" icon-last="keyboard_double_arrow_right"
             @update:modelValue="handleCurrentChange" />
         <span>前往</span>
         <!-- 待修正style  -->

@@ -18,9 +18,9 @@ import { defineProps } from 'vue';
 import useGoBack from '@/hooks/useGoBack'
 
 const props = defineProps({
-    cancelButtonColor: { type: String, default: 'orange-1' },
+    cancelButtonColor: { type: String, default: 'white' },
     cancelButtonText: { type: String },
-    confirmButtonColor: { type: String, default: 'brown-5' },
+    confirmButtonColor: { type: String, default: 'primary' },
     confirmButtonText: { type: String },
     goBackRoute: { type: String, default: '' },
     autoBack: { type: Boolean, default: true },

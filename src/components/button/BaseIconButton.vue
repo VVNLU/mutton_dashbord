@@ -13,7 +13,7 @@ import { useApp } from '@/stores/app'
 
 const props = defineProps({
     label: { type: String },
-    color: { type: String, default: 'brown-5' },
+    color: { type: String, default: 'primary' },
     icon: { type: String },
     outline: { type: Boolean, default: false },
     round: { type: Boolean, default: true },
