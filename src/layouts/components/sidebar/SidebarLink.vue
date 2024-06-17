@@ -1,7 +1,7 @@
 <template>
     <q-item v-ripple :to="to" clickable class="text-white">
         <q-item-section avatar>
-            <q-icon class="sidebar-icon" :name="icon" size="1.8rem" />
+            <q-icon class="sidebar-icon" :name="icon" size="1.6rem" />
         </q-item-section>
         <q-item-section>
             <q-item-label class="sidebar-label text-bold text-subtitle1">{{ title }}</q-item-label>
