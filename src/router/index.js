@@ -4,6 +4,7 @@ import MainLayout from '@/layouts/MainLayout.vue'
 
 /* Router Modules */
 import carouselRouter from './modules/carousel'
+import inventorRouter from './modules/inventor'
 
 export const constantRoutes = [
   {
@@ -30,7 +31,10 @@ export const constantRoutes = [
   },
 ]
 
-export const asyncRoutes = [carouselRouter]
+export const asyncRoutes = [
+  carouselRouter,
+  inventorRouter,
+]
 
 const router = createRouter({
   history: createWebHistory(),
