@@ -27,7 +27,7 @@ const onChangeFilter = () => {
 }
 
 const onReset = () => {
-  defineEmits('reset')
+  emit('reset')
 }
 </script>
 
