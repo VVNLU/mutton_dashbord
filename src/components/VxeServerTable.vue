@@ -2,9 +2,10 @@
   <div>
     <div v-show="!isReadingList">
       <vxe-table ref="dataTable" class="q-mb-sm" auto-resize round stripe :key="refreshKey" :data="data"
-        :show-footer="showFooter" :footer-span-method="footerSpanMethod" :checkbox-config="observeCheckboxConfig"
-        :tree-config="treeConfig" :row-config="observeRowConfig" :max-height="maxHeight" @sort-change="onChangeSort"
-        @checkbox-all="onCheckboxAll" @checkbox-change="onCheckboxChange">
+        :show-footer="showFooter" :footer-span-method="footerSpanMethod" :footer-method="footerMethod"
+        :checkbox-config="observeCheckboxConfig" :tree-config="treeConfig" :row-config="observeRowConfig"
+        :max-height="maxHeight" @sort-change="onChangeSort" @checkbox-all="onCheckboxAll"
+        @checkbox-change="onCheckboxChange">
         <slot />
       </vxe-table>
       <pagination v-if="total > 0 && showPagination" :total="total" :current="current" :auto-scroll="false"
@@ -14,9 +15,9 @@
 </template>
 
 <script setup>
-import { computed, defineProps, ref } from 'vue';
+import { computed, defineProps, ref } from 'vue'
 import { useApp } from '@/stores/app'
-import mapKeys from 'lodash-es/mapKeys';
+import mapKeys from 'lodash-es/mapKeys'
 
 const props = defineProps({
   data: { type: Array, default() { return [] } },
@@ -25,10 +26,11 @@ const props = defineProps({
   showPagination: { type: Boolean, default: true },
   showFooter: { type: Boolean, default: false },
   footerSpanMethod: { type: Function },
+  footerMethod: { type: Function },
   checkboxConfig: { type: Object },
   treeConfig: { type: Object },
   rowConfig: { type: Object },
-  maxHeight: { type: Number }
+  maxHeight: { type: Number },
 })
 
 const emit = defineEmits([
