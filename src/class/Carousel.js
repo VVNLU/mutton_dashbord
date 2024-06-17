@@ -17,7 +17,6 @@ class Carousel {
 
   constructor(obj) {
     if (obj) {
-      this.id = obj?.id
       this.create_at = obj?.create_at && convertDateTime(obj?.create_at)
       this.publish_date = obj?.publish_date && convertDateTime(obj?.publish_date, 'YYYY/MM/DD HH:mm:ss')
       this.closed_date = obj?.closed_date && convertDateTime(obj?.closed_date)
