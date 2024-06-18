@@ -4,9 +4,12 @@
             <sidebar-link :key="onlyOneChild.path" :to="resolvePath(onlyOneChild.path)" :title="onlyOneChild.meta.title"
                 :icon="onlyOneChild.meta.icon" @click="onclick(onlyOneChild)" />
         </template>
+        <!-- sidebar 第一層標題 -->
         <q-expansion-item v-else v-model="open" :key="item.groupName" :group="item.groupName" :icon="item.meta.icon"
-            :label="item.meta.title" :header-class="headerClassActive" :expand-icon-class="expandIconClassActive">
-            <q-list v-for="(childItem, childIndex) in visibleChildren" :key="childIndex" class="q-pl-lg">
+            :label="item.meta.title" :header-class="headerClassActive" :expand-icon-class="expandIconClassActive"
+            class="first-sidebar text-white text-bold text-subtitle1 ">
+            <q-list v-for="(childItem, childIndex) in visibleChildren" :key="childIndex"
+                class="q-pl-lg bg-light-blue-9">
                 <sidebar-item v-if="childItem.children && childItem.children.length > 0" :is-nest="true"
                     :item="childItem" :base-path="resolvePath(childItem.path)" />
                 <sidebar-link v-else :key="childItem.path" :to="resolvePath(childItem.path)"
@@ -128,3 +131,9 @@ watch(() => route, (newValue) => {
 }, { deep: true })
 
 </script>
+
+<style scoped>
+.first-sidebar {
+    text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
+}
+</style>
