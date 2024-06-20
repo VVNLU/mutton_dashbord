@@ -14,7 +14,28 @@
           :footer-method="calculateFooterTotals" @sort-change="OnChangeSort" @update:current="onChangePage">
           <vxe-column v-for="{ field, title, min_width, sort } in tableFields" :key="field" :field="field"
             :title="title" :sortable="sort" :min-width="min_width" />
-          <vxe-column title="操作" fixed="right" width="115">
+          <vxe-column title="銷貨量" width="200">
+            <template #default="{ row }">
+              {{ row.salesVolume }}
+              <span>
+                <base-icon-button v-if="row.salesVolume > 0" icon="fas fa-circle-exclamation" :size="'sm'"
+                  :color="'warning'" :flat="true" />
+                <q-tooltip class="text-h6">
+                  重慶市場: {{ row.chongqing_market }}<br />
+                  四八市場: {{ row.shiba_market }}<br />
+                  外送: {{ row.delivery }}<br />
+                  自取: {{ row.pick_up }}<br />
+                  公關: {{ row.gift }}<br />
+                </q-tooltip>
+              </span>
+            </template>
+          </vxe-column>
+          <vxe-column title="備註" width="250">
+            <template #default="{ row }">
+              {{ row.remark }}
+            </template>
+          </vxe-column>
+          <vxe-column title="操作" fixed="right" width="120">
             <template #default="{ row }">
               <div class="flex-center row">
                 <edit-icon-button class="q-mr-xs q-mb-xs"
@@ -47,8 +68,8 @@ const filter = reactive({
 const tableFields = ref([
   { title: '日期', field: 'date', min_width: '120', sort: true },
   { title: '進貨量', field: 'restock', min_width: '100', sort: false },
-  { title: '銷貨量', field: 'salesVolume', min_width: '100', sort: false },
-  { title: '備註', field: 'remark', min_width: '150', sort: false },
+  // { title: '銷貨量', field: 'salesVolume', min_width: '100', sort: false },
+  // { title: '備註', field: 'remark', min_width: '150', sort: false },
 ])
 const dialog = ref()
 const totalStock = ref(0)
