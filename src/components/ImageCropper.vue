@@ -55,7 +55,7 @@ const getResult = async () => {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .image-cropper {
     --x-unit: v-bind("xUnit");
     --y-unit: v-bind("yUnit");

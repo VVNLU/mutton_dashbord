@@ -18,7 +18,7 @@ const props = defineProps({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .svg-icon {
     fill: currentColor;
     display: inline-block;
