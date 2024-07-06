@@ -5,6 +5,7 @@ import MainLayout from '@/layouts/MainLayout.vue'
 /* Router Modules */
 import carouselRouter from './modules/carousel'
 import inventorRouter from './modules/inventor'
+import materialRouter from './modules/material'
 
 export const constantRoutes = [
   {
@@ -34,6 +35,7 @@ export const constantRoutes = [
 export const asyncRoutes = [
   carouselRouter,
   inventorRouter,
+  materialRouter,
 ]
 
 const router = createRouter({
