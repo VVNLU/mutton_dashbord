@@ -14,7 +14,7 @@
           :footer-method="calculateFooterTotals" @sort-change="OnChangeSort" @update:current="onChangePage">
           <vxe-column v-for="{ field, title, min_width, sort } in tableFields" :key="field" :field="field"
             :title="title" :sortable="sort" :min-width="min_width" />
-          <vxe-column title="銷貨量" width="200">
+          <vxe-column title="銷貨量" field="salesVolume" width="200">
             <template #default="{ row }">
               {{ row.salesVolume }}
               <span>
@@ -68,8 +68,6 @@ const filter = reactive({
 const tableFields = ref([
   { title: '日期', field: 'date', min_width: '120', sort: true },
   { title: '進貨量', field: 'restock', min_width: '100', sort: false },
-  // { title: '銷貨量', field: 'salesVolume', min_width: '100', sort: false },
-  // { title: '備註', field: 'remark', min_width: '150', sort: false },
 ])
 const dialog = ref()
 const totalStock = ref(0)
