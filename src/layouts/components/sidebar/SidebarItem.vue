@@ -9,7 +9,7 @@
             :label="item.meta.title" :header-class="headerClassActive" :expand-icon-class="expandIconClassActive"
             class="first-sidebar text-white text-bold text-subtitle1 ">
             <q-list v-for="(childItem, childIndex) in visibleChildren" :key="childIndex"
-                class="q-pl-lg bg-light-blue-9">
+                class="q-pl-lg bg-light-blue-10">
                 <sidebar-item v-if="childItem.children && childItem.children.length > 0" :is-nest="true"
                     :item="childItem" :base-path="resolvePath(childItem.path)" />
                 <sidebar-link v-else :key="childItem.path" :to="resolvePath(childItem.path)"
