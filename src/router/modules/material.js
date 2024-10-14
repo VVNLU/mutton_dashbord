@@ -16,7 +16,7 @@ const materialRouter = {
   },
   redirect: { name: 'MaterialList' },
   children: [
-    // 最新消息分類
+    // 原物料分類
     {
       path: '/material-classification',
       name: 'MaterialClassification',
@@ -38,7 +38,7 @@ const materialRouter = {
         },
       ],
     },
-    // 最新消息
+    // 原物料列表
     {
       path: '',
       meta: {
