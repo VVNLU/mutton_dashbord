@@ -6,6 +6,7 @@ const carouselRouter = {
   groupName: 'first',
   name: 'carousel',
   meta: {
+    title: '輪播圖維護',
     slug: 'link',
     permissions: ['view carousel'],
     icon: 'menu_open'

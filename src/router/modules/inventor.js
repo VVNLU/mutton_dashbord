@@ -6,6 +6,7 @@ const inventorRouter = {
   groupName: 'first',
   name: 'inventor',
   meta: {
+    title: '進銷存維護',
     slug: 'link',
     permissions: ['view inventor'],
     icon: 'menu_open'
