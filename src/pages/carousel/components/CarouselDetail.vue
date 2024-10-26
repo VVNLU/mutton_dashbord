@@ -59,7 +59,7 @@
       </div>
     </base-form>
   </q-page>
-  <fixed-footer @save="onSubmit" :confirmButtonText="'送出'" :cancelButtonText="'取消'" />
+  <fixed-footer @save="onSubmit" />
 </template>
 
 <script setup>

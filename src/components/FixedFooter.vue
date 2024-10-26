@@ -19,9 +19,9 @@ import useGoBack from '@/hooks/useGoBack'
 
 const props = defineProps({
     cancelButtonColor: { type: String, default: 'white' },
-    cancelButtonText: { type: String },
+    cancelButtonText: { type: String, default: '取消' },
     confirmButtonColor: { type: String, default: 'primary' },
-    confirmButtonText: { type: String },
+    confirmButtonText: { type: String, default: '確定' },
     goBackRoute: { type: String, default: '' },
     autoBack: { type: Boolean, default: true },
     showCancel: { type: Boolean, default: true },
