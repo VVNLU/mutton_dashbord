@@ -2,62 +2,24 @@ import MainLayout from '@/layouts/MainLayout.vue'
 
 const vendorsRouter = {
   path: '/vendors',
-  group: [
-    '/vendors-classification',
-    '/vendors',
-  ],
-  groupName: 'first',
   component: MainLayout,
+  groupName: 'first',
+  name: 'vendors',
   meta: {
     title: '供應商管理',
-    slug: 'dropdown',
-    icon: 'fa-solid fa-address-book',
-    permissions: ['view vendors'],
+    slug: 'link',
+    icon: 'menu_open'
   },
   redirect: { name: 'VendorsList' },
   children: [
-    // 供應商分類
-    {
-      path: '/vendors-classification',
-      name: 'VendorsClassification',
-      meta: {
-        slug: 'link',
-        permissions: ['view vendors_classification'],
-      },
-      redirect: { name: 'VendorsClassificationList' },
-      children: [
-        {
-          path: '',
-          component: () => import('@/pages/vendors/vendors-classification/VendorsClassificationList.vue'),
-          name: 'VendorsClassificationList',
-          meta: {
-            title: '供應商分類維護',
-            icon: 'fas fa-ellipsis',
-            permissions: ['view vendors_classification'],
-          },
-        },
-      ],
-    },
-    // 供應商
     {
       path: '',
+      component: () => import('@/pages/vendors/VendorsList.vue'),
+      name: 'VendorsList',
       meta: {
-        slug: 'link',
-        permissions: ['view vendors'],
+        title: '供應商管理',
+        icon: 'fa-solid fa-address-book',
       },
-      redirect: { name: 'VendorsList' },
-      children: [
-        {
-          path: '',
-          component: () => import('@/pages/vendors/vendors-list/VendorsList.vue'),
-          name: 'VendorsList',
-          meta: {
-            title: '供應商維護',
-            icon: 'fas fa-ellipsis',
-            permissions: ['view vendors'],
-          },
-        },
-      ],
     },
   ],
 }

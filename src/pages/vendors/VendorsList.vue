@@ -11,8 +11,8 @@
         <vendors-list-search-block v-model="search" @changeFilter="onChangeFilter" @reset="onReset" />
         <vxe-server-table ref="dataTable" :data="data" :total="total" :current="search.page" @sort-change="OnChangeSort"
           @update:current="onChangePage">
-          <vxe-column v-for="{ field, name } in sortedTableFields" :key="field" :field="field" :title="name"
-            min-width="120" />
+          <vxe-column v-for="{ field, title, min_width, sort } in tableFields" :key="field" :field="field"
+            :title="title" :min-width="min_width" />
           <vxe-column title="操作" fixed="right" width="120">
             <template #default="{ row }">
               <div class="flex-center row">
@@ -32,8 +32,7 @@
 
 <script setup>
 import { reactive, ref, computed } from 'vue'
-// import { getList, updateData, deleteData } from '@/api/vendors'
-import { getList } from '@/api/vendorsClassification'
+import { getList, updateData, deleteData } from '@/api/vendors'
 import VendorsListSearchBlock from './components/VendorsListSearchBlock.vue'
 import VendorsDialog from './components/VendorsDialog.vue'
 import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
@@ -44,13 +43,21 @@ const filter = reactive({
   keyword: null,
 })
 
-const tableFields = ref([])
 const dialog = ref()
+const tableFields = ref([
+  { title: '公司名稱', field: 'title', min_width: '150' },
+  { title: '聯絡人', field: 'name', min_width: '100' },
+  { title: '聯絡電話', field: 'tel', min_width: '120' },
+  { title: '公司地址', field: 'address', min_width: '200' },
+  { title: '供應品項', field: 'supplies', min_width: '120' },
+  { title: '備註', field: 'remark', min_width: '150' },
+])
 
 const readListFetch = async (payload) => {
   return await getList(payload)
     .then((res) => {
-      tableFields.value = res
+      data.value = res
+      total.value = res.length
     })
 }
 
@@ -79,13 +86,9 @@ const showDialog = ({ id, mode, callRead }) => {
   dialog.value.showDialog({ id, mode, callRead })
 }
 
-const sortedTableFields = computed(() => {
-  return tableFields.value.filter(field => field.is_enable).sort((a, b) => a.sequence - b.sequence)
-})
-
 const { dataTable, search, data, total, onChangePage, onChangeFilter, OnChangeSort, onReset } = useVxeServerDataTable({
   searchParams: filter,
-  sortParams: [{ field: 'date', order: 'asc', }, { field: 'id', order: 'desc' }],
+  sortParams: [{ field: 'date', order: 'desc', }, { field: 'id', order: 'desc' }],
   sessionStorageKey: 'dashboardVendorsServerDataTable',
   callback: refreshFetch,
 })
