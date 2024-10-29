@@ -34,7 +34,8 @@ export const constantRoutes = [
 ]
 
 export const asyncRoutes = [
-  carouselRouter,
+  // 有需要輪播圖再打開
+  // carouselRouter,
   vendorsRouter,
   inventorRouter,
   materialRouter,
