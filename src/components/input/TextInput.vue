@@ -47,15 +47,17 @@ const props = defineProps({
     outlined: { type: Boolean, default: true },
     placeholder: { type: String, default: '請輸入' },
     maxLength: { type: Number, default: 255 },
+    required: { type: Boolean, default: false },
 })
 const emit = defineEmits(['update:modelValue'])
 
-const { rules, maxLength } = toRefs(props)
+const { rules, maxLength, required, label } = toRefs(props)
 const input = ref()
 const observeValue = useVModel(props, 'modelValue', emit)
 
 const ruleList = computed(() => {
     const rule = []
+    required.value && rule.push(vuelidate.required(`${label.value}必填`))
     rule.push(vuelidate.maxLength(maxLength.value, `長度不可超過${maxLength.value}字`))
     return rule.concat(rules.value)
 })
