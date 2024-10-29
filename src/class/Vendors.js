@@ -1,6 +1,3 @@
-import VendorsClassification from "./VendorsClassification"
-
-
 class Vendors {
 
   //api欄位
