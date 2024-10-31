@@ -11,8 +11,32 @@
         <!-- <material-list-search-block v-model="search" class="q-mb-sm" @changeFilter="onChangeFilter" @reset="onReset" /> -->
         <vxe-server-table ref="dataTable" :data="data" :total="total" :current="search.page" @sort-change="OnChangeSort"
           @update:current="onChangePage">
-          <vxe-column v-for="{ field, title, min_width, sort } in tableFields" :key="field" :field="field"
-            :title="title" :sortable="sort" :min-width="min_width" />
+          <vxe-column title="日期" field="data" min_width="110" />
+          <vxe-column title="原物料" min_width="110">
+            <template #default="{ row }">
+              <div v-for="item in row.contents">{{ item.title }}</div>
+            </template>
+          </vxe-column>
+          <vxe-column title="數量" min_width="110">
+            <template #default="{ row }">
+              <div v-for="item in row.contents">{{ item.quantity }}</div>
+            </template>
+          </vxe-column>
+          <vxe-column title="單位" min_width="110">
+            <template #default="{ row }">
+              <div v-for="item in row.contents">{{ item.unit }}</div>
+            </template>
+          </vxe-column>
+          <vxe-column title="單價" min_width="110">
+            <template #default="{ row }">
+              <div v-for="item in row.contents">{{ item.price }}</div>
+            </template>
+          </vxe-column>
+          <vxe-column title="總價" min_width="110">
+            <template #default="{ row }">
+              <div v-for="item in row.contents">{{ item.total }}</div>
+            </template>
+          </vxe-column>
           <vxe-column title="操作" fixed="right" width="115">
             <template #default="{ row }">
               <div class="flex-center row">
@@ -45,15 +69,6 @@ const filter = reactive({
   end_closed_date: null,
 })
 
-const tableFields = ref([
-  { title: '日期', field: '', min_width: '120', sort: true },
-  { title: '內容物', field: '', min_width: '120', sort: false },
-  { title: '單價', field: '', min_width: '120', sort: false },
-  { title: '單位', field: '', min_width: '100', sort: false },
-  { title: '數量', field: '', min_width: '120', sort: false },
-  { title: '總成本', field: '', min_width: '120', sort: false },
-])
-
 const readListFetch = async (payload) => {
   return await getList(payload)
     .then((res) => {
@@ -68,28 +83,6 @@ const updateFetch = async (id, payload) => {
 
 const delFetch = async (id) => {
   return await deleteData(id)
-}
-
-const onEnable = async (row) => {
-  const payload = { is_enable: row.is_enable }
-  const urlObj = {
-    edit: () => {
-      return callUpdateFetch(row.id, { ...payload })
-    },
-  }
-  const [res] = await urlObj.edit()
-  if (res) refreshFetch()
-}
-
-const onBlank = async (row) => {
-  const payload = { is_link_blank: row.is_link_blank }
-  const urlObj = {
-    edit: () => {
-      return callUpdateFetch(row.id, { ...payload })
-    },
-  }
-  const [res] = await urlObj.edit()
-  if (res) refreshFetch()
 }
 
 const onDelete = async (row) => {
@@ -115,14 +108,14 @@ const { dataTable, search, data, total, onChangePage, onChangeFilter, OnChangeSo
   searchParams: filter,
   sortParams: [{
     field: 'sequence',
-    order: 'asc',
+    order: 'desc',
   }],
   sessionStorageKey: 'dashboardMaterialServerDataTable',
   callback: refreshFetch,
 })
 
 const { messageDelete } = useMessageDialog()
-const { callUpdateFetch, callDeleteFetch, callReadListFetch: getDataList } = useCRUD({
+const { callDeleteFetch, callReadListFetch: getDataList } = useCRUD({
   updateFetch: updateFetch,
   deleteFetch: delFetch,
   readListFetch: readListFetch,

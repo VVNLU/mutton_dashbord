@@ -47,10 +47,17 @@ export const updateData = async (docId, newData) => {
 }
 
 // 刪除數據
-export const deleteData = async (docId) => {
+export const deleteData = async (docId, docIndex) => {
+  console.log('66', docId, docIndex)
   try {
-    const docRef = await deleteDoc(doc(db, "material_list", docId))
-    return docRef
+    const docRef = doc(db, "material_list", docId)
+    const docSnapshot = await getDoc(docRef)
+    if (!docSnapshot.exists()) {
+      throw new Error("Document does not exist!")
+    }
+
+    const currentData = docSnapshot.data()
+    console.log('455', currentData.contents[docIndex])
   } catch (error) {
     console.error("Error deleting document: ", error)
     throw error
