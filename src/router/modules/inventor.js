@@ -20,10 +20,10 @@ const inventorRouter = {
       meta: {
         title: '進銷存維護',
         icon: 'fa-solid fa-cart-shopping',
-        permissions: ['view inventor'],
-      },
-    },
-  ],
+        permissions: ['view inventor']
+      }
+    }
+  ]
 }
 
 export default inventorRouter

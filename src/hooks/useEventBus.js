@@ -9,6 +9,6 @@ export default function useEventBus() {
 
   return {
     emit,
-    bus,
+    bus
   }
 }

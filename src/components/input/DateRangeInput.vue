@@ -1,6 +1,12 @@
 <template>
-  <text-input ref="inputDateRange" :label="label" :placeholder="placeholder" :modelValue="observeValue" inputmode="none"
-    @clear="clearFn">
+  <text-input
+    ref="inputDateRange"
+    :label="label"
+    :placeholder="placeholder"
+    :modelValue="observeValue"
+    inputmode="none"
+    @clear="clearFn"
+  >
     <template #append>
       <q-icon name="event" />
     </template>
@@ -8,9 +14,21 @@
       <slot name="hint" />
     </template>
     <template #default>
-      <q-popup-proxy v-model="show" class="flex justify-center" transition-show="scale" transition-hide="scale">
-        <q-date ref="datePicker" range v-model="dateRangeValue" :title="dateTitle" :subtitle="dateSubtitle"
-          :options="options" @update:modelValue="updateModelValue">
+      <q-popup-proxy
+        v-model="show"
+        class="flex justify-center"
+        transition-show="scale"
+        transition-hide="scale"
+      >
+        <q-date
+          ref="datePicker"
+          range
+          v-model="dateRangeValue"
+          :title="dateTitle"
+          :subtitle="dateSubtitle"
+          :options="options"
+          @update:modelValue="updateModelValue"
+        >
           <div class="row items-center justify-end">
             <q-btn v-close-popup flat label="Close" />
           </div>
@@ -21,7 +39,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, ref, toRefs } from 'vue';
+import { computed, defineProps, ref, toRefs } from 'vue'
 
 const props = defineProps({
   modelValue: { type: [Object, String] },
@@ -39,12 +57,16 @@ const show = ref(false)
 const { min, max } = toRefs(props)
 
 const observeValue = computed(() => {
-  return props.modelValue ? `${props.modelValue?.from} - ${props.modelValue?.to}` : ''
+  return props.modelValue
+    ? `${props.modelValue?.from} - ${props.modelValue?.to}`
+    : ''
 })
 
 const dateRangeValue = computed({
   get() {
-    return props.modelValue?.from === props.modelValue?.to ? props.modelValue?.from : props.modelValue
+    return props.modelValue?.from === props.modelValue?.to
+      ? props.modelValue?.from
+      : props.modelValue
   },
   set(value) {
     const dateRangeValuePrototype = Object.prototype.toString.call(value)
@@ -53,7 +75,7 @@ const dateRangeValue = computed({
     } else {
       emit('update:modelValue', value)
     }
-  },
+  }
 })
 
 const dateTitle = computed(() => {

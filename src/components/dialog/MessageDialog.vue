@@ -11,8 +11,16 @@
         {{ message }}
       </q-card-section>
       <q-card-actions class="q-dialog-footer" align="right">
-        <base-flat-button :color="confirmButtonColor" :label="confirmButtonText" @click="onConfirm" />
-        <base-flat-button :color="cancelButtonColor" :label="cancelButtonText" @click="onCancel" />
+        <base-flat-button
+          :color="confirmButtonColor"
+          :label="confirmButtonText"
+          @click="onConfirm"
+        />
+        <base-flat-button
+          :color="cancelButtonColor"
+          :label="cancelButtonText"
+          @click="onCancel"
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -20,7 +28,7 @@
 
 <script setup>
 import { useMessageDialogStore } from '@/stores/messageDialog'
-import { toRefs } from 'vue';
+import { toRefs } from 'vue'
 
 const store = useMessageDialogStore()
 

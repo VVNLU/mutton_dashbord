@@ -1,17 +1,33 @@
 <template>
-  <base-dialog v-model="isShowDialog" title="忘記密碼" confirm-button-text="送出" @save="onSave" @hide="onHide">
+  <base-dialog
+    v-model="isShowDialog"
+    title="忘記密碼"
+    confirm-button-text="送出"
+    @save="onSave"
+    @hide="onHide"
+  >
     <base-form ref="form">
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
           <q-item>
-            <text-input v-model="data.state.account" class="full-width" label="帳號 *" placeholder="請輸入帳號"
-              :rules="[$rules.required('帳號必填')]" />
+            <text-input
+              v-model="data.state.account"
+              class="full-width"
+              label="帳號 *"
+              placeholder="請輸入帳號"
+              :rules="[$rules.required('帳號必填')]"
+            />
           </q-item>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
           <q-item>
-            <email-input v-model="data.state.email" class="full-width" label="Email *" placeholder="請輸入Email"
-              :rules="[$rules.required('Email必填')]" />
+            <email-input
+              v-model="data.state.email"
+              class="full-width"
+              label="Email *"
+              placeholder="請輸入Email"
+              :rules="[$rules.required('Email必填')]"
+            />
           </q-item>
         </div>
       </div>
@@ -43,9 +59,9 @@ const onHide = () => {
 const { form, data, isShowDialog, showDialog, save } = useDialog({
   formData: {
     account: '',
-    email: '',
+    email: ''
   },
   createFetch: createFetch,
-  createSuccess: '忘記密碼送出成功',
+  createSuccess: '忘記密碼送出成功'
 })
 </script>

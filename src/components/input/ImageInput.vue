@@ -1,39 +1,82 @@
 <template>
-  <q-field v-model="observeValue" :outlined="outlined" class="h-full full-width">
+  <q-field
+    v-model="observeValue"
+    :outlined="outlined"
+    class="h-full full-width"
+  >
     <template #control>
       <div class="mt-1rem input-image">
-        <div class="cursor-pointer flex min-h-34 items-center justify-center" @click="showDialog = true">
-          <img v-if="preview" class="w-full transform scale-98" :src="preview" alt="">
+        <div
+          class="cursor-pointer flex min-h-34 items-center justify-center"
+          @click="showDialog = true"
+        >
+          <img
+            v-if="preview"
+            class="w-full transform scale-98"
+            :src="preview"
+            alt=""
+          />
           <q-icon v-else name="add" size="2em" />
         </div>
         <!-- ANCHOR 上傳 -->
-        <base-dialog v-model="showDialog" title="上傳圖片" @show="onOpen" @save="onSave" @cancel="onCancelCropper"
-          :confirmButtonText="'送出'" :cancelButtonText="'取消'">
+        <base-dialog
+          v-model="showDialog"
+          title="上傳圖片"
+          @show="onOpen"
+          @save="onSave"
+          @cancel="onCancelCropper"
+          :confirmButtonText="'送出'"
+          :cancelButtonText="'取消'"
+        >
           <base-form ref="form">
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12">
                 <q-item>
                   <q-item-section>
-                    <image-uploader ref="imageUpload" class="full-width" :img-src="uploadPreview" @onFile="onFile" />
+                    <image-uploader
+                      ref="imageUpload"
+                      class="full-width"
+                      :img-src="uploadPreview"
+                      @onFile="onFile"
+                    />
                   </q-item-section>
                 </q-item>
               </div>
               <div class="col-xs-12 col-sm-12 col-md-12">
                 <q-item>
-                  <text-input v-model="state.title" class="full-width" label="圖片標題" placeholder="請輸入圖片標題" />
+                  <text-input
+                    v-model="state.title"
+                    class="full-width"
+                    label="圖片標題"
+                    placeholder="請輸入圖片標題"
+                  />
                 </q-item>
               </div>
               <div class="col-xs-12 col-sm-12 col-md-12">
                 <q-item>
-                  <text-input v-model="state.alt" class="full-width" label="圖片描述文字" placeholder="請輸入圖片描述文字"
-                    hint="做為圖片替代文字，用來描述圖片內容，當圖片失效時才會顯示" />
+                  <text-input
+                    v-model="state.alt"
+                    class="full-width"
+                    label="圖片描述文字"
+                    placeholder="請輸入圖片描述文字"
+                    hint="做為圖片替代文字，用來描述圖片內容，當圖片失效時才會顯示"
+                  />
                 </q-item>
               </div>
             </div>
           </base-form>
         </base-dialog>
-        <base-dialog v-model="showCropper" title="裁切圖片" @save="onCropper" @cancel="onCancelCropper">
-          <image-cropper ref="cropper" :source="tempCropper" :aspect-ratio="aspect" />
+        <base-dialog
+          v-model="showCropper"
+          title="裁切圖片"
+          @save="onCropper"
+          @cancel="onCancelCropper"
+        >
+          <image-cropper
+            ref="cropper"
+            :source="tempCropper"
+            :aspect-ratio="aspect"
+          />
         </base-dialog>
       </div>
     </template>
@@ -41,7 +84,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, reactive, ref } from 'vue';
+import { computed, defineProps, reactive, ref } from 'vue'
 // import useImgStorage from '@/hooks/useImgStorage'
 
 const props = defineProps({
@@ -63,7 +106,7 @@ let tempRaw = null // 存放圖片原始資料(type, name)
 const state = reactive({
   alt: '',
   title: '',
-  image: '',
+  image: ''
 })
 
 const observeValue = computed({
@@ -105,13 +148,11 @@ const onFile = (fileObj) => {
 
 const onCropper = async () => {
   const { canvas } = await cropper.value.getResult()
-  const blob = await new Promise((resolve) => canvas.toBlob(resolve, tempRaw.type))
-  const base64 = canvas.toDataURL(tempRaw.type)
-  const file = new File(
-    [blob],
-    tempRaw.name,
-    { type: tempRaw.type }
+  const blob = await new Promise((resolve) =>
+    canvas.toBlob(resolve, tempRaw.type)
   )
+  const base64 = canvas.toDataURL(tempRaw.type)
+  const file = new File([blob], tempRaw.name, { type: tempRaw.type })
   setImage(URL.createObjectURL(blob), file, base64)
   showCropper.value = false
 }

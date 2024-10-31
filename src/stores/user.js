@@ -1,5 +1,10 @@
 import { defineStore } from 'pinia'
-import { signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail
+} from 'firebase/auth'
 import { auth } from '@/firebase'
 import { setAuthData, getAuthData, removeAuthData } from '@/utils/auth'
 import { getData, addData } from '@/api/role'
@@ -9,52 +14,58 @@ export const useUser = defineStore({
   state: () => ({
     user: null,
     token: getAuthData(), // 初始化 token
-    role: null,
+    role: null
   }),
   actions: {
     login(email, password) {
-      return signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+      return signInWithEmailAndPassword(auth, email, password).then(
+        (userCredential) => {
           this.user = userCredential.user
           this.token = userCredential.user.accessToken
 
-          return getData(userCredential.user.uid)
-            .then((userRole) => {
-              this.role = userRole.role
-              setAuthData(userCredential.user.accessToken, userCredential.user.uid, userRole.role)
-            })
-        })
+          return getData(userCredential.user.uid).then((userRole) => {
+            this.role = userRole.role
+            setAuthData(
+              userCredential.user.accessToken,
+              userCredential.user.uid,
+              userRole.role
+            )
+          })
+        }
+      )
     },
 
     logout() {
-      return signOut(auth)
-        .then(() => {
-          this.user = null
-          this.token = null
-          this.role = null
-          removeAuthData()
-        })
+      return signOut(auth).then(() => {
+        this.user = null
+        this.token = null
+        this.role = null
+        removeAuthData()
+      })
     },
 
     register(email, password, role = 'user') {
-      return createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+      return createUserWithEmailAndPassword(auth, email, password).then(
+        (userCredential) => {
           this.user = userCredential.user
           this.token = userCredential.user.accessToken
 
-          return addData(userCredential.user.uid, role)
-            .then(() => {
-              this.role = role
-              setAuthData(userCredential.user.accessToken, userCredential.user.uid, role)
-            })
-        })
+          return addData(userCredential.user.uid, role).then(() => {
+            this.role = role
+            setAuthData(
+              userCredential.user.accessToken,
+              userCredential.user.uid,
+              role
+            )
+          })
+        }
+      )
     },
 
     forgotPassword(email) {
-      return sendPasswordResetEmail(auth, email)
-        .then((res) => {
-          return res
-        })
-    },
+      return sendPasswordResetEmail(auth, email).then((res) => {
+        return res
+      })
+    }
   }
 })

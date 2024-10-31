@@ -1,5 +1,10 @@
 <template>
-  <text-input v-model="observeValue" type="mail" :label="label" :rules="ruleList">
+  <text-input
+    v-model="observeValue"
+    type="mail"
+    :label="label"
+    :rules="ruleList"
+  >
     <template v-if="$slots.default" #default>
       <slot name="default" />
     </template>
@@ -34,15 +39,19 @@
 </template>
 
 <script setup>
-import { computed, defineProps, toRefs } from 'vue';
+import { computed, defineProps, toRefs } from 'vue'
 import { useVModel } from '@vueuse/core'
 import { vuelidate } from '@/plugins/vuelidate'
 
-
 const props = defineProps({
-  label: { type: String, },
+  label: { type: String },
   modelValue: { type: [String, Number], default: 0 },
-  rules: { type: Array, default() { return [] } },
+  rules: {
+    type: Array,
+    default() {
+      return []
+    }
+  }
 })
 const emit = defineEmits(['update:modelValue'])
 
@@ -50,9 +59,7 @@ const { rules } = toRefs(props)
 const observeValue = useVModel(props, 'modelValue', emit)
 
 const ruleList = computed(() => {
-  const rule = [
-    vuelidate.email('必須是email格式')
-  ]
+  const rule = [vuelidate.email('必須是email格式')]
   return rule.concat(rules.value)
 })
 </script>

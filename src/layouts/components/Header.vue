@@ -1,11 +1,11 @@
 <template>
-    <q-header elevated class="bg-white text-blue-grey-7">
-        <q-toolbar>
-            <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggle" />
-            <q-space />
-            <q-btn flat dense round icon="logout" @click="logout" />
-        </q-toolbar>
-    </q-header>
+  <q-header elevated class="bg-white text-blue-grey-7">
+    <q-toolbar>
+      <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggle" />
+      <q-space />
+      <q-btn flat dense round icon="logout" @click="logout" />
+    </q-toolbar>
+  </q-header>
 </template>
 
 <script setup>
@@ -15,11 +15,11 @@ import useLogout from '@/hooks/useLogout.js'
 const storeApp = useApp()
 
 const toggle = () => {
-    storeApp.toggleSidebar()
+  storeApp.toggleSidebar()
 }
 
 const logout = () => {
-    resetStore()
+  resetStore()
 }
 
 const { resetStore } = useLogout()

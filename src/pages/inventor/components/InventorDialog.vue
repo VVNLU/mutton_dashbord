@@ -1,37 +1,84 @@
 <template>
-  <base-dialog v-model="isShowDialog" title="進銷存明細" :confirmButtonText="'送出'" :cancelButtonText="'取消'" @save="onSave"
-    @hide="onHide">
+  <base-dialog
+    v-model="isShowDialog"
+    title="進銷存明細"
+    :confirmButtonText="'送出'"
+    :cancelButtonText="'取消'"
+    @save="onSave"
+    @hide="onHide"
+  >
     <base-form ref="form">
       <div class="row q-col-gutter-x-md">
         <div class="col-12">
           <date-input v-model="data.state.date" class="full-width" />
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-          <number-input v-model="data.state.restock" class="full-width" label="進貨量" placeholder="請輸入進貨量"
-            :modelValue="null" :required="false" />
+          <number-input
+            v-model="data.state.restock"
+            class="full-width"
+            label="進貨量"
+            placeholder="請輸入進貨量"
+            :modelValue="null"
+            :required="false"
+          />
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-          <number-input v-model="data.state.chongqing_market" class="full-width" label="銷貨量-重慶市場" placeholder="請輸入銷貨量"
-            :modelValue="null" :required="false" />
+          <number-input
+            v-model="data.state.chongqing_market"
+            class="full-width"
+            label="銷貨量-重慶市場"
+            placeholder="請輸入銷貨量"
+            :modelValue="null"
+            :required="false"
+          />
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-          <number-input v-model="data.state.shiba_market" class="full-width" label="銷貨量-市八市場" placeholder="請輸入銷貨量"
-            :modelValue="null" :required="false" />
+          <number-input
+            v-model="data.state.shiba_market"
+            class="full-width"
+            label="銷貨量-市八市場"
+            placeholder="請輸入銷貨量"
+            :modelValue="null"
+            :required="false"
+          />
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-          <number-input v-model="data.state.delivery" class="full-width" label="銷貨量-外送" placeholder="請輸入銷貨量"
-            :modelValue="null" :required="false" />
+          <number-input
+            v-model="data.state.delivery"
+            class="full-width"
+            label="銷貨量-外送"
+            placeholder="請輸入銷貨量"
+            :modelValue="null"
+            :required="false"
+          />
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-          <number-input v-model="data.state.pick_up" class="full-width" label="銷貨量-自取" placeholder="請輸入銷貨量"
-            :modelValue="null" :required="false" />
+          <number-input
+            v-model="data.state.pick_up"
+            class="full-width"
+            label="銷貨量-自取"
+            placeholder="請輸入銷貨量"
+            :modelValue="null"
+            :required="false"
+          />
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-          <number-input v-model="data.state.gift" class="full-width" label="銷貨量-公關" placeholder="請輸入銷貨量"
-            :modelValue="null" :required="false" />
+          <number-input
+            v-model="data.state.gift"
+            class="full-width"
+            label="銷貨量-公關"
+            placeholder="請輸入銷貨量"
+            :modelValue="null"
+            :required="false"
+          />
         </div>
         <div class="col-12">
-          <text-input v-model="data.state.remark" class="full-width" label="備註" placeholder="請輸入備註" />
+          <text-input
+            v-model="data.state.remark"
+            class="full-width"
+            label="備註"
+            placeholder="請輸入備註"
+          />
         </div>
       </div>
     </base-form>
@@ -74,7 +121,7 @@ export default defineComponent({
       formData: new Inventor(),
       readFetch: readFetch,
       createFetch: createFetch,
-      updateFetch: updateFetch,
+      updateFetch: updateFetch
     })
 
     return {
@@ -83,9 +130,9 @@ export default defineComponent({
       isShowDialog,
       showDialog,
       onSave,
-      onHide,
+      onHide
     }
-  },
+  }
 })
 </script>
 

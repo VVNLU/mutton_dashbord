@@ -1,5 +1,5 @@
-import { reactive } from "vue";
-import cloneDeep from "lodash/cloneDeep";
+import { reactive } from 'vue'
+import cloneDeep from 'lodash/cloneDeep'
 
 export default function useQuickState(params = {}) {
   const state = reactive({ ...params })

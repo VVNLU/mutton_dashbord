@@ -6,7 +6,7 @@ export default defineConfig({
   preflight: false,
   extract: {
     include: ['src/**/*.{html,vue,jsx,tsx,svelte}'],
-    exclude: ['node_modules', '.git'],
+    exclude: ['node_modules', '.git']
   },
   theme: {
     extend: {
@@ -21,7 +21,7 @@ export default defineConfig({
         info: 'var(--color--info)',
         warning: 'var(--color--warning)',
         func: {
-          focus: 'var(--color--func--focus)',
+          focus: 'var(--color--func--focus)'
         },
 
         pink: colors.pink,
@@ -47,21 +47,21 @@ export default defineConfig({
         neutral: colors.neutral,
         zinc: colors.zinc,
         light: colors.light,
-        dark: colors.dark,
-      },
+        dark: colors.dark
+      }
     },
     screens: {
       xs: '0px',
       sm: '600px',
       md: '1024px',
       lg: '1440px',
-      xl: '1920px',
-    },
+      xl: '1920px'
+    }
   },
   plugins: [
     require('windicss/plugin/typography'),
     require('windicss/plugin/line-clamp'),
     require('windicss/plugin/aspect-ratio'),
-    require('windicss/plugin/scroll-snap'),
-  ],
+    require('windicss/plugin/scroll-snap')
+  ]
 })

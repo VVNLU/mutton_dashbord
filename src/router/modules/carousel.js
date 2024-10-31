@@ -20,8 +20,8 @@ const carouselRouter = {
       meta: {
         title: '輪播圖維護',
         icon: 'fa-regular fa-image',
-        permissions: ['view carousel'],
-      },
+        permissions: ['view carousel']
+      }
     },
     {
       path: 'create',
@@ -29,7 +29,7 @@ const carouselRouter = {
       name: 'CarouselCreate',
       meta: {
         title: '輪播圖詳情',
-        permissions: ['create carousel'],
+        permissions: ['create carousel']
       },
       hidden: true
     },
@@ -39,11 +39,11 @@ const carouselRouter = {
       name: 'CarouselEdit',
       meta: {
         title: '輪播圖詳情',
-        permissions: ['update carousel'],
+        permissions: ['update carousel']
       },
       hidden: true
-    },
-  ],
+    }
+  ]
 }
 
 export default carouselRouter

@@ -11,15 +11,34 @@
           </q-card-section>
           <q-card-section>
             <base-form ref="form" class="q-gutter-y-md">
-              <text-input v-model="formData.email" :label="'Email'" :placeholder="'請輸入Email'" lazy-rules
-                :rules="[$rules.required('Email必填')]" />
-              <password-input v-model="formData.password" @keyup.enter="handleLogin"
-                :rules="[$rules.required('密碼必填')]" />
+              <text-input
+                v-model="formData.email"
+                :label="'Email'"
+                :placeholder="'請輸入Email'"
+                lazy-rules
+                :rules="[$rules.required('Email必填')]"
+              />
+              <password-input
+                v-model="formData.password"
+                @keyup.enter="handleLogin"
+                :rules="[$rules.required('密碼必填')]"
+              />
               <div>
-                <base-button class="w-full q-mb-md" :label="'登入'" style="width: 100%;" @click.prevent="handleLogin" />
-                <base-button class="text-white q-mb-md" style="width: 100%;" color="black" label="忘記密碼"
-                  @click.prevent="showDialog({ mode: 'create' })" />
-                <div class="text-center">還沒有帳號嗎？
+                <base-button
+                  class="w-full q-mb-md"
+                  :label="'登入'"
+                  style="width: 100%"
+                  @click.prevent="handleLogin"
+                />
+                <base-button
+                  class="text-white q-mb-md"
+                  style="width: 100%"
+                  color="black"
+                  label="忘記密碼"
+                  @click.prevent="showDialog({ mode: 'create' })"
+                />
+                <div class="text-center">
+                  還沒有帳號嗎？
                   <span>
                     <router-link class="text-primary no-underline" to="/">
                       立即註冊
@@ -48,7 +67,7 @@ const store = useUser()
 const dialog = ref()
 const formData = reactive({
   email: '',
-  password: '',
+  password: ''
 })
 
 const showDialog = ({ data, mode }) => {
@@ -64,12 +83,13 @@ const handleLogin = async () => {
     if (success) {
       const { email, password } = formData
       const urlObj = {
-        login: () => { return callCreateFetch(email, password) }
+        login: () => {
+          return callCreateFetch(email, password)
+        }
       }
       const [res, err] = await urlObj.login()
       if (res) router.push('/')
     }
-
   })
 }
 

@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs'
 
 import isToday from 'dayjs/plugin/isToday'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
@@ -24,16 +24,16 @@ const $dayjs = dayjs
 export default $dayjs
 
 export const formatDate = (value, format) => {
-    if (value) return ''
-    return $dayjs(value).format(format || 'YYYY-MM-DD HH:mm:ss')
+  if (value) return ''
+  return $dayjs(value).format(format || 'YYYY-MM-DD HH:mm:ss')
 }
 
 export const useDayjs = {
-    install: (app, options) => {
-        app.config.globalProperties.$filters = {
-            formatDate,
-        }
-        app.provide('formatDate', formatDate)
-        app.provide('$dayjs', $dayjs)
+  install: (app, options) => {
+    app.config.globalProperties.$filters = {
+      formatDate
     }
+    app.provide('formatDate', formatDate)
+    app.provide('$dayjs', $dayjs)
+  }
 }

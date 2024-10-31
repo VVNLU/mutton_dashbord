@@ -1,8 +1,7 @@
 class MaterialClassification {
-
   //api欄位
-  name = ""
-  unit = ""
+  name = ''
+  unit = ''
   sequence = 0
   is_enable = true
 

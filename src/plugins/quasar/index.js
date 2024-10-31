@@ -13,11 +13,11 @@ export default {
     app.use(Quasar, {
       plugins: {
         Notify,
-        Loading,
+        Loading
       },
       config: {
-        notify: {},
-      },
+        notify: {}
+      }
     })
-  },
+  }
 }

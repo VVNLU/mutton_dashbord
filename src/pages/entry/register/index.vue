@@ -11,13 +11,25 @@
           </q-card-section>
           <q-card-section>
             <base-form ref="form" class="q-gutter-y-md">
-              <text-input v-model="formData.email" :label="'Email'" :placeholder="'請輸入Email'" lazy-rules
-                :rules="[$rules.required('Email必填')]" />
-              <password-input v-model="formData.password" @keyup.enter="handleRegister"
-                :rules="[$rules.required('密碼必填')]" />
+              <text-input
+                v-model="formData.email"
+                :label="'Email'"
+                :placeholder="'請輸入Email'"
+                lazy-rules
+                :rules="[$rules.required('Email必填')]"
+              />
+              <password-input
+                v-model="formData.password"
+                @keyup.enter="handleRegister"
+                :rules="[$rules.required('密碼必填')]"
+              />
               <div>
-                <base-button class="w-full q-mb-md" :label="'註冊'" style="width: 100%;"
-                  @click.prevent="handleRegister" />
+                <base-button
+                  class="w-full q-mb-md"
+                  :label="'註冊'"
+                  style="width: 100%"
+                  @click.prevent="handleRegister"
+                />
                 <div class="text-center">
                   <router-link class="text-primary no-underline" to="/login">
                     返回登入
@@ -42,7 +54,7 @@ const router = useRouter()
 const store = useUser()
 const formData = reactive({
   email: '',
-  password: '',
+  password: ''
 })
 
 const createFetch = async (email, password) => {
@@ -54,7 +66,9 @@ const handleRegister = async () => {
     if (success) {
       const { email, password } = formData
       const urlObj = {
-        register: () => { return callCreateFetch(email, password) }
+        register: () => {
+          return callCreateFetch(email, password)
+        }
       }
       const [res, err] = await urlObj.register()
       if (res) router.push('/login')

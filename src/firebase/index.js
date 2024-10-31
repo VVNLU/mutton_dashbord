@@ -1,16 +1,16 @@
-import { initializeApp } from "firebase/app"
-import { getFirestore } from "firebase/firestore"
-import { getAnalytics } from "firebase/analytics"
-import { getAuth } from "firebase/auth"
-import { getStorage } from "firebase/storage";
+import { initializeApp } from 'firebase/app'
+import { getFirestore } from 'firebase/firestore'
+import { getAnalytics } from 'firebase/analytics'
+import { getAuth } from 'firebase/auth'
+import { getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDnKjgmrVSFRb63LeBDd6YMDlyuz5JSkzM",
+  apiKey: 'AIzaSyDnKjgmrVSFRb63LeBDd6YMDlyuz5JSkzM',
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-  projectId: "mutton-dashboard",
-  storageBucket: "mutton-dashboard.appspot.com",
+  projectId: 'mutton-dashboard',
+  storageBucket: 'mutton-dashboard.appspot.com',
   messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-  appId: "1:820459566052:web:1d033145bfde32459a4df1",
+  appId: '1:820459566052:web:1d033145bfde32459a4df1'
 }
 
 const app = initializeApp(firebaseConfig) // 初始化 Firebase
