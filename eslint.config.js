@@ -15,9 +15,14 @@ export default [
       prettier
     },
     rules: {
-      semi: ['off', 'never'],
+      'prettier/prettier': 'error',
       ...vue.configs['vue3-recommended'].rules,
-      'prettier/prettier': 'error' // Prettier 規則
+      semi: ['off', 'never'],
+      languageOptions: {
+        globals: {
+          localStorage: 'readonly'
+        }
+      }
     }
   }
 ]
