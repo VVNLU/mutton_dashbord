@@ -6,7 +6,8 @@ import {
   getDoc,
   getDocs,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  arrayRemove
 } from 'firebase/firestore'
 
 // 新增
@@ -54,9 +55,8 @@ export const updateData = async (docId, newData) => {
   }
 }
 
-// 刪除數據
-export const deleteData = async (docId, docIndex) => {
-  console.log('66', docId, docIndex)
+// 刪除某一數據
+export const removeData = async (docId, docIndex) => {
   try {
     const docRef = doc(db, 'material_list', docId)
     const docSnapshot = await getDoc(docRef)
@@ -65,7 +65,20 @@ export const deleteData = async (docId, docIndex) => {
     }
 
     const currentData = docSnapshot.data()
-    console.log('455', currentData.contents[docIndex])
+    await updateDoc(docRef, {
+      contents: arrayRemove(currentData.contents[docIndex])
+    })
+  } catch (error) {
+    console.error('Error deleting document: ', error)
+    throw error
+  }
+}
+
+// 刪除整筆數據
+export const deleteData = async (docId) => {
+  try {
+    const docRef = await deleteDoc(doc(db, 'material_list', docId))
+    return docRef
   } catch (error) {
     console.error('Error deleting document: ', error)
     throw error

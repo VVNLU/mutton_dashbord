@@ -9,15 +9,9 @@
     <q-card class="shadow-7">
       <card-body>
         <!-- <material-list-search-block v-model="search" class="q-mb-sm" @changeFilter="onChangeFilter" @reset="onReset" /> -->
-        <vxe-server-table
-          ref="dataTable"
-          :data="data"
-          :total="total"
-          :current="search.page"
-          @sort-change="OnChangeSort"
-          @update:current="onChangePage"
-        >
-          <vxe-column title="日期" field="data" min_width="110" />
+        <vxe-server-table ref="dataTable" :data="data" :total="total" :current="search.page" @sort-change="OnChangeSort"
+          @update:current="onChangePage">
+          <vxe-column title="日期" field="date" min_width="110" />
           <vxe-column title="原物料" min_width="110">
             <template #default="{ row }">
               <div v-for="item in row.contents">{{ item.title }}</div>
@@ -35,7 +29,8 @@
           </vxe-column>
           <vxe-column title="單價" min_width="110">
             <template #default="{ row }">
-              <div v-for="item in row.contents">{{ item.price }}</div>
+              <div v-for="item in row.contents">{{ (item.quantity && item.total) ? (item.total /
+        item.quantity).toFixed(2) : 'N/A' }}</div>
             </template>
           </vxe-column>
           <vxe-column title="總價" min_width="110">
@@ -46,14 +41,8 @@
           <vxe-column title="操作" fixed="right" width="115">
             <template #default="{ row }">
               <div class="flex-center row">
-                <edit-icon-button
-                  class="q-mr-xs q-mb-xs"
-                  :to="'/material/edit/' + row.id"
-                />
-                <delete-icon-button
-                  class="q-mr-xs q-mb-xs"
-                  @click="onDelete(row)"
-                />
+                <edit-icon-button class="q-mr-xs q-mb-xs" :to="'/material/edit/' + row.id" />
+                <delete-icon-button class="q-mr-xs q-mb-xs" @click="onDelete(row)" />
               </div>
             </template>
           </vxe-column>
@@ -65,7 +54,7 @@
 
 <script setup>
 // import MaterialListSearchBlock from './components/MaterialListSearchBlock.vue'
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import { getList, updateData, deleteData } from '@/api/material'
 import useCRUD from '@/hooks/useCRUD'
 import useMessageDialog from '@/hooks/useMessageDialog'
@@ -99,7 +88,7 @@ const delFetch = async (id) => {
 const onDelete = async (row) => {
   const res = await messageDelete({
     title: '刪除',
-    message: '確認刪除輪播圖？',
+    message: '確認刪除原物料紀錄？',
     confirmButtonText: '確認',
     cancelButtonText: '取消'
   })
@@ -141,7 +130,7 @@ const {
   searchParams: filter,
   sortParams: [
     {
-      field: 'sequence',
+      field: 'date',
       order: 'desc'
     }
   ],

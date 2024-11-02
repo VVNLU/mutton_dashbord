@@ -9,13 +9,8 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-md-6 col-sm-12 col-xs-12">
-                  <date-input
-                    v-model="formData.date"
-                    class="w-full"
-                    label="日期 *"
-                    placeholder="請選擇日期"
-                    :rules="[$rules.required('日期必填')]"
-                  />
+                  <date-input v-model="date" class="w-full" label="日期 *" placeholder="請選擇日期"
+                    :rules="[$rules.required('日期必填')]" />
                 </div>
               </div>
             </card-body>
@@ -27,14 +22,8 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <base-button
-                    v-for="item in materialClassificationData"
-                    :label="item.name"
-                    :outline="true"
-                    :rounded="true"
-                    @click="addNewRow(item)"
-                    class="classification-btn"
-                  />
+                  <base-button v-for="item in materialClassificationData" :label="item.name" :outline="true"
+                    :rounded="true" @click="addNewData(item)" class="classification-btn" />
                 </div>
               </div>
             </card-body>
@@ -46,14 +35,7 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <vxe-server-table
-                    ref="dataTable"
-                    :data="data"
-                    :total="total"
-                    :current="search.page"
-                    @sort-change="OnChangeSort"
-                    @update:current="onChangePage"
-                  >
+                  <vxe-server-table ref="dataTable" :data="data">
                     <vxe-column title="項目" min_width="130">
                       <template #default="{ row }">
                         <div>{{ row.title }}</div>
@@ -61,10 +43,7 @@
                     </vxe-column>
                     <vxe-column title="數量" min_width="130">
                       <template #default="{ row }">
-                        <number-input
-                          v-model="row.quantity"
-                          placeholder="請輸入數量"
-                        />
+                        <number-input v-model="row.quantity" placeholder="請輸入數量" />
                       </template>
                     </vxe-column>
                     <vxe-column title="單位" min_width="130">
@@ -74,18 +53,12 @@
                     </vxe-column>
                     <vxe-column title="總額" min_width="130">
                       <template #default="{ row }">
-                        <number-input
-                          v-model="row.total"
-                          placeholder="請輸入總額"
-                        />
+                        <number-input v-model="row.total" placeholder="請輸入總額" />
                       </template>
                     </vxe-column>
                     <vxe-column title="操作" fixed="right" width="115">
                       <template #default="{ rowIndex }">
-                        <delete-icon-button
-                          class="q-mr-xs q-mb-xs"
-                          @click="onDelete(rowIndex)"
-                        />
+                        <delete-icon-button class="q-mr-xs q-mb-xs" @click="onDelete(rowIndex)" />
                       </template>
                     </vxe-column>
                   </vxe-server-table>
@@ -103,9 +76,8 @@
 <script setup>
 import { defineProps, ref, toRefs, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { getData, addData, updateData, deleteData } from '@/api/material'
+import { getData, addData, updateData, removeData } from '@/api/material'
 import { getList } from '@/api/materialClassification'
-import Material from '@/class/Material'
 import useCRUD from '@/hooks/useCRUD'
 import useGoBack from '@/hooks/useGoBack'
 import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
@@ -117,26 +89,19 @@ const props = defineProps({
 
 const { mode } = toRefs(props)
 const route = useRoute()
-const formData = ref(new Material())
 const materialClassificationData = ref([])
+const date = ref([])
 const id = route.params.id || null
 
 onMounted(async () => {
   readListMaterialClassificationFetch()
 
   if (id) {
-    const [res] = await callReadFetch(id)
-    formData.value = res
-    data.value = res.contents.map((item) => ({
-      title: item.title,
-      quantity: item.quantity,
-      unit: item.unit,
-      total: item.total
-    }))
+    refreshReadData(id)
   }
 })
 
-const addNewRow = (item) => {
+const addNewData = async (item) => {
   data.value.push({
     title: item.name,
     quantity: 0,
@@ -157,8 +122,8 @@ const updateFetch = async (id, payload) => {
   return await updateData(id, payload)
 }
 
-const delFetch = async (id) => {
-  return await deleteData(id)
+const delFetch = async (id, index) => {
+  return await removeData(id, index)
 }
 
 const readListMaterialClassificationFetch = async () => {
@@ -169,10 +134,19 @@ const readListMaterialClassificationFetch = async () => {
   }))
 }
 
+const refreshReadData = async (id) => {
+  const [res] = await callReadFetch(id)
+  data.value = res.contents
+  date.value = res.date
+}
+
 const onSubmit = async () => {
   form.value.validate().then(async (success) => {
     if (success) {
-      const payload = formData.value
+      const payload = {
+        date: date.value,
+        contents: data.value
+      }
       const urlObj = {
         create: () => {
           return callCreateFetch({ ...payload })
@@ -189,7 +163,6 @@ const onSubmit = async () => {
 }
 
 const onDelete = async (rowIndex) => {
-  console.log('222', id, rowIndex)
   const res = await messageDelete({
     title: '刪除',
     message: '確認刪除原物料？',
@@ -197,15 +170,21 @@ const onDelete = async (rowIndex) => {
     cancelButtonText: '取消'
   })
   if (!res) return
-  const delRes = await deleteData(id, rowIndex)
-  if (delRes) {
-    refreshFetch()
+
+  // 判斷資料是否為已存在
+  const [getDataRes] = await callReadFetch(id)
+  if (rowIndex <= getDataRes.contents.length - 1) {
+    const delRes = await callDeleteFetch(id, rowIndex)
+    if (delRes) {
+      await refreshReadData(id)
+    }
+  } else {
+    data.value.splice(rowIndex, 1)
   }
 }
 
-const { dataTable, search, data, total, onChangePage, OnChangeSort } =
+const { dataTable, data } =
   useVxeServerDataTable({
-    sortParams: [{ field: 'sequence', order: 'asc' }],
     sessionStorageKey: 'dashboardMaterialDetailServerDataTable'
   })
 

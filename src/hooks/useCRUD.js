@@ -99,10 +99,10 @@ export default function useCRUD({
     }
   }
 
-  const callDeleteFetch = async (id) => {
+  const callDeleteFetch = async (id, payload = null) => {
     storeApp.isLoading = true
     storeApp.isDelete = true
-    const res = await reqDelete.execute(0, id)
+    const res = await reqDelete.execute(0, id, payload)
     if (reqDelete.error.value) {
       storeApp.isLoading = false
       storeApp.isDelete = false
