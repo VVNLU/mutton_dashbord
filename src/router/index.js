@@ -4,7 +4,6 @@ import MainLayout from '@/layouts/MainLayout.vue'
 
 /* Router Modules */
 import carouselRouter from './modules/carousel'
-import inventorRouter from './modules/inventor'
 import materialRouter from './modules/material'
 import vendorsRouter from './modules/vendors'
 
@@ -37,7 +36,6 @@ export const asyncRoutes = [
   // 有需要輪播圖再打開
   // carouselRouter,
   vendorsRouter,
-  inventorRouter,
   materialRouter
 ]
 
