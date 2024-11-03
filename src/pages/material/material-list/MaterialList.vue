@@ -11,8 +11,33 @@
         <!-- <material-list-search-block v-model="search" class="q-mb-sm" @changeFilter="onChangeFilter" @reset="onReset" /> -->
         <vxe-server-table ref="dataTable" :data="data" :total="total" :current="search.page" @sort-change="OnChangeSort"
           @update:current="onChangePage">
-          <vxe-column v-for="{ field, title, min_width, sort } in tableFields" :key="field" :field="field"
-            :title="title" :sortable="sort" :min-width="min_width" />
+          <vxe-column title="日期" field="date" min_width="110" />
+          <vxe-column title="原物料" min_width="110">
+            <template #default="{ row }">
+              <div v-for="item in row.contents">{{ item.title }}</div>
+            </template>
+          </vxe-column>
+          <vxe-column title="數量" min_width="110">
+            <template #default="{ row }">
+              <div v-for="item in row.contents">{{ item.quantity }}</div>
+            </template>
+          </vxe-column>
+          <vxe-column title="單位" min_width="110">
+            <template #default="{ row }">
+              <div v-for="item in row.contents">{{ item.unit }}</div>
+            </template>
+          </vxe-column>
+          <vxe-column title="單價" min_width="110">
+            <template #default="{ row }">
+              <div v-for="item in row.contents">{{ (item.quantity && item.total) ? (item.total /
+        item.quantity).toFixed(2) : 'N/A' }}</div>
+            </template>
+          </vxe-column>
+          <vxe-column title="總價" min_width="110">
+            <template #default="{ row }">
+              <div v-for="item in row.contents">{{ item.total }}</div>
+            </template>
+          </vxe-column>
           <vxe-column title="操作" fixed="right" width="115">
             <template #default="{ row }">
               <div class="flex-center row">
@@ -29,7 +54,7 @@
 
 <script setup>
 // import MaterialListSearchBlock from './components/MaterialListSearchBlock.vue'
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import { getList, updateData, deleteData } from '@/api/material'
 import useCRUD from '@/hooks/useCRUD'
 import useMessageDialog from '@/hooks/useMessageDialog'
@@ -42,24 +67,14 @@ const filter = reactive({
   start_publish_date: null,
   end_publish_date: null,
   start_closed_date: null,
-  end_closed_date: null,
+  end_closed_date: null
 })
 
-const tableFields = ref([
-  { title: '日期', field: '', min_width: '120', sort: true },
-  { title: '內容物', field: '', min_width: '120', sort: false },
-  { title: '單價', field: '', min_width: '120', sort: false },
-  { title: '單位', field: '', min_width: '100', sort: false },
-  { title: '數量', field: '', min_width: '120', sort: false },
-  { title: '總成本', field: '', min_width: '120', sort: false },
-])
-
 const readListFetch = async (payload) => {
-  return await getList(payload)
-    .then((res) => {
-      data.value = res
-      total.value = res.length
-    })
+  return await getList(payload).then((res) => {
+    data.value = res
+    total.value = res.length
+  })
 }
 
 const updateFetch = async (id, payload) => {
@@ -70,30 +85,13 @@ const delFetch = async (id) => {
   return await deleteData(id)
 }
 
-const onEnable = async (row) => {
-  const payload = { is_enable: row.is_enable }
-  const urlObj = {
-    edit: () => {
-      return callUpdateFetch(row.id, { ...payload })
-    },
-  }
-  const [res] = await urlObj.edit()
-  if (res) refreshFetch()
-}
-
-const onBlank = async (row) => {
-  const payload = { is_link_blank: row.is_link_blank }
-  const urlObj = {
-    edit: () => {
-      return callUpdateFetch(row.id, { ...payload })
-    },
-  }
-  const [res] = await urlObj.edit()
-  if (res) refreshFetch()
-}
-
 const onDelete = async (row) => {
-  const res = await messageDelete({ title: '刪除', message: '確認刪除輪播圖？', confirmButtonText: '確認', cancelButtonText: '取消' })
+  const res = await messageDelete({
+    title: '刪除',
+    message: '確認刪除原物料紀錄？',
+    confirmButtonText: '確認',
+    cancelButtonText: '取消'
+  })
   if (!res) return
   const [delRes] = await callDeleteFetch(row.id)
   if (delRes) {
@@ -104,28 +102,46 @@ const onDelete = async (row) => {
 
 const refreshFetch = async () => {
   const filter = { ...search }
-  filter.start_publish_date = filter.publish_date_range?.from ? filter.publish_date_range.from : null
-  filter.end_publish_date = filter.publish_date_range?.to ? filter.publish_date_range.to : null
-  filter.start_closed_date = filter.closed_date_range?.from ? filter.closed_date_range.from : null
-  filter.end_closed_date = filter.closed_date_range?.to ? filter.closed_date_range.to : null
+  filter.start_publish_date = filter.publish_date_range?.from
+    ? filter.publish_date_range.from
+    : null
+  filter.end_publish_date = filter.publish_date_range?.to
+    ? filter.publish_date_range.to
+    : null
+  filter.start_closed_date = filter.closed_date_range?.from
+    ? filter.closed_date_range.from
+    : null
+  filter.end_closed_date = filter.closed_date_range?.to
+    ? filter.closed_date_range.to
+    : null
   await getDataList({ ...filter })
 }
 
-const { dataTable, search, data, total, onChangePage, onChangeFilter, OnChangeSort, onReset } = useVxeServerDataTable({
+const {
+  dataTable,
+  search,
+  data,
+  total,
+  onChangePage,
+  onChangeFilter,
+  OnChangeSort,
+  onReset
+} = useVxeServerDataTable({
   searchParams: filter,
-  sortParams: [{
-    field: 'sequence',
-    order: 'asc',
-  }],
+  sortParams: [
+    {
+      field: 'date',
+      order: 'desc'
+    }
+  ],
   sessionStorageKey: 'dashboardMaterialServerDataTable',
-  callback: refreshFetch,
+  callback: refreshFetch
 })
 
 const { messageDelete } = useMessageDialog()
-const { callUpdateFetch, callDeleteFetch, callReadListFetch: getDataList } = useCRUD({
+const { callDeleteFetch, callReadListFetch: getDataList } = useCRUD({
   updateFetch: updateFetch,
   deleteFetch: delFetch,
-  readListFetch: readListFetch,
+  readListFetch: readListFetch
 })
-
 </script>

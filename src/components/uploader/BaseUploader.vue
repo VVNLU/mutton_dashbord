@@ -1,15 +1,30 @@
 <template>
   <div>
-    <q-uploader ref="uploader" color="white" text-color="black" flat :accept="accept" :multiple="multiple"
-      :max-file-size="maxFileSize" :disable="disable" @added="onAdded" @rejected="onRejected">
+    <q-uploader
+      ref="uploader"
+      color="white"
+      text-color="black"
+      flat
+      :accept="accept"
+      :multiple="multiple"
+      :max-file-size="maxFileSize"
+      :disable="disable"
+      @added="onAdded"
+      @rejected="onRejected"
+    >
       <template #header="scope">
         <q-btn class="h-full w-full p-2.5rem" @click="scope.pickFiles">
           <q-uploader-add-trigger />
           <q-spinner v-if="scope.isUploading" class="q-uploader__spinner" />
           <div>
-            <img v-if="imgSrc" class="w-full" :src="imgSrc" alt="">
+            <img v-if="imgSrc" class="w-full" :src="imgSrc" alt="" />
             <div v-else class="flex-center row column">
-              <svg-icon color="gray" icon="cloud-arrow-up" class="cursor-pointer" size="56" />
+              <svg-icon
+                color="gray"
+                icon="cloud-arrow-up"
+                class="cursor-pointer"
+                size="56"
+              />
               <div class="q-uploader__title">將檔案拖放到此處或點擊上傳</div>
             </div>
           </div>
@@ -30,7 +45,7 @@ const props = defineProps({
   imgSrc: { type: String },
   maxFileSize: { type: Number },
   multiple: { type: Boolean },
-  disable: { type: Boolean, default: false },
+  disable: { type: Boolean, default: false }
 })
 const emit = defineEmits(['rejected', 'added'])
 
@@ -45,7 +60,6 @@ const onAdded = (files) => {
 const onRejected = (rejectedEntries) => {
   emit('rejected', rejectedEntries)
 }
-
 </script>
 
 <style lang="scss" scoped>

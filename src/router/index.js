@@ -12,12 +12,12 @@ export const constantRoutes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/pages/entry/login/index.vue'),
+    component: () => import('@/pages/entry/login/index.vue')
   },
   {
     path: '/register',
     name: 'register',
-    component: () => import('@/pages/entry/register/index.vue'),
+    component: () => import('@/pages/entry/register/index.vue')
   },
   {
     path: '/',
@@ -27,10 +27,10 @@ export const constantRoutes = [
       {
         path: 'dashboard',
         component: () => import('@/pages/dashboard/index.vue'),
-        name: 'dashboard',
-      },
-    ],
-  },
+        name: 'dashboard'
+      }
+    ]
+  }
 ]
 
 export const asyncRoutes = [
@@ -38,7 +38,7 @@ export const asyncRoutes = [
   // carouselRouter,
   vendorsRouter,
   inventorRouter,
-  materialRouter,
+  materialRouter
 ]
 
 const router = createRouter({
@@ -50,13 +50,16 @@ router.beforeEach((to) => {
   if (
     to.name !== 'login' &&
     to.name !== 'register' &&
-    localStorage.getItem("Dashboard-Rwd-Base-Token") === null
+    localStorage.getItem('Dashboard-Rwd-Base-Token') === null
   ) {
     return { name: 'login' || 'register' }
   }
 })
 router.beforeEach((to) => {
-  if (to.name === 'login' && localStorage.getItem("Dashboard-Rwd-Base-Token") !== null) {
+  if (
+    to.name === 'login' &&
+    localStorage.getItem('Dashboard-Rwd-Base-Token') !== null
+  ) {
     return { name: 'dashboard' }
   }
 })

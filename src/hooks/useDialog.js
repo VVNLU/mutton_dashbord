@@ -1,6 +1,6 @@
-import { ref } from "vue"
+import { ref } from 'vue'
 import useQuickState from './useQuickState'
-import mapKeys from "lodash/mapKeys"
+import mapKeys from 'lodash/mapKeys'
 import useCRUD from '@/hooks/useCRUD'
 
 export default function useDialog({
@@ -23,7 +23,7 @@ export default function useDialog({
 
   readListFetch,
   readListSuccess = '讀取列表成功',
-  readListFail = '讀取列表失敗',
+  readListFail = '讀取列表失敗'
 }) {
   const form = ref()
   const data = useQuickState(formData)
@@ -47,7 +47,12 @@ export default function useDialog({
         data.total = rowData.length
       } else {
         mapKeys(data.state, (_, key) => {
-          data.state[key] = rowData[key] === undefined ? (data.state[key] !== undefined ? data.state[key] : '') : rowData[key]
+          data.state[key] =
+            rowData[key] === undefined
+              ? data.state[key] !== undefined
+                ? data.state[key]
+                : ''
+              : rowData[key]
         })
       }
     }
@@ -60,7 +65,9 @@ export default function useDialog({
       }
     }
     if (callReadList) {
-      const [res] = dataId ? await callReadListFetch(dataId, payload) : await callReadListFetch(payload)
+      const [res] = dataId
+        ? await callReadListFetch(dataId, payload)
+        : await callReadListFetch(payload)
       if (res) {
         data.list = res.list
         data.total = res.total
@@ -109,7 +116,13 @@ export default function useDialog({
     })
   }
 
-  const { callCreateFetch, callReadFetch, callUpdateFetch, callDeleteFetch, callReadListFetch } = useCRUD({
+  const {
+    callCreateFetch,
+    callReadFetch,
+    callUpdateFetch,
+    callDeleteFetch,
+    callReadListFetch
+  } = useCRUD({
     readFetch,
     createFetch,
     updateFetch,
@@ -128,6 +141,6 @@ export default function useDialog({
     data,
     isShowDialog,
     showDialog,
-    save,
+    save
   }
 }

@@ -77,5 +77,5 @@ export default {
     app.component('ImageColumn', ImageColumn)
     app.component('BaseUploader', BaseUploader)
     app.component('ImageUploader', ImageUploader)
-  },
+  }
 }

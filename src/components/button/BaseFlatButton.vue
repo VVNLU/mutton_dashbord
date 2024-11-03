@@ -1,5 +1,12 @@
 <template>
-  <q-btn no-caps :label="label" :color="color" :flat="flat" :size="size" :loading="isLoading">
+  <q-btn
+    no-caps
+    :label="label"
+    :color="color"
+    :flat="flat"
+    :size="size"
+    :loading="isLoading"
+  >
     <template #loading>
       <q-spinner-hourglass size="0.75em" />
     </template>
@@ -7,7 +14,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps } from 'vue';
+import { computed, defineProps } from 'vue'
 import { useApp } from '@/stores/app'
 
 const props = defineProps({
@@ -21,6 +28,9 @@ const props = defineProps({
 const storeApp = useApp()
 
 const isLoading = computed(() => {
-  return props.useLoading && (storeApp.isCreate || storeApp.isUpdate || storeApp.usDelete)
+  return (
+    props.useLoading &&
+    (storeApp.isCreate || storeApp.isUpdate || storeApp.usDelete)
+  )
 })
 </script>

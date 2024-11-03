@@ -32,7 +32,7 @@ export default function useCRUD({
   readListSuccess = '讀取列表成功',
   readListFail = '讀取列表失敗',
   isShowReadListSuccess = true,
-  isShowReadListFail = true,
+  isShowReadListFail = true
 }) {
   const { notify, notifyAPIError } = useNotify()
   const storeApp = useApp()
@@ -55,7 +55,8 @@ export default function useCRUD({
       isShowCreateFail && notifyAPIError({ message })
       return [null, reqCreate.error.value]
     } else {
-      isShowCreateSuccess && notify({ message: createSuccess, type: 'positive' })
+      isShowCreateSuccess &&
+        notify({ message: createSuccess, type: 'positive' })
       storeApp.isLoading = false
       storeApp.isCreate = false
       return [res || true, null]
@@ -90,17 +91,18 @@ export default function useCRUD({
       isShowUpdateFail && notifyAPIError({ message })
       return [null, reqUpdate.error.value]
     } else {
-      isShowUpdateSuccess && notify({ message: updateSuccess, type: 'positive' })
+      isShowUpdateSuccess &&
+        notify({ message: updateSuccess, type: 'positive' })
       storeApp.isLoading = false
       storeApp.isUpdate = false
       return [res || true, null]
     }
   }
 
-  const callDeleteFetch = async (id) => {
+  const callDeleteFetch = async (id, payload = null) => {
     storeApp.isLoading = true
     storeApp.isDelete = true
-    const res = await reqDelete.execute(0, id)
+    const res = await reqDelete.execute(0, id, payload)
     if (reqDelete.error.value) {
       storeApp.isLoading = false
       storeApp.isDelete = false
@@ -108,7 +110,8 @@ export default function useCRUD({
       isShowDeleteFail && notifyAPIError({ message })
       return [null, reqDelete.error.value]
     } else {
-      isShowDeleteSuccess && notify({ message: deleteSuccess, type: 'positive' })
+      isShowDeleteSuccess &&
+        notify({ message: deleteSuccess, type: 'positive' })
       storeApp.isLoading = false
       storeApp.isDelete = false
       return [res || true, null]
@@ -129,7 +132,14 @@ export default function useCRUD({
     }
   }
 
-  const isLoading = computed(() => reqCreate.isLoading.value || reqRead.isLoading.value || reqUpdate.isLoading.value || reqDelete.isLoading.value || reqReadList.isLoading.value)
+  const isLoading = computed(
+    () =>
+      reqCreate.isLoading.value ||
+      reqRead.isLoading.value ||
+      reqUpdate.isLoading.value ||
+      reqDelete.isLoading.value ||
+      reqReadList.isLoading.value
+  )
   const isCreate = computed(() => reqCreate.isLoading.value)
   const isReading = computed(() => reqRead.isLoading.value)
   const isUpdate = computed(() => reqUpdate.isLoading.value)

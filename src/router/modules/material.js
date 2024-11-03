@@ -2,84 +2,80 @@ import MainLayout from '@/layouts/MainLayout.vue'
 
 const materialRouter = {
   path: '/material',
-  group: [
-    '/material-classification',
-    '/material',
-  ],
+  group: ['/material-classification', '/material'],
   groupName: 'first',
   component: MainLayout,
   meta: {
     title: '原物料管理',
     slug: 'dropdown',
-    icon: 'fas fa-seedling',
-    permissions: ['view material'],
+    icon: 'fas fa-seedling'
   },
   redirect: { name: 'MaterialList' },
   children: [
-    // 原物料分類
+    // 原物料
     {
       path: '/material-classification',
       name: 'MaterialClassification',
       meta: {
-        slug: 'link',
-        permissions: ['view material_classification'],
+        slug: 'link'
       },
       redirect: { name: 'MaterialClassificationList' },
       children: [
         {
           path: '',
-          component: () => import('@/pages/material/material-classification/MaterialClassificationList.vue'),
+          component: () =>
+            import(
+              '@/pages/material/material-classification/MaterialClassificationList.vue'
+            ),
           name: 'MaterialClassificationList',
           meta: {
-            title: '原物料分類維護',
-            icon: 'fas fa-ellipsis',
-            permissions: ['view material_classification'],
-          },
-        },
-      ],
+            title: '原物料',
+            icon: 'chevron_right'
+          }
+        }
+      ]
     },
-    // 原物料列表
+    // 原物料紀錄
     {
       path: '',
       meta: {
-        slug: 'link',
-        permissions: ['view material'],
+        slug: 'link'
       },
       redirect: { name: 'MaterialList' },
       children: [
         {
           path: '',
-          component: () => import('@/pages/material/material-list/MaterialList.vue'),
+          component: () =>
+            import('@/pages/material/material-list/MaterialList.vue'),
           name: 'MaterialList',
           meta: {
-            title: '原物料維護',
-            icon: 'fas fa-ellipsis',
-            permissions: ['view material'],
-          },
+            title: '原物料紀錄',
+            icon: 'chevron_right'
+          }
         },
         {
           path: 'create',
-          component: () => import('@/pages/material/material-list/MaterialCreate.vue'),
+          component: () =>
+            import('@/pages/material/material-list/MaterialCreate.vue'),
           name: 'MaterialCreate',
           meta: {
-            title: '原物料詳情',
-            permissions: ['create material'],
+            title: '原物料詳情'
           },
           hidden: true
         },
         {
           path: 'edit/:id([A-Za-z0-9_]+)',
-          component: () => import('@/pages/material/material-list/MaterialEdit.vue'),
+          component: () =>
+            import('@/pages/material/material-list/MaterialEdit.vue'),
           name: 'MaterialEdit',
           meta: {
-            title: '原物料詳情',
-            permissions: ['update material'],
+            title: '原物料詳情'
           },
           hidden: true
-        },
-      ],
-    },
-  ],
+        }
+      ]
+    }
+  ]
 }
 
 export default materialRouter

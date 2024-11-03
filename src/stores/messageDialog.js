@@ -12,7 +12,7 @@ export const useMessageDialogStore = defineStore({
     cancelButtonText: '',
     cancelButtonColor: 'primary',
     showCancel: true,
-    resolve: null,
+    resolve: null
   }),
   actions: {
     alert({
@@ -23,7 +23,7 @@ export const useMessageDialogStore = defineStore({
       confirmButtonColor,
       cancelButtonText,
       cancelButtonColor,
-      showCancel,
+      showCancel
     }) {
       this.title = title
       this.message = message
@@ -34,7 +34,7 @@ export const useMessageDialogStore = defineStore({
       this.cancelButtonColor = cancelButtonColor || this.cancelButtonColor
       this.showCancel = showCancel
       this.show = true
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         this.resolve = resolve
       })
     },
@@ -47,6 +47,6 @@ export const useMessageDialogStore = defineStore({
     close() {
       this.show = false
       this.$reset()
-    },
-  },
+    }
+  }
 })

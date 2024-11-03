@@ -5,14 +5,14 @@ export const useApp = defineStore({
   state: () => ({
     sidebar: {
       opened: false,
-      withoutAnimation: false,
+      withoutAnimation: false
     },
     isLoading: false,
     isCreate: false,
     isReading: false,
     isReadingList: false,
     isUpdate: false,
-    isDelete: false,
+    isDelete: false
   }),
   actions: {
     toggleSidebar() {
@@ -23,6 +23,6 @@ export const useApp = defineStore({
       } else {
         localStorage.setItem('sidebarStatus', 0)
       }
-    },
-  },
+    }
+  }
 })

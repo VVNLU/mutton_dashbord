@@ -1,12 +1,11 @@
 class Vendors {
-
   //api欄位
-  title = ""  // 公司名稱
-  name = ""    // 聯絡人
-  tel = ""
-  address = ""
-  supplies = ""  // 供應品項
-  remark = ""
+  title = '' // 公司名稱
+  name = '' // 聯絡人
+  tel = ''
+  address = ''
+  supplies = '' // 供應品項
+  remark = ''
 
   constructor(obj) {
     if (obj) {

@@ -12,6 +12,6 @@ export default function useLogout() {
     router.push('/login')
   }
   return {
-    resetStore,
+    resetStore
   }
 }

@@ -1,14 +1,14 @@
 <template>
-    <q-toggle v-model="observeVale" :left-label="leftLabel" />
+  <q-toggle v-model="observeVale" :left-label="leftLabel" />
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps } from 'vue'
 import { useVModel } from '@vueuse/core'
 
 const props = defineProps({
-    modelValue: { type: Boolean, default: true },
-    leftLabel: { type: Boolean, default: true }
+  modelValue: { type: Boolean, default: true },
+  leftLabel: { type: Boolean, default: true }
 })
 const emit = defineEmits(['update:modelValue'])
 

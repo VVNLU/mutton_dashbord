@@ -1,6 +1,12 @@
 <template>
-  <text-input ref="inputData" v-model="observeValue" :label="label" :placeholder="placeholder" :rules="ruleList"
-    inputmode="none">
+  <text-input
+    ref="inputData"
+    v-model="observeValue"
+    :label="label"
+    :placeholder="placeholder"
+    :rules="ruleList"
+    inputmode="none"
+  >
     <template #append>
       <q-icon name="event" />
     </template>
@@ -8,9 +14,20 @@
       <slot name="hint" />
     </template>
     <template #default>
-      <q-popup-proxy v-model="show" class="flex justify-center" transition-show="scale" transition-hide="scale">
-        <q-date v-model="observeValue" minimal :title="dateTitle" :subtitle="dateSubtitle" :options="observeOptions"
-          @update:modelValue="updateModelValue">
+      <q-popup-proxy
+        v-model="show"
+        class="flex justify-center"
+        transition-show="scale"
+        transition-hide="scale"
+      >
+        <q-date
+          v-model="observeValue"
+          minimal
+          :title="dateTitle"
+          :subtitle="dateSubtitle"
+          :options="observeOptions"
+          @update:modelValue="updateModelValue"
+        >
           <div class="row items-center justify-end">
             <q-btn v-close-popup label="Close" color="primary" flat />
           </div>
@@ -21,8 +38,8 @@
 </template>
 
 <script setup>
-import { useVModel } from '@vueuse/core';
-import { computed, defineProps, ref, toRefs } from 'vue';
+import { useVModel } from '@vueuse/core'
+import { computed, defineProps, ref, toRefs } from 'vue'
 import { vuelidate } from '@/plugins/vuelidate'
 
 const props = defineProps({
@@ -32,7 +49,12 @@ const props = defineProps({
   options: { type: Array },
   min: { type: String },
   max: { type: String },
-  rules: { type: Array, default() { return [] } }
+  rules: {
+    type: Array,
+    default() {
+      return []
+    }
+  }
 })
 const emit = defineEmits(['update:modelValue'])
 
@@ -65,8 +87,10 @@ const observeOptions = computed(() => {
 
 const ruleList = computed(() => {
   const rule = []
-  min.value && rule.push(vuelidate.dayjIsSameOrAfter(min.value, `必須比${min.value}晚`))
-  max.value && rule.push(vuelidate.dayjIsSameOrBefore(max.value, `必須比${max.value}早`))
+  min.value &&
+    rule.push(vuelidate.dayjIsSameOrAfter(min.value, `必須比${min.value}晚`))
+  max.value &&
+    rule.push(vuelidate.dayjIsSameOrBefore(max.value, `必須比${max.value}早`))
   return rule.concat(rules.value)
 })
 

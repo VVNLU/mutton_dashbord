@@ -1,5 +1,5 @@
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "./index"
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { storage } from './index'
 
 /**
  * 上傳文件到 Firebase Storage 並返回文件的下載 URL
@@ -9,7 +9,7 @@ import { storage } from "./index"
 
 export const uploadFile = async (file) => {
   if (!file) {
-    throw new Error("No file provided for upload.")
+    throw new Error('No file provided for upload.')
   }
 
   const storageRef = ref(storage, `images/${file.name}`)

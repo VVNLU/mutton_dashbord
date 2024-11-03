@@ -1,12 +1,12 @@
 <template>
-    <q-skeleton square :height="height" :width="width" />
+  <q-skeleton square :height="height" :width="width" />
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps } from 'vue'
 
 const props = defineProps({
-    height: { type: String, default: '150px' },
-    width: { type: String }
+  height: { type: String, default: '150px' },
+  width: { type: String }
 })
 </script>

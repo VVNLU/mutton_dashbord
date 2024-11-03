@@ -5,27 +5,27 @@ export default function useNotify() {
     message,
     type = 'info',
     timeout = 3000,
-    position = 'top',
+    position = 'top'
   }) =>
     Notify.create({
       message,
       type,
       timeout,
-      position,
+      position
     })
 
   const notifyAPIError = ({ message }) =>
     Notify.create({
       message,
       type: 'negative',
-      position: 'top',
+      position: 'top'
     })
 
   const notifyError = ({ message }) =>
     Notify.create({
       message,
       type: 'negative',
-      position: 'top',
+      position: 'top'
     })
 
   const customNotify = ({
@@ -34,7 +34,7 @@ export default function useNotify() {
     position = 'top',
     color = 'brown',
     textColor = 'white',
-    icon = 'announcement',
+    icon = 'announcement'
   }) =>
     Notify.create({
       message,
@@ -42,12 +42,12 @@ export default function useNotify() {
       position,
       color,
       textColor,
-      icon,
+      icon
     })
   return {
     notify,
     notifyAPIError,
     notifyError,
-    customNotify,
+    customNotify
   }
 }

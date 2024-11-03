@@ -1,10 +1,14 @@
 <template>
-  <list-search-block v-model="sourceData" @changeFilter="onChangeFilter" @reset="onReset" />
+  <list-search-block
+    v-model="sourceData"
+    @changeFilter="onChangeFilter"
+    @reset="onReset"
+  />
 </template>
 
 <script setup>
 import { useVModel } from '@vueuse/core'
-import { defineProps } from 'vue';
+import { defineProps } from 'vue'
 
 const props = defineProps({
   modelValue: { type: [Object, String] }

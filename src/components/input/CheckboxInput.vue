@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { useVModel } from '@vueuse/core';
+import { useVModel } from '@vueuse/core'
 import { defineProps } from 'vue'
 
 const props = defineProps({

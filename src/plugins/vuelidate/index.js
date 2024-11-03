@@ -126,12 +126,12 @@ export const vuelidate = {
   },
   isTrue(message = false) {
     return (val) => val === true || message
-  },
+  }
 }
 
 export const useVuelidate = {
   install: (app, options) => {
     app.config.globalProperties.$rules = vuelidate
     app.provide('vuelidate', vuelidate)
-  },
+  }
 }
