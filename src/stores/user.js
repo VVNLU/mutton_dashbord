@@ -17,22 +17,27 @@ export const useUser = defineStore({
     role: null
   }),
   actions: {
-    login(email, password) {
-      return signInWithEmailAndPassword(auth, email, password).then(
-        (userCredential) => {
-          this.user = userCredential.user
-          this.token = userCredential.user.accessToken
+    async login(email, password) {
+      try {
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          `${email}@admin.com.tw`,
+          password
+        )
+        this.user = userCredential.user
+        this.token = userCredential.user.accessToken
 
-          return getData(userCredential.user.uid).then((userRole) => {
-            this.role = userRole.role
-            setAuthData(
-              userCredential.user.accessToken,
-              userCredential.user.uid,
-              userRole.role
-            )
-          })
-        }
-      )
+        const userRole = await getData(userCredential.user.uid)
+        this.role = userRole.role
+        setAuthData(
+          userCredential.user.accessToken,
+          userCredential.user.uid,
+          'userRole.role'
+        )
+        return userRole
+      } catch (e) {
+        console.log(e)
+      }
     },
 
     logout() {
