@@ -17,7 +17,7 @@
           <vxe-column title="上架設定" width="120">
             <template #default="{ row }">
               <toggle-input v-model="row.isAvailable" :label="row.isAvailable ? '上架' : '不上架'"
-                @update:modelValue="onEnable(row)" />
+                @update:modelValue="onAvailable(row)" />
             </template>
           </vxe-column>
           <vxe-column title="操作" fixed="right" width="115">
@@ -74,19 +74,8 @@ const delFetch = async (id) => {
   return await deleteData(id)
 }
 
-const onEnable = async (row) => {
+const onAvailable = async (row) => {
   const payload = { isAvailable: row.isAvailable }
-  const urlObj = {
-    edit: () => {
-      return callUpdateFetch(row.id, { ...payload })
-    }
-  }
-  const [res] = await urlObj.edit()
-  if (res) refreshFetch()
-}
-
-const onBlank = async (row) => {
-  const payload = { is_link_blank: row.is_link_blank }
   const urlObj = {
     edit: () => {
       return callUpdateFetch(row.id, { ...payload })
