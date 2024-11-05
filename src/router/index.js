@@ -6,6 +6,7 @@ import MainLayout from '@/layouts/MainLayout.vue'
 import carouselRouter from './modules/carousel'
 import materialRouter from './modules/material'
 import vendorsRouter from './modules/vendors'
+import productRouter from './modules/product'
 
 export const constantRoutes = [
   {
@@ -36,7 +37,8 @@ export const asyncRoutes = [
   // 有需要輪播圖再打開
   // carouselRouter,
   vendorsRouter,
-  materialRouter
+  materialRouter,
+  productRouter
 ]
 
 const router = createRouter({
@@ -44,23 +46,23 @@ const router = createRouter({
   routes: [...constantRoutes, ...asyncRoutes]
 })
 
-router.beforeEach((to) => {
-  if (
-    to.name !== 'login' &&
-    to.name !== 'register' &&
-    localStorage.getItem('Dashboard-Rwd-Base-Token') === null
-  ) {
-    return { name: 'login' || 'register' }
-  }
-})
-router.beforeEach((to) => {
-  if (
-    to.name === 'login' &&
-    localStorage.getItem('Dashboard-Rwd-Base-Token') !== null
-  ) {
-    return { name: 'dashboard' }
-  }
-})
+// router.beforeEach((to) => {
+//   if (
+//     to.name !== 'login' &&
+//     to.name !== 'register' &&
+//     localStorage.getItem('Dashboard-Rwd-Base-Token') === null
+//   ) {
+//     return { name: 'login' || 'register' }
+//   }
+// })
+// router.beforeEach((to) => {
+//   if (
+//     to.name === 'login' &&
+//     localStorage.getItem('Dashboard-Rwd-Base-Token') !== null
+//   ) {
+//     return { name: 'dashboard' }
+//   }
+// })
 
 // export function addRoutes(routes = [], { parent = '' }) {
 //   routes.forEach((route) => {
