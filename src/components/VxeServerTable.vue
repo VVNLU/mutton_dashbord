@@ -1,34 +1,15 @@
 <template>
   <div>
     <div v-show="!isReadingList">
-      <vxe-table
-        ref="dataTable"
-        class="q-mb-sm"
-        auto-resize
-        round
-        stripe
-        :key="refreshKey"
-        :data="data"
-        :show-footer="showFooter"
-        :footer-span-method="footerSpanMethod"
-        :footer-method="footerMethod"
-        :checkbox-config="observeCheckboxConfig"
-        :tree-config="treeConfig"
-        :row-config="observeRowConfig"
-        :max-height="maxHeight"
-        @sort-change="onChangeSort"
-        @checkbox-all="onCheckboxAll"
-        @checkbox-change="onCheckboxChange"
-      >
+      <vxe-table ref="dataTable" class="q-mb-sm" auto-resize round stripe :key="refreshKey" :data="data"
+        :show-footer="showFooter" :footer-span-method="footerSpanMethod" :footer-method="footerMethod"
+        :checkbox-config="observeCheckboxConfig" :tree-config="treeConfig" :row-config="observeRowConfig"
+        :max-height="maxHeight" :cell-class-name="cellClassName" @sort-change="onChangeSort"
+        @checkbox-all="onCheckboxAll" @checkbox-change="onCheckboxChange">
         <slot />
       </vxe-table>
-      <pagination
-        v-if="total > 0 && showPagination"
-        :total="total"
-        :current="current"
-        :auto-scroll="false"
-        @update:current="onUpdateCurrent"
-      />
+      <pagination v-if="total > 0 && showPagination" :total="total" :current="current" :auto-scroll="false"
+        @update:current="onUpdateCurrent" />
     </div>
   </div>
 </template>
@@ -54,7 +35,11 @@ const props = defineProps({
   checkboxConfig: { type: Object },
   treeConfig: { type: Object },
   rowConfig: { type: Object },
-  maxHeight: { type: Number }
+  maxHeight: { type: Number },
+  cellClassName: {
+    type: [String, Function],
+    default: null
+  }
 })
 
 const emit = defineEmits([
@@ -70,7 +55,6 @@ const refreshKey = ref(0)
 const isReadingList = computed(() => {
   return storeApp.isReadingList
 })
-
 const observeCheckboxConfig = computed(() => {
   const config = {
     reserve: true,
