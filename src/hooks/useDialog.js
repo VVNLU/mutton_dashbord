@@ -141,6 +141,7 @@ export default function useDialog({
     data,
     isShowDialog,
     showDialog,
+    hideDialog,
     save
   }
 }
