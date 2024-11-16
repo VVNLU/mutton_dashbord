@@ -4,6 +4,7 @@ import DateRangeInput from './input/DateRangeInput.vue'
 import EmailInput from './input/EmailInput.vue'
 import ImageInput from './input/ImageInput.vue'
 import NumberInput from './input/NumberInput.vue'
+import OptionGroup from './input/OptionGroup.vue'
 import TextInput from './input/TextInput.vue'
 import PasswordInput from './input/PasswordInput.vue'
 import SearchInput from './input/SearchInput.vue'
@@ -45,6 +46,7 @@ export default {
     app.component('EmailInput', EmailInput)
     app.component('ImageInput', ImageInput)
     app.component('NumberInput', NumberInput)
+    app.component('OptionGroup', OptionGroup)
     app.component('TextInput', TextInput)
     app.component('PasswordInput', PasswordInput)
     app.component('SearchInput', SearchInput)

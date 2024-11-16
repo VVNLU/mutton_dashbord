@@ -7,6 +7,7 @@ import carouselRouter from './modules/carousel'
 import materialRouter from './modules/material'
 import vendorsRouter from './modules/vendors'
 import productRouter from './modules/product'
+import orderRouter from './modules/order'
 
 export const constantRoutes = [
   {
@@ -38,7 +39,8 @@ export const asyncRoutes = [
   // carouselRouter,
   vendorsRouter,
   materialRouter,
-  productRouter
+  productRouter,
+  orderRouter
 ]
 
 const router = createRouter({
