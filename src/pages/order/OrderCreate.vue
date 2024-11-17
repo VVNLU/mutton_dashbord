@@ -32,7 +32,7 @@
                   <option-group v-model="payment" label="交易方式" :options="selectedPaymentMethod" type="radio"
                     class="full-width" />
                 </div>
-                <div v-if="payment === '匯款'" class="q-pt-xl col-md-6 col-sm-12 col-xs-12">
+                <div v-if="payment === '轉帳'" class="q-mt-md col-md-6 col-sm-12 col-xs-12">
                   <text-input v-model="accountLastFive" label="帳號後五碼" placeholder="請輸入帳號後五碼" :required="true" />
                 </div>
               </div>
@@ -43,7 +43,7 @@
                   <option-group v-model="ship" label="出貨方式" :options="selectedShippingMethod" type="radio"
                     class="full-width" />
                 </div>
-                <div v-if="ship === '宅配'" class="q-pt-xl col-md-6 col-sm-12 col-xs-12">
+                <div v-if="ship === '宅配'" class="q-mt-md col-md-6 col-sm-12 col-xs-12">
                   <text-input v-model="orderNumber" label="貨運單號" placeholder="請輸入貨運單號" :required="true" />
                 </div>
               </div>
@@ -124,7 +124,7 @@ const orderNumber = ref("")
 
 const selectedPaymentMethod = ref([
   { label: '現金', value: '現金' },
-  { label: '匯款', value: '匯款' },
+  { label: '轉帳', value: '轉帳' },
 ])
 
 const selectedShippingMethod = ref([

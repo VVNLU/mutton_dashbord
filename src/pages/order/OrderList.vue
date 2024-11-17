@@ -56,6 +56,7 @@ const tableFields = ref([
   { title: '電話', field: 'client.tel', min_width: '120' },
   { title: '狀態', field: 'state', min_width: '80' },
   { title: '交易方式', field: 'payment', min_width: '80' },
+  { title: '後五碼', field: 'accountLastFive', min_width: '80' },
   { title: '是否付款', field: 'isPaid', min_width: '80' },
   { title: '出貨方式', field: 'ship', min_width: '80' },
   { title: '是否出貨', field: 'isShipped', min_width: '80' },
@@ -73,9 +74,9 @@ const getCellClassName = ({ row = {}, column = {} } = {}) => {
     case 'state':
       return row.state === '處理中' ? 'processing' : row.state === '已完成' ? 'completed' : row.state === '已取消' ? 'canceled' : ''
     case 'isPaid':
-      return row.isPaid === '處理中' ? 'processing' : row.state === '已完成' ? 'completed' : row.state === '已取消' ? 'canceled' : ''
+      return row.isPaid === '處理中' ? 'processing' : row.isPaid === '已完成' ? 'completed' : row.isPaid === '已取消' ? 'canceled' : ''
     case 'isShipped':
-      return row.isShipped === '處理中' ? 'processing' : row.state === '已完成' ? 'completed' : row.state === '已取消' ? 'canceled' : ''
+      return row.isShipped === '處理中' ? 'processing' : row.isShipped === '已完成' ? 'completed' : row.isShipped === '已取消' ? 'canceled' : ''
     default:
       return ''
   }

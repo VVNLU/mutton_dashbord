@@ -19,7 +19,13 @@
           <q-table :rows="clientData.contents" :columns="columns" row-key="name" hide-bottom>
             <template v-slot:top-left>
               <q-tr>
-                <q-td># {{ currentId }}</q-td>
+                <q-item-label><q-icon name="receipt_long" class="q-pr-xs" /> {{ currentId }}</q-item-label>
+                <q-item-label v-if="clientData.payment === '現金'"><q-icon name="paid" class="q-pr-xs" />
+                  {{ clientData.payment }}付款
+                </q-item-label>
+                <q-item-label v-if="clientData.payment === '轉帳'"><q-icon name="paid" class="q-pr-xs" />
+                  {{ clientData.payment }}付款: 後五碼 <span class="text-bold"> {{ clientData.accountLastFive }}</span>
+                </q-item-label>
               </q-tr>
             </template>
             <template v-slot:top-right>
