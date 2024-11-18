@@ -8,8 +8,8 @@ import { convertDateTime } from '@/utils/data-convert'
 export function initializeDates(data) {
   return {
     ...data,
-    create_at: data.create_at ? convertDateTime(data.create_at) : null,
-    publish_at: data.publish_at ? convertDateTime(data.publish_at) : null,
+    createDate: data.createDate ? convertDateTime(data.createDate) : null,
+    updateDate: data.updateDate ? convertDateTime(data.updateDate) : null,
   }
 }
 
@@ -22,10 +22,10 @@ export function initializeDates(data) {
 export function updateDates(data, mode) {
   const updatedData = { ...data }
   if (mode === 'create') {
-    updatedData.create_at = convertDateTime()
+    updatedData.createDate = convertDateTime()
   }
   if (mode === 'edit') {
-    updatedData.publish_at = convertDateTime()
+    updatedData.updateDate = convertDateTime()
   }
   return updatedData
 }
