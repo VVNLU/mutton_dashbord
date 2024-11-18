@@ -66,7 +66,7 @@
 import { defineProps, ref, toRefs, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { getData, addData, updateData } from '@/api/product'
-import { getList } from '@/api/materialClassification'
+import { initializeDates, updateDates } from '@/utils/dateHandler'
 import useCRUD from '@/hooks/useCRUD'
 import useGoBack from '@/hooks/useGoBack'
 import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
@@ -79,7 +79,6 @@ const props = defineProps({
 
 const { mode } = toRefs(props)
 const route = useRoute()
-const materialClassificationData = ref([])
 const id = route.params.id || null
 const dialog = ref()
 
@@ -107,18 +106,14 @@ const updateFetch = async (id, payload) => {
 
 const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
-  data.value = res
+  data.value = initializeDates(res)
   data.value.contents = Array.isArray(data.value.contents) ? data.value.contents : [data.value.contents]
 }
 
 const onSubmit = async () => {
   form.value.validate().then(async (success) => {
     if (success) {
-      const payload = {
-        ...data.value,
-        contents: data.value.contents,
-        ...(mode.value === 'create' ? { isAvailable: true } : {})
-      }
+      const payload = updateDates({ ...data.value, contents: data.value.contents }, mode.value)
       const urlObj = {
         create: () => {
           return callCreateFetch({ ...payload })
@@ -166,7 +161,6 @@ const {
   callReadFetch,
   callCreateFetch,
   callUpdateFetch,
-  callDeleteFetch
 } = useCRUD({
   readFetch: readFetch,
   createFetch: createFetch,
