@@ -11,7 +11,7 @@
         <!-- <material-list-search-block v-model="search" class="q-mb-sm" @changeFilter="onChangeFilter" @reset="onReset" /> -->
         <vxe-server-table ref="dataTable" :data="data" :total="total" :current="search.page" @sort-change="OnChangeSort"
           @update:current="onChangePage">
-          <vxe-column title="日期" field="date" min_width="110" />
+          <vxe-column title="日期" field="manufacturingDate" min_width="110" sortable="true"/>
           <vxe-column title="原物料" min_width="110">
             <template #default="{ row }">
               <div v-for="item in row.contents">{{ item.title }}</div>
@@ -130,7 +130,7 @@ const {
   searchParams: filter,
   sortParams: [
     {
-      field: 'date',
+      field: 'manufacturingDate',
       order: 'desc'
     }
   ],

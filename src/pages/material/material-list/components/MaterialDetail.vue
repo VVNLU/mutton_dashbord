@@ -9,7 +9,7 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-md-6 col-sm-12 col-xs-12">
-                  <date-input v-model="date" class="w-full" label="日期 *" placeholder="請選擇日期"
+                  <date-input v-model="manufacturingDate" class="w-full" label="日期 *" placeholder="請選擇日期"
                     :rules="[$rules.required('日期必填')]" />
                 </div>
               </div>
@@ -78,6 +78,7 @@ import { defineProps, ref, toRefs, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getData, addData, updateData, removeData } from '@/api/material'
 import { getList } from '@/api/materialClassification'
+import { initializeDates, updateDates } from '@/utils/dateHandler'
 import useCRUD from '@/hooks/useCRUD'
 import useGoBack from '@/hooks/useGoBack'
 import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
@@ -90,7 +91,7 @@ const props = defineProps({
 const { mode } = toRefs(props)
 const route = useRoute()
 const materialClassificationData = ref([])
-const date = ref([])
+const manufacturingDate = ref([])
 const id = route.params.id || null
 
 onMounted(async () => {
@@ -136,17 +137,17 @@ const readListMaterialClassificationFetch = async () => {
 
 const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
-  data.value = res.contents
-  date.value = res.date
+  data.value = initializeDates(res.contents)
+  manufacturingDate.value = initializeDates(res.manufacturingDate)
 }
 
 const onSubmit = async () => {
   form.value.validate().then(async (success) => {
     if (success) {
-      const payload = {
-        date: date.value,
+      const payload = updateDates({
+        manufacturingDate: manufacturingDate.value,
         contents: data.value
-      }
+      }, mode.value)
       const urlObj = {
         create: () => {
           return callCreateFetch({ ...payload })
