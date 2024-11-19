@@ -46,7 +46,7 @@ export default defineComponent({
     }
 
     const onSave = async () => {
-      data.state = updateDates(data.state, 'create') // 新增時間
+      data.state = updateDates(data.state, mode.value === 'create'?'create':'edit')
       const [res] = await save()
       if (res) emit('save')
     }
@@ -56,7 +56,7 @@ export default defineComponent({
     }
 
     // use
-    const { form, data, isShowDialog, showDialog, save } = useDialog({
+    const { form, data, isShowDialog, showDialog, save,mode } = useDialog({
       formData: initializeDates(new Material()), // 初始化日期
       readFetch: readFetch,
       createFetch: createFetch,
