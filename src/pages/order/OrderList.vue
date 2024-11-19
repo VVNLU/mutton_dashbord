@@ -11,9 +11,20 @@
       <card-body>
         <!-- <order-list-search-block v-model="search" class="q-mb-sm" @changeFilter="onChangeFilter" @reset="onReset" /> -->
         <vxe-server-table ref="dataTable" :data="data" :total="total" :current="search.page" @sort-change="OnChangeSort"
-          @update:current="onChangePage" :cell-class-name="getCellClassName">
-          <vxe-column v-for="{ field, title, min_width } in tableFields" :key="field" :field="field" :title="title"
-            :min-width="min_width" />
+          @update:current="onChangePage">
+          <vxe-column v-for="{ field, title, min_width, type } in tableFields" :key="field" :field="field"
+            :title="title" :min-width="min_width" :type="type">
+            <template v-if="type === 'html'" #default="{ row, column }">
+              <div :class="getCellClassName({ row, column })">
+                {{ row[field] }}
+              </div>
+            </template>
+            <template v-if="type === 'accountLastFive'" #default="{ row }">
+              <div>
+                {{ row.payment === '現金' ? '-' : row.accountLastFive }}
+              </div>
+            </template>
+          </vxe-column>
           <vxe-column title="操作" fixed="right" width="60">
             <template #default="{ row }">
               <div class="flex-center row">
@@ -54,12 +65,12 @@ const tableFields = ref([
   { title: '訂單單號', field: 'id', min_width: '120' },
   { title: '訂購人', field: 'client.name', min_width: '100' },
   { title: '電話', field: 'client.tel', min_width: '120' },
-  { title: '狀態', field: 'state', min_width: '80' },
+  { title: '狀態', field: 'state', min_width: '80', type: 'html' },
   { title: '交易方式', field: 'payment', min_width: '80' },
-  { title: '後五碼', field: 'accountLastFive', min_width: '80' },
-  { title: '是否付款', field: 'isPaid', min_width: '80' },
+  { title: '後五碼', field: 'accountLastFive', min_width: '80', type: 'accountLastFive' },
+  { title: '是否付款', field: 'isPaid', min_width: '80', type: 'html' },
   { title: '出貨方式', field: 'ship', min_width: '80' },
-  { title: '是否出貨', field: 'isShipped', min_width: '80' },
+  { title: '是否出貨', field: 'isShipped', min_width: '80', type: 'html' },
   { title: '人員', field: '', min_width: '80' },
   { title: '備註', field: 'client.remark', min_width: '120' },
 ])
@@ -72,7 +83,7 @@ const getCellClassName = ({ row = {}, column = {} } = {}) => {
   const field = column.field
   switch (field) {
     case 'state':
-      return row.state === '處理中' ? 'processing' : row.state === '已完成' ? 'completed' : row.state === '已取消' ? 'canceled' : ''
+      return row.state === '處理中' ? 'processing ' : row.state === '已完成' ? 'completed' : row.state === '已取消' ? 'canceled' : ''
     case 'isPaid':
       return row.isPaid === '處理中' ? 'processing' : row.isPaid === '已完成' ? 'completed' : row.isPaid === '已取消' ? 'canceled' : ''
     case 'isShipped':
@@ -171,12 +182,14 @@ const {
 .processing,
 .completed,
 .canceled {
+  display: flex;
+  justify-content: center;
   font-weight: bold;
-  border-radius: 15px;
+  border-radius: 4px;
 }
 
 .processing {
-  background-color: $rating-grade-color;
+  background-color: $yellow;
 }
 
 .completed {
