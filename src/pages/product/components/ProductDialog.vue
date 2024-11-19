@@ -25,7 +25,7 @@
               </vxe-column>
               <vxe-column title="數量" min_width="150">
                 <template #default="{ row }">
-                  <number-input v-model="row.quantity" placeholder="請輸入數量" />
+                  <number-input v-model="row.quantity" placeholder="請輸入數量" label="數量" />
                 </template>
               </vxe-column>
               <vxe-column title="操作" fixed="right" width="120">
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, computed, watch } from 'vue-demi'
+import { defineComponent, ref, onMounted, watch } from 'vue-demi'
 import { getList } from '@/api/materialClassification'
 import useDialog from '@/hooks/useDialog'
 import useMessageDialog from '@/hooks/useMessageDialog'
@@ -76,7 +76,7 @@ export default defineComponent({
       data.value.push({
         id: item.id,
         name: item.name,
-        quantity: 0,
+        quantity: null,
         uniqueItem: Date.now() + Math.random() // 判斷項目重複時要刪除哪一個
       })
     }

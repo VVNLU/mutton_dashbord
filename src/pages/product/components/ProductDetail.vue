@@ -116,7 +116,7 @@ const onSubmit = async () => {
       const payload = updateDates({ ...data.value, contents: data.value.contents }, mode.value)
       const urlObj = {
         create: () => {
-          return callCreateFetch({ ...payload })
+          return callCreateFetch({ ...payload, isAvailable: true })
         },
         edit: () => {
           return callUpdateFetch(id, { ...payload })
