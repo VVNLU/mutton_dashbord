@@ -4,31 +4,66 @@
     <base-form ref="form">
       <div class="row q-col-gutter-x-md">
         <div class="col-6">
-          <span class="text-18px text-bold">訂購人</span>
-          <text-input v-model="clientData.client.name" disable />
+          <q-field borderless stack-label label="訂購人">
+            <template v-slot:control>
+              <div class="self-center full-width no-outline text-18px" tabindex="0">
+                {{ clientData.client.name }}
+              </div>
+            </template>
+          </q-field>
         </div>
         <div class="col-6">
-          <span class="text-18px text-bold">電話</span>
-          <text-input v-model="clientData.client.tel" disable />
+          <q-field borderless stack-label label="電話">
+            <template v-slot:control>
+              <div class="self-center full-width no-outline text-18px" tabindex="0">
+                {{ clientData.client.tel }}
+              </div>
+            </template>
+          </q-field>
         </div>
         <div class="col-6">
-          <span class="text-18px text-bold">地址</span>
-          <text-input v-model="clientData.client.address" disable />
+          <q-field borderless stack-label label="地址">
+            <template v-slot:control>
+              <div class="self-center full-width no-outline text-18px" tabindex="0">
+                {{ clientData.client.address }}
+              </div>
+            </template>
+          </q-field>
         </div>
         <div class="col-6">
-          <span class="text-18px text-bold">備註</span>
-          <text-input v-model="clientData.client.remark" disable />
+          <q-field borderless stack-label label="備註">
+            <template v-slot:control>
+              <div class="self-center full-width no-outline text-18px" tabindex="0">
+                {{ clientData.client.remark }}
+              </div>
+            </template>
+          </q-field>
         </div>
         <div class="col-12">
           <q-table :rows="clientData.contents" :columns="columns" row-key="name" hide-bottom>
             <template v-slot:top-left>
               <q-tr>
-                <q-item-label><q-icon name="receipt_long" class="q-pr-xs" /> {{ currentId }}</q-item-label>
-                <q-item-label v-if="clientData.payment === '現金'"><q-icon name="paid" class="q-pr-xs" />
-                  {{ clientData.payment }}付款
+                <q-item-label class="text-info">
+                  <q-icon name="receipt_long" class="q-pr-xs text-info" size="1.5em" />
+                  {{ currentId }}
                 </q-item-label>
-                <q-item-label v-if="clientData.payment === '轉帳'"><q-icon name="paid" class="q-pr-xs" />
-                  {{ clientData.payment }}付款: 後五碼 <span class="text-bold"> {{ clientData.accountLastFive }}</span>
+                <q-item-label class="text-accent text-shadow" v-if="clientData.payment">
+                  <q-icon name="paid" class="q-pr-xs" size="1.5em" />
+                  {{ clientData.payment }}付款
+                  <template v-if="clientData.payment === '轉帳'">: 後五碼
+                    <span class="text-bold">
+                      {{ clientData.accountLastFive }}
+                    </span>
+                  </template>
+                </q-item-label>
+                <q-item-label class="text-secondary text-shadow" v-if="clientData.ship">
+                  <q-icon name="local_shipping" class="q-pr-xs" size="1.5em" />
+                  {{ clientData.ship }}出貨
+                  <template v-if="clientData.ship === '宅配'">: 貨運單號
+                    <span class="text-bold">
+                      {{ clientData.orderNumber }}
+                    </span>
+                  </template>
                 </q-item-label>
               </q-tr>
             </template>
@@ -181,9 +216,9 @@ export default defineComponent({
 
     const getStatusColor = (status) => {
       const colorMap = {
-        '處理中': 'yellow text-black',
-        '已完成': 'green',
-        '已取消': 'red',
+        '處理中': 'warning text-black',
+        '已完成': 'positive',
+        '已取消': 'negative',
       }
       return colorMap[status] || colorMap.default
     }

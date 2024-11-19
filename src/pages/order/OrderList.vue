@@ -24,6 +24,11 @@
                 {{ row.payment === '現金' ? '-' : row.accountLastFive }}
               </div>
             </template>
+            <template v-if="type === 'orderNumber'" #default="{ row }">
+              <div>
+                {{ row.ship === '宅配' ? row.orderNumber : '-' }}
+              </div>
+            </template>
           </vxe-column>
           <vxe-column title="操作" fixed="right" width="60">
             <template #default="{ row }">
@@ -70,6 +75,7 @@ const tableFields = ref([
   { title: '後五碼', field: 'accountLastFive', min_width: '80', type: 'accountLastFive' },
   { title: '是否付款', field: 'isPaid', min_width: '80', type: 'html' },
   { title: '出貨方式', field: 'ship', min_width: '80' },
+  { title: '貨運單號', field: 'orderNumber', min_width: '120', type: 'orderNumber' },
   { title: '是否出貨', field: 'isShipped', min_width: '80', type: 'html' },
   { title: '人員', field: '', min_width: '80' },
   { title: '備註', field: 'client.remark', min_width: '120' },
@@ -189,16 +195,17 @@ const {
 }
 
 .processing {
-  background-color: $yellow;
+  color: $dark;
+  background-color: $warning;
 }
 
 .completed {
   color: white;
-  background-color: $green;
+  background-color: $positive;
 }
 
 .canceled {
   color: white;
-  background-color: $red;
+  background-color: $negative;
 }
 </style>
