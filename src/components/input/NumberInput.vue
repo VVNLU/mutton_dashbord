@@ -1,11 +1,5 @@
 <template>
-  <text-input
-    v-model="observeValue"
-    type="number"
-    :label="label"
-    :rules="ruleList"
-    @clear="clearFn"
-  >
+  <text-input v-model="observeValue" type="number" :label="label" :rules="ruleList" @clear="clearFn">
     <template v-if="$slots.default" #default>
       <slot name="default" />
     </template>
@@ -45,7 +39,7 @@ import { vuelidate } from '@/plugins/vuelidate'
 
 const props = defineProps({
   label: { type: String },
-  modelValue: { type: [String, Number], default: 0 },
+  modelValue: { type: [String, Number] },
   rules: {
     type: Array,
     default() {
