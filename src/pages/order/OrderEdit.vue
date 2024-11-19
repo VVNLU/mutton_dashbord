@@ -101,6 +101,7 @@
 <script>
 import { defineComponent, ref, watch, computed } from 'vue-demi'
 import { getData, updateData, deleteData } from '@/api/order'
+import { initializeDates, updateDates } from '@/utils/dateHandler'
 import useDialog from '@/hooks/useDialog'
 import useMessageDialog from '@/hooks/useMessageDialog'
 import useCRUD from '@/hooks/useCRUD'
@@ -132,7 +133,7 @@ export default defineComponent({
 
     const readFetch = async (id) => {
       const res = await getData(id)
-      clientData.value = res
+      clientData.value = initializeDates(res)
       currentId.value = id
     }
 
@@ -145,9 +146,9 @@ export default defineComponent({
     }
 
     const onSave = async () => {
-      const payload = {
+      const payload = updateDates({
         ...clientData.value
-      }
+      },'edit')
       const id = currentId.value
       await callUpdateFetch(id, { ...payload })
 

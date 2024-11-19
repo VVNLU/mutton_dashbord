@@ -105,6 +105,7 @@
 import { ref, onMounted } from 'vue'
 import { addData } from '@/api/order'
 import { getList } from '@/api/product'
+import {  updateDates } from '@/utils/dateHandler'
 import useCRUD from '@/hooks/useCRUD'
 import useGoBack from '@/hooks/useGoBack'
 import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
@@ -162,7 +163,7 @@ const readProductFetch = async () => {
 const onSubmit = async () => {
   form.value.validate().then(async (success) => {
     if (success) {
-      const payload = {
+      const payload = updateDates({
         state: '處理中',
         isPaid: '處理中',
         isShipped: '處理中',
@@ -172,7 +173,7 @@ const onSubmit = async () => {
         accountLastFive: accountLastFive.value,
         ship: ship.value,
         orderNumber: orderNumber.value
-      }
+      }, 'create')
       const [res] = await callCreateFetch({ ...payload })
       if (res) goBack()
     }
