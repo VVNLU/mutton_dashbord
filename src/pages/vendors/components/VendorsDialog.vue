@@ -77,8 +77,9 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, computed } from 'vue-demi'
+import { defineComponent } from 'vue-demi'
 import { addData, getData, updateData } from '@/api/vendors'
+import { initializeDates, updateDates } from '@/utils/dateHandler'
 import Vendors from '@/class/Vendors'
 import useDialog from '@/hooks/useDialog'
 
@@ -98,6 +99,7 @@ export default defineComponent({
     }
 
     const onSave = async () => {
+      data.state = updateDates(data.state, mode.value === 'create'?'create':'edit')
       const [res] = await save()
       if (res) emit('save')
     }
@@ -107,8 +109,8 @@ export default defineComponent({
     }
 
     // use
-    const { form, data, isShowDialog, showDialog, save } = useDialog({
-      formData: new Vendors(),
+    const { form, data, isShowDialog, showDialog, save , mode} = useDialog({
+      formData: initializeDates(new Vendors()), // 初始化日期
       createFetch: createFetch,
       readFetch: readFetch,
       updateFetch: updateFetch

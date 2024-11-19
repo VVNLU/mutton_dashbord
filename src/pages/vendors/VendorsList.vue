@@ -53,8 +53,9 @@
 </template>
 
 <script setup>
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref } from 'vue'
 import { getList, updateData, deleteData } from '@/api/vendors'
+import { initializeDates, updateDates } from '@/utils/dateHandler'
 import VendorsListSearchBlock from './components/VendorsListSearchBlock.vue'
 import VendorsDialog from './components/VendorsDialog.vue'
 import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
@@ -77,7 +78,7 @@ const tableFields = ref([
 
 const readListFetch = async (payload) => {
   return await getList(payload).then((res) => {
-    data.value = res
+    data.value = res.map(item => initializeDates(item))
     total.value = res.length
   })
 }
