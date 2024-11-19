@@ -11,9 +11,13 @@
           <span class="text-18px text-bold">電話</span>
           <text-input v-model="clientData.client.tel" disable />
         </div>
-        <div class="col-12">
+        <div class="col-6">
           <span class="text-18px text-bold">地址</span>
           <text-input v-model="clientData.client.address" disable />
+        </div>
+        <div class="col-6">
+          <span class="text-18px text-bold">備註</span>
+          <text-input v-model="clientData.client.remark" disable />
         </div>
         <div class="col-12">
           <q-table :rows="clientData.contents" :columns="columns" row-key="name" hide-bottom>
@@ -148,7 +152,7 @@ export default defineComponent({
     const onSave = async () => {
       const payload = updateDates({
         ...clientData.value
-      },'edit')
+      }, 'edit')
       const id = currentId.value
       await callUpdateFetch(id, { ...payload })
 
