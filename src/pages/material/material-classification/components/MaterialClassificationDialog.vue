@@ -32,7 +32,6 @@ export default defineComponent({
     }
 
     const createFetch = async (payload) => {
-      console.log('pay', payload)
       return await addData(payload)
     }
 
