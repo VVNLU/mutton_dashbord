@@ -43,7 +43,7 @@
                     </vxe-column>
                     <vxe-column title="數量" min_width="130">
                       <template #default="{ row }">
-                        <number-input v-model="row.quantity" placeholder="請輸入數量" />
+                        <number-input v-model="row.quantity" placeholder="請輸入數量" label="數量" />
                       </template>
                     </vxe-column>
                     <vxe-column title="單位" min_width="130">
@@ -53,7 +53,7 @@
                     </vxe-column>
                     <vxe-column title="總額" min_width="130">
                       <template #default="{ row }">
-                        <number-input v-model="row.total" placeholder="請輸入總額" />
+                        <number-input v-model="row.total" placeholder="請輸入總額" label="總額" />
                       </template>
                     </vxe-column>
                     <vxe-column title="操作" fixed="right" width="115">
@@ -105,9 +105,9 @@ onMounted(async () => {
 const addNewData = async (item) => {
   data.value.push({
     title: item.name,
-    quantity: 0,
+    quantity: null,
     unit: item.unit,
-    total: 0
+    total: null
   })
 }
 
