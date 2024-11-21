@@ -1,7 +1,7 @@
-import { ref } from 'vue'
+import { ref } from 'vue-demi'
 import useQuickState from './useQuickState'
 import mapKeys from 'lodash/mapKeys'
-import useCRUD from '@/hooks/useCRUD'
+import useCRUD from './useCRUD'
 
 export default function useDialog({
   formData,
@@ -23,21 +23,24 @@ export default function useDialog({
 
   readListFetch,
   readListSuccess = '讀取列表成功',
-  readListFail = '讀取列表失敗'
+  readListFail = '讀取列表失敗',
+
 }) {
+  // data
   const form = ref()
   const data = useQuickState(formData)
   const id = ref(null)
   const mode = ref() // create, edit, delete
   const isShowDialog = ref(false)
 
+  // methods
   const showDialog = async ({
     id: dataId = null,
     data: rowData = null,
     mode: dialogMode = 'create',
     callRead = false,
     callReadList = false,
-    payload = null
+    payload = null,
   }) => {
     id.value = dataId
     mode.value = dialogMode
@@ -47,12 +50,7 @@ export default function useDialog({
         data.total = rowData.length
       } else {
         mapKeys(data.state, (_, key) => {
-          data.state[key] =
-            rowData[key] === undefined
-              ? data.state[key] !== undefined
-                ? data.state[key]
-                : ''
-              : rowData[key]
+          data.state[key] = rowData[key] === undefined ? (data.state[key] !== undefined ? data.state[key] : '') : rowData[key]
         })
       }
     }
@@ -65,9 +63,7 @@ export default function useDialog({
       }
     }
     if (callReadList) {
-      const [res] = dataId
-        ? await callReadListFetch(dataId, payload)
-        : await callReadListFetch(payload)
+      const [res] = dataId ? await callReadListFetch(dataId, payload) : await callReadListFetch(payload)
       if (res) {
         data.list = res.list
         data.total = res.total
@@ -81,7 +77,7 @@ export default function useDialog({
   }
 
   const save = async () => {
-    return form.value.validate().then(async (success) => {
+    return await form.value.validate().then(async (success) => {
       if (success) {
         const payload = { ...data.state }
         const urlObj = {
@@ -105,7 +101,7 @@ export default function useDialog({
             } else {
               return callDeleteFetch({ ...payload })
             }
-          }
+          },
         }
         const [res, error] = await urlObj[mode.value]()
         hideDialog()
@@ -116,6 +112,7 @@ export default function useDialog({
     })
   }
 
+  // use
   const {
     callCreateFetch,
     callReadFetch,
@@ -132,7 +129,7 @@ export default function useDialog({
     readSuccess,
     updateSuccess,
     deleteSuccess,
-    readListSuccess
+    readListSuccess,
   })
 
   return {
@@ -141,7 +138,6 @@ export default function useDialog({
     data,
     isShowDialog,
     showDialog,
-    hideDialog,
-    save
+    save,
   }
 }
