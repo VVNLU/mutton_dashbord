@@ -3,44 +3,22 @@
     <page-header>
       {{ $route.meta.title }}
       <template #action>
-        <add-button @click="showDialog({})" />
+        <add-button @click="showDialog({ mode: 'create' })" />
       </template>
     </page-header>
     <q-card class="shadow-7">
       <card-body>
-        <vendors-list-search-block
-          v-model="search"
-          @changeFilter="onChangeFilter"
-          @reset="onReset"
-        />
-        <vxe-server-table
-          ref="dataTable"
-          :data="data"
-          :total="total"
-          :current="search.page"
-          @sort-change="OnChangeSort"
-          @update:current="onChangePage"
-        >
-          <vxe-column
-            v-for="{ field, title, min_width, sort } in tableFields"
-            :key="field"
-            :field="field"
-            :title="title"
-            :min-width="min_width"
-          />
+        <vendor-list-search-block v-model="search" @changeFilter="onChangeFilter" @reset="onReset" />
+        <vxe-server-table ref="dataTable" :data="data" :total="total" :current="search.page" @sort-change="OnChangeSort"
+          @update:current="onChangePage">
+          <vxe-column v-for="{ field, title, min_width } in tableFields" :key="field" :field="field" :title="title"
+            :min-width="min_width" />
           <vxe-column title="操作" fixed="right" width="120">
             <template #default="{ row }">
               <div class="flex-center row">
-                <edit-icon-button
-                  class="q-mr-xs q-mb-xs"
-                  @click="
-                    showDialog({ id: row.id, mode: 'edit', callRead: true })
-                  "
-                />
-                <delete-icon-button
-                  class="q-mr-xs q-mb-xs"
-                  @click="onDelete(row)"
-                />
+                <edit-icon-button class="q-mr-xs q-mb-xs"
+                  @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
+                <delete-icon-button class="q-mr-xs q-mb-xs" @click="onDelete(row)" />
               </div>
             </template>
           </vxe-column>
@@ -48,16 +26,16 @@
       </card-body>
     </q-card>
 
-    <vendors-dialog ref="dialog" @save="refreshFetch" />
+    <vendor-dialog ref="dialog" @save="refreshFetch" />
   </q-page>
 </template>
 
 <script setup>
 import { reactive, ref } from 'vue'
-import { getList, updateData, deleteData } from '@/api/vendors'
-import { initializeDates, updateDates } from '@/utils/dateHandler'
-import VendorsListSearchBlock from './components/VendorsListSearchBlock.vue'
-import VendorsDialog from './components/VendorsDialog.vue'
+import { getList, updateData, deleteData } from '@/api/vendor'
+import { initializeDates } from '@/utils/dateHandler'
+import VendorListSearchBlock from './components/VendorListSearchBlock.vue'
+import VendorDialog from './components/VendorDialog.vue'
 import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
 import useMessageDialog from '@/hooks/useMessageDialog'
 import useCRUD from '@/hooks/useCRUD'
@@ -92,7 +70,8 @@ const delFetch = async (id) => {
 }
 
 const refreshFetch = async () => {
-  await callReadListFetch({ ...search })
+  console.log('123', search)
+  await callReadListFetch(null, { ...search })
 }
 
 const onDelete = async (row) => {
@@ -125,10 +104,9 @@ const {
 } = useVxeServerDataTable({
   searchParams: filter,
   sortParams: [
-    { field: 'date', order: 'desc' },
-    { field: 'id', order: 'desc' }
+    { field: 'createDate', order: 'desc' },
   ],
-  sessionStorageKey: 'dashboardVendorsServerDataTable',
+  sessionStorageKey: 'dashboardVendorServerDataTable',
   callback: refreshFetch
 })
 

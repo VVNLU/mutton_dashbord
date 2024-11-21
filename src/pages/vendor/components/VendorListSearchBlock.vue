@@ -16,6 +16,7 @@ const props = defineProps({
 const emit = defineEmits(['changeFilter', 'reset'])
 
 const sourceData = useVModel(props, 'modelValue', emit)
+console.log('sourceData',sourceData.value)
 
 const onChangeFilter = () => {
   emit('changeFilter')

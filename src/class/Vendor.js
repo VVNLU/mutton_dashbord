@@ -1,4 +1,4 @@
-class Vendors {
+class vendor {
   //api欄位
   title = '' // 公司名稱
   name = '' // 聯絡人
@@ -18,4 +18,4 @@ class Vendors {
     }
   }
 }
-export default Vendors
+export default vendor

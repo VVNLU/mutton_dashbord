@@ -1,21 +1,21 @@
 import MainLayout from '@/layouts/MainLayout.vue'
 
-const vendorsRouter = {
-  path: '/vendors',
+const vendorRouter = {
+  path: '/vendor',
   component: MainLayout,
   groupName: 'first',
-  name: 'vendors',
+  name: 'vendor',
   meta: {
     title: '供應商管理',
     slug: 'link',
     icon: 'menu_open'
   },
-  redirect: { name: 'VendorsList' },
+  redirect: { name: 'vendorList' },
   children: [
     {
       path: '',
-      component: () => import('@/pages/vendors/VendorsList.vue'),
-      name: 'VendorsList',
+      component: () => import('@/pages/vendor/VendorList.vue'),
+      name: 'vendorList',
       meta: {
         title: '供應商管理',
         icon: 'fa-solid fa-address-book'
@@ -24,4 +24,4 @@ const vendorsRouter = {
   ]
 }
 
-export default vendorsRouter
+export default vendorRouter
