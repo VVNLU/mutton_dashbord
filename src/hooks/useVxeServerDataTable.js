@@ -20,7 +20,7 @@ export default function useVxeServerDataTable({
   const total = ref(0)
   const sort = ref([])
   const unSessionStorageParamsField = unSessionStorageParams.map((item) => item.field) // 不需要儲存在 sessionStorage 的欄位名列表
-  console.log('search', search.value)
+
   // 變更頁碼
   const onChangePage = (page) => {
     search.page = page // 更新 search.page
