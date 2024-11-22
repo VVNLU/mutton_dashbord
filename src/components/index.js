@@ -37,6 +37,7 @@ import PageHeader from './PageHeader.vue'
 import ImageColumn from './table-column/ImageColumn.vue'
 import BaseUploader from './uploader/BaseUploader.vue'
 import ImageUploader from './uploader/ImageUploader.vue'
+import DataTable from './DataTable.vue'
 
 export default {
   install(app) {
@@ -79,5 +80,6 @@ export default {
     app.component('ImageColumn', ImageColumn)
     app.component('BaseUploader', BaseUploader)
     app.component('ImageUploader', ImageUploader)
+    app.component('DataTable', DataTable)
   }
 }
