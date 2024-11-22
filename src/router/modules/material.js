@@ -2,7 +2,7 @@ import MainLayout from '@/layouts/MainLayout.vue'
 
 const materialRouter = {
   path: '/material',
-  group: ['/material-classification', '/material'],
+  group: ['/material-category', '/material'],
   groupName: 'first',
   component: MainLayout,
   meta: {
@@ -14,20 +14,20 @@ const materialRouter = {
   children: [
     // 原物料
     {
-      path: '/material-classification',
-      name: 'MaterialClassification',
+      path: '/material-category',
+      name: 'MaterialCategory',
       meta: {
         slug: 'link'
       },
-      redirect: { name: 'MaterialClassificationList' },
+      redirect: { name: 'MaterialCategoryList' },
       children: [
         {
           path: '',
           component: () =>
             import(
-              '@/pages/material/material-classification/MaterialClassificationList.vue'
+              '@/pages/material/material-category/MaterialCategoryList.vue'
             ),
-          name: 'MaterialClassificationList',
+          name: 'MaterialCategoryList',
           meta: {
             title: '原物料',
             icon: 'chevron_right'

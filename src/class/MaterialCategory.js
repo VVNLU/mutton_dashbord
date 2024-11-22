@@ -1,15 +1,15 @@
-class MaterialClassification {
+class MaterialCategory {
   //api欄位
-  name = ''
+  title = ''
   unit = ''
   is_enable = true
 
   constructor(obj) {
     if (obj) {
-      this.name = obj?.name
+      this.title = obj?.title
       this.unit = obj?.unit
       this.is_enable = obj?.is_enable
     }
   }
 }
-export default MaterialClassification
+export default MaterialCategory

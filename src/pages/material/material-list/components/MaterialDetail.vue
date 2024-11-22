@@ -22,8 +22,8 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <base-button v-for="item in materialClassificationData" :label="item.name" :outline="true"
-                    :rounded="true" @click="addNewData(item)" class="classification-btn" />
+                  <base-button v-for="item in materialCategoryData" :label="item.name" :outline="true" :rounded="true"
+                    @click="addNewData(item)" class="classification-btn" />
                 </div>
               </div>
             </card-body>
@@ -77,7 +77,7 @@
 import { defineProps, ref, toRefs, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getData, addData, updateData, removeData } from '@/api/material'
-import { getList } from '@/api/materialClassification'
+import { getList } from '@/api/materialCategory'
 import { initializeDates, updateDates } from '@/utils/dateHandler'
 import useCRUD from '@/hooks/useCRUD'
 import useGoBack from '@/hooks/useGoBack'
@@ -90,12 +90,12 @@ const props = defineProps({
 
 const { mode } = toRefs(props)
 const route = useRoute()
-const materialClassificationData = ref([])
+const materialCategoryData = ref([])
 const manufacturingDate = ref([])
 const id = route.params.id || null
 
 onMounted(async () => {
-  readListMaterialClassificationFetch()
+  readListMaterialCategoryFetch()
 
   if (id) {
     refreshReadData(id)
@@ -127,9 +127,9 @@ const delFetch = async (id, index) => {
   return await removeData(id, index)
 }
 
-const readListMaterialClassificationFetch = async () => {
+const readListMaterialCategoryFetch = async () => {
   const res = await getList()
-  materialClassificationData.value = res.map((item) => ({
+  materialCategoryData.value = res.map((item) => ({
     name: item.name,
     unit: item.unit
   }))
@@ -202,7 +202,7 @@ const {
   createFetch: createFetch,
   updateFetch: updateFetch,
   deleteFetch: delFetch,
-  readListFetch: readListMaterialClassificationFetch
+  readListFetch: readListMaterialCategoryFetch
 })
 </script>
 

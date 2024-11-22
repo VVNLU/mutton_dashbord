@@ -12,7 +12,7 @@ import {
 // 新增
 export const addData = async (data) => {
   try {
-    const docRef = await addDoc(collection(db, 'material_classification'), data)
+    const docRef = await addDoc(collection(db, 'material-category'), data)
     return docRef
   } catch (error) {
     console.error('Error written document: ', error)
@@ -23,7 +23,7 @@ export const addData = async (data) => {
 // 讀取單筆數據
 export const getData = async (id) => {
   try {
-    const docRef = await getDoc(doc(db, 'material_classification', id))
+    const docRef = await getDoc(doc(db, 'material-category', id))
     return docRef.data()
   } catch (error) {
     console.error('Error getting documents: ', error)
@@ -34,7 +34,7 @@ export const getData = async (id) => {
 // 讀取列表數據
 export const getList = async () => {
   try {
-    const docRef = await getDocs(collection(db, 'material_classification'))
+    const docRef = await getDocs(collection(db, 'material-category'))
     const data = docRef.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
     return data
   } catch (error) {
@@ -47,7 +47,7 @@ export const getList = async () => {
 export const updateData = async (docId, newData) => {
   try {
     const newDocRef = await updateDoc(
-      doc(db, 'material_classification', docId),
+      doc(db, 'material-category', docId),
       newData
     )
     return newDocRef
@@ -60,7 +60,7 @@ export const updateData = async (docId, newData) => {
 // 刪除數據
 export const deleteData = async (docId) => {
   try {
-    const docRef = await deleteDoc(doc(db, 'material_classification', docId))
+    const docRef = await deleteDoc(doc(db, 'material-category', docId))
     return docRef
   } catch (error) {
     console.error('Error deleting document: ', error)

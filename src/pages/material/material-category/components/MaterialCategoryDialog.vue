@@ -4,7 +4,7 @@
     <base-form ref="form">
       <div class="row q-col-gutter-x-md">
         <div class="col-xs-12 col-sm-6 col-md-6">
-          <text-input v-model="data.state.name" class="full-width" label="分類名稱" placeholder="請輸入分類名稱"
+          <text-input v-model="data.state.title" class="full-width" label="分類名稱" placeholder="請輸入分類名稱"
             :rules="[$rules.required('分類名稱必填')]" />
         </div>
         <div class="col-xs-12 col-sm-6 col-md-6">
@@ -18,9 +18,9 @@
 
 <script>
 import { defineComponent } from 'vue-demi'
-import Material from '@/class/MaterialClassification'
+import Material from '@/class/MaterialCategory'
 import useDialog from '@/hooks/useDialog'
-import { getData, addData, updateData } from '@/api/materialClassification'
+import { getData, addData, updateData } from '@/api/materialCategory'
 import { initializeDates, updateDates } from '@/utils/dateHandler'
 
 export default defineComponent({
@@ -42,7 +42,10 @@ export default defineComponent({
     const onSave = async () => {
       data.state = updateDates({ ...data.state }, mode.value === 'create' ? 'create' : 'edit')
       const [res] = await save()
-      if (res) emit('save')
+      if (res) {
+        emit('save')
+        data.state = initializeDates(new Vendor()) // 重置資料
+      }
     }
 
     const onHide = () => {
