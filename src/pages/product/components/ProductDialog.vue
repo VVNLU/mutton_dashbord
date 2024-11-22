@@ -8,8 +8,8 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <base-button v-for="item in materialClassificationData" :label="item.name" :outline="true"
-                    :rounded="true" @click="addNewData(item)" class="classification-btn" />
+                  <base-button v-for="item in materialCategoryData" :label="item.name" :outline="true" :rounded="true"
+                    @click="addNewData(item)" class="classification-btn" />
                 </div>
               </div>
             </card-body>
@@ -43,7 +43,7 @@
 
 <script>
 import { defineComponent, ref, onMounted, watch } from 'vue-demi'
-import { getList } from '@/api/materialClassification'
+import { getList } from '@/api/materialCategory'
 import useDialog from '@/hooks/useDialog'
 import useMessageDialog from '@/hooks/useMessageDialog'
 import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
@@ -57,10 +57,10 @@ export default defineComponent({
   },
   emits: ['update:detailData', 'save'],
   setup(props, { emit }) {
-    const materialClassificationData = ref([])
+    const materialCategoryData = ref([])
 
     onMounted(async () => {
-      await readListMaterialClassificationFetch()
+      await readListMaterialCategoryFetch()
 
       data.value = [...props.detailData]
     })
@@ -81,9 +81,9 @@ export default defineComponent({
       })
     }
 
-    const readListMaterialClassificationFetch = async () => {
+    const readListMaterialCategoryFetch = async () => {
       const res = await getList()
-      materialClassificationData.value = res.map((item) => ({
+      materialCategoryData.value = res.map((item) => ({
         id: item.id,
         name: item.name
       }))
@@ -119,11 +119,11 @@ export default defineComponent({
 
     const { form, isShowDialog, showDialog, save
     } = useDialog({
-      readListFetch: readListMaterialClassificationFetch
+      readListFetch: readListMaterialCategoryFetch
     })
 
     return {
-      materialClassificationData,
+      materialCategoryData,
 
       dataTable,
       data,
