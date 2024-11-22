@@ -1,7 +1,7 @@
 <template>
   <base-dialog
     v-model="isShowDialog"
-    title="進銷存明細"
+    title="供應商明細"
     :confirmButtonText="'送出'"
     :cancelButtonText="'取消'"
     @save="onSave"
@@ -22,7 +22,7 @@
           </div>
           <div class="col-xs-12 col-sm-6 col-md-6">
             <text-input
-              v-model="data.state.name"
+              v-model="data.state.contact"
               class="full-width"
               label="聯絡人 *"
               placeholder="請輸入聯絡人"
@@ -101,7 +101,10 @@ export default defineComponent({
     const onSave = async () => {
       data.state = updateDates(data.state, mode.value === 'create' ? 'create' : 'edit')
       const [res] = await save()
-      if (res) emit('save')
+      if (res){
+        emit('save')
+        data.state = initializeDates(new Vendor()) // 重置資料
+      }
     }
 
     const onHide = () => {

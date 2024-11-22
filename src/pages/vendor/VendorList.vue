@@ -3,26 +3,17 @@
     <page-header>
       {{ $route.meta.title }}
       <template #action>
-        <add-button @click="showDialog({ mode: 'create' })" />
+        <add-button @click="showDialog({ id: null, mode: 'create', callRead: false })" />
       </template>
     </page-header>
     <q-card class="shadow-7">
       <card-body>
-        <vendor-list-search-block v-model="search" @changeFilter="onChangeFilter" @reset="onReset" />
-        <vxe-server-table ref="dataTable" :data="data" :total="total" :current="search.page" @sort-change="OnChangeSort"
-          @update:current="onChangePage">
-          <vxe-column v-for="{ field, title, min_width } in tableFields" :key="field" :field="field" :title="title"
-            :min-width="min_width" />
-          <vxe-column title="操作" fixed="right" width="120">
-            <template #default="{ row }">
-              <div class="flex-center row">
-                <edit-icon-button class="q-mr-xs q-mb-xs"
-                  @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
-                <delete-icon-button class="q-mr-xs q-mb-xs" @click="onDelete(row)" />
-              </div>
-            </template>
-          </vxe-column>
-        </vxe-server-table>
+        <data-table :columns="columns" :rows="rows" :loading="loading">
+          <template #props="{ row }">
+            <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
+            <delete-icon-button @click="onDelete(row)" />
+          </template>
+        </data-table>
       </card-body>
     </q-card>
 
@@ -31,34 +22,35 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { getList, updateData, deleteData } from '@/api/vendor'
 import { initializeDates } from '@/utils/dateHandler'
-import VendorListSearchBlock from './components/VendorListSearchBlock.vue'
 import VendorDialog from './components/VendorDialog.vue'
-import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
 import useMessageDialog from '@/hooks/useMessageDialog'
 import useCRUD from '@/hooks/useCRUD'
 
-const filter = reactive({
-  keyword: null
+const rows = ref([])
+const loading = ref(true)
+const dialog = ref()
+const columns = [
+  { name: 'title', label: '公司名稱', field: 'title', align: 'center' },
+  { name: 'contact', label: '聯絡人', field: 'contact', align: 'center' },
+  { name: 'tel', label: '聯絡電話', field: 'tel', align: 'center' },
+  { name: 'address', label: '公司地址', field: 'address', align: 'center' },
+  { name: 'supplies', label: '供應品項', field: 'supplies', align: 'center' },
+  { name: 'remark', label: '備註', field: 'remark', align: 'center' },
+]
+
+onMounted(async () => {
+  await readListFetch()
+  loading.value = false
 })
 
-const dialog = ref()
-const tableFields = ref([
-  { title: '公司名稱', field: 'title', min_width: '150' },
-  { title: '聯絡人', field: 'name', min_width: '100' },
-  { title: '聯絡電話', field: 'tel', min_width: '120' },
-  { title: '公司地址', field: 'address', min_width: '200' },
-  { title: '供應品項', field: 'supplies', min_width: '120' },
-  { title: '備註', field: 'remark', min_width: '150' }
-])
-
 const readListFetch = async (payload) => {
-  return await getList(payload).then((res) => {
-    data.value = res.map(item => initializeDates(item))
-    total.value = res.length
-  })
+  return await getList(payload)
+    .then((res) => {
+      rows.value = res.map(item => initializeDates(item))
+    })
 }
 
 const updateFetch = async (id, payload) => {
@@ -70,8 +62,7 @@ const delFetch = async (id) => {
 }
 
 const refreshFetch = async () => {
-  console.log('123', search)
-  await callReadListFetch(null, { ...search })
+  await callReadListFetch()
 }
 
 const onDelete = async (row) => {
@@ -84,35 +75,18 @@ const onDelete = async (row) => {
   if (!res) return
   const [delRes] = await callDeleteFetch(row.id)
   if (delRes) {
-    onChangeFilter()
+    callReadListFetch()
   }
+
 }
 
 const showDialog = ({ id, mode, callRead }) => {
   dialog.value.showDialog({ id, mode, callRead })
 }
 
-const {
-  dataTable,
-  search,
-  data,
-  total,
-  onChangePage,
-  onChangeFilter,
-  OnChangeSort,
-  onReset
-} = useVxeServerDataTable({
-  searchParams: filter,
-  sortParams: [
-    { field: 'createDate', order: 'desc' },
-  ],
-  sessionStorageKey: 'dashboardVendorServerDataTable',
-  callback: refreshFetch
-})
-
 const { callReadListFetch, callDeleteFetch } = useCRUD({
-  updateFetch: updateFetch,
-  readListFetch: readListFetch,
+  updateFetch,
+  readListFetch,
   deleteFetch: delFetch
 })
 

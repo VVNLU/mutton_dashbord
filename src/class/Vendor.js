@@ -1,7 +1,7 @@
 class vendor {
   //api欄位
   title = '' // 公司名稱
-  name = '' // 聯絡人
+  contact = '' // 聯絡人
   tel = ''
   address = ''
   supplies = '' // 供應品項
@@ -10,7 +10,7 @@ class vendor {
   constructor(obj) {
     if (obj) {
       this.title = obj?.title
-      this.name = obj?.name
+      this.contact = obj?.contact
       this.tel = obj?.tel
       this.address = obj?.address
       this.supplies = obj?.supplies
