@@ -22,7 +22,7 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <base-button v-for="item in materialCategoryData" :label="item.name" :outline="true" :rounded="true"
+                  <base-button v-for="item in materialCategoryData" :label="item.title" :outline="true" :rounded="true"
                     @click="addNewData(item)" class="classification-btn" />
                 </div>
               </div>
@@ -35,33 +35,11 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <vxe-server-table ref="dataTable" :data="data">
-                    <vxe-column title="項目" min_width="130">
-                      <template #default="{ row }">
-                        <div>{{ row.title }}</div>
-                      </template>
-                    </vxe-column>
-                    <vxe-column title="數量" min_width="130">
-                      <template #default="{ row }">
-                        <number-input v-model="row.quantity" placeholder="請輸入數量" label="數量" />
-                      </template>
-                    </vxe-column>
-                    <vxe-column title="單位" min_width="130">
-                      <template #default="{ row }">
-                        <div>{{ row.unit }}</div>
-                      </template>
-                    </vxe-column>
-                    <vxe-column title="總額" min_width="130">
-                      <template #default="{ row }">
-                        <number-input v-model="row.total" placeholder="請輸入總額" label="總額" />
-                      </template>
-                    </vxe-column>
-                    <vxe-column title="操作" fixed="right" width="115">
-                      <template #default="{ rowIndex }">
-                        <delete-icon-button class="q-mr-xs q-mb-xs" @click="onDelete(rowIndex)" />
-                      </template>
-                    </vxe-column>
-                  </vxe-server-table>
+                  <popup-data-table :columns="columns" :rows="rows">
+                    <template #props="{ row }">
+                      <delete-icon-button @click="onDelete(row)" />
+                    </template>
+                  </popup-data-table>
                 </div>
               </div>
             </card-body>
@@ -76,13 +54,13 @@
 <script setup>
 import { defineProps, ref, toRefs, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { getData, addData, updateData, removeData } from '@/api/material'
+import { getData, addData, updateData } from '@/api/material'
 import { getList } from '@/api/materialCategory'
-import { initializeDates, updateDates } from '@/utils/dateHandler'
+import { updateDates } from '@/utils/dateHandler'
 import useCRUD from '@/hooks/useCRUD'
 import useGoBack from '@/hooks/useGoBack'
-import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
 import useMessageDialog from '@/hooks/useMessageDialog'
+import useNotify from '@/hooks/useNotify'
 
 const props = defineProps({
   mode: { type: String, required: true }
@@ -90,9 +68,18 @@ const props = defineProps({
 
 const { mode } = toRefs(props)
 const route = useRoute()
+const rows = ref([])
 const materialCategoryData = ref([])
 const manufacturingDate = ref([])
 const id = route.params.id || null
+const { notifyAPIError } = useNotify()
+
+const columns = [
+  { name: 'title', label: '項目', field: 'title', align: 'center' },
+  { name: 'quantity', label: '數量', field: 'quantity', align: 'center', isPopupEdit: true },
+  { name: 'unit', label: '單位', field: 'unit', align: 'center' },
+  { name: 'total', label: '總額', field: 'total', align: 'center', isPopupEdit: true },
+]
 
 onMounted(async () => {
   readListMaterialCategoryFetch()
@@ -103,11 +90,19 @@ onMounted(async () => {
 })
 
 const addNewData = async (item) => {
-  data.value.push({
-    title: item.name,
-    quantity: null,
+  const isDuplicate = rows.value.some(row => row.id === item.id)
+
+  if (isDuplicate) {
+    notifyAPIError({ message: '已有 ' + `${item.title}` + ' 原物料了' })
+    return
+  }
+
+  rows.value.push({
+    id: item.id,
+    title: item.title,
+    quantity: 0,
     unit: item.unit,
-    total: null
+    total: 0
   })
 }
 
@@ -123,22 +118,21 @@ const updateFetch = async (id, payload) => {
   return await updateData(id, payload)
 }
 
-const delFetch = async (id, index) => {
-  return await removeData(id, index)
-}
-
 const readListMaterialCategoryFetch = async () => {
   const res = await getList()
+  console.log('ccc', res)
   materialCategoryData.value = res.map((item) => ({
-    name: item.name,
+    id: item.id,
+    title: item.title,
     unit: item.unit
   }))
 }
 
 const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
-  data.value = initializeDates(res.contents)
-  manufacturingDate.value = initializeDates(res.manufacturingDate)
+  console.log('res', res)
+  rows.value = res.contents
+  manufacturingDate.value = res.manufacturingDate
 }
 
 const onSubmit = async () => {
@@ -146,7 +140,7 @@ const onSubmit = async () => {
     if (success) {
       const payload = updateDates({
         manufacturingDate: manufacturingDate.value,
-        contents: data.value
+        contents: rows.value
       }, mode.value)
       const urlObj = {
         create: () => {
@@ -163,7 +157,7 @@ const onSubmit = async () => {
   })
 }
 
-const onDelete = async (rowIndex) => {
+const onDelete = async (row) => {
   const res = await messageDelete({
     title: '刪除',
     message: '確認刪除原物料？',
@@ -172,22 +166,12 @@ const onDelete = async (rowIndex) => {
   })
   if (!res) return
 
-  // 判斷資料是否為已存在
-  const [getDataRes] = await callReadFetch(id)
-  if (rowIndex <= getDataRes.contents.length - 1) {
-    const delRes = await callDeleteFetch(id, rowIndex)
-    if (delRes) {
-      await refreshReadData(id)
-    }
-  } else {
-    data.value.splice(rowIndex, 1)
+  const index = rows.value.indexOf(row)
+  if (index !== -1) {
+    rows.value.splice(index, 1)
   }
+  await callDeleteFetch()
 }
-
-const { dataTable, data } =
-  useVxeServerDataTable({
-    sessionStorageKey: 'dashboardMaterialDetailServerDataTable'
-  })
 
 const { goBack } = useGoBack()
 const { messageDelete } = useMessageDialog()
@@ -201,7 +185,6 @@ const {
   readFetch: readFetch,
   createFetch: createFetch,
   updateFetch: updateFetch,
-  deleteFetch: delFetch,
   readListFetch: readListMaterialCategoryFetch
 })
 </script>
