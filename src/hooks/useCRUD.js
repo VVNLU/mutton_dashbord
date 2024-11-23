@@ -56,7 +56,7 @@ export default function useCRUD({
       storeApp.isCreate = false
       const message = JSON.stringify(errorMsg)
 
-      isShowCreateFail && notifyAPIError({ message })
+      isShowCreateFail && notifyAPIError({ message: createFail || message })
       return [null, errorMsg]
     } else {
       isShowCreateSuccess &&

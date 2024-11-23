@@ -95,6 +95,7 @@ const handleLogin = async () => {
 
 const { form, callCreateFetch } = useCRUD({
   createSuccess: '登入成功',
+  createFail: '登入失敗',
   createFetch: createFetch
 })
 </script>

@@ -7,7 +7,7 @@ import {
 } from 'firebase/auth'
 import { auth } from '@/firebase'
 import { setAuthData, getAuthData, removeAuthData } from '@/utils/auth'
-import { getData, addData } from '@/api/role'
+import { addData } from '@/api/role'
 
 export const useUser = defineStore({
   id: 'user',
@@ -18,26 +18,16 @@ export const useUser = defineStore({
   }),
   actions: {
     async login(email, password) {
-      try {
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          `${email}@admin.com.tw`,
-          password
-        )
-        this.user = userCredential.user
-        this.token = userCredential.user.accessToken
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        `${email}@admin.com.tw`,
+        password
+      )
 
-        const userRole = await getData(userCredential.user.uid)
-        this.role = userRole.role
-        setAuthData(
-          userCredential.user.accessToken,
-          userCredential.user.uid,
-          'userRole.role'
-        )
-        return userRole
-      } catch (e) {
-        console.log(e)
-      }
+      this.user = userCredential.user
+      this.token = userCredential.user.accessToken
+      setAuthData(userCredential.user.accessToken, userCredential.user.uid)
+      return userCredential
     },
 
     logout() {
