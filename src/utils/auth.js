@@ -2,10 +2,9 @@ const TokenKey = 'Dashboard-Rwd-Base-Token'
 const UIDKey = 'Dashboard-Rwd-Base-UID'
 const RoleKey = 'Dashboard-Rwd-Base-Role'
 
-export function setAuthData(token, uid, role) {
+export function setAuthData(token, uid) {
   localStorage.setItem(TokenKey, token)
   localStorage.setItem(UIDKey, uid)
-  localStorage.setItem(RoleKey, role)
 }
 
 export function getAuthData() {
