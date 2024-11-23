@@ -5,12 +5,12 @@ import { getAuth } from 'firebase/auth'
 import { getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDnKjgmrVSFRb63LeBDd6YMDlyuz5JSkzM',
+  apiKey: import.meta.env.VITE_API_KEY,
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-  projectId: 'mutton-dashboard',
-  storageBucket: 'mutton-dashboard.appspot.com',
-  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-  appId: '1:820459566052:web:1d033145bfde32459a4df1'
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID
 }
 
 const app = initializeApp(firebaseConfig) // 初始化 Firebase
