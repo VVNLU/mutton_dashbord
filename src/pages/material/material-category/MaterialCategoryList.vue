@@ -3,17 +3,26 @@
     <page-header>
       {{ $route.meta.title }}
       <template #action>
-        <add-button @click="showDialog({ id: null, mode: 'create', callRead: false })" />
+        <add-button
+          @click="showDialog({ id: null, mode: 'create', callRead: false })"
+        />
       </template>
     </page-header>
     <q-card class="shadow-7">
       <card-body>
         <data-table :columns="columns" :rows="rows" :loading="loading">
           <template #props="{ row }">
-            <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
+            <edit-icon-button
+              @click="showDialog({ id: row.id, mode: 'edit', callRead: true })"
+            />
             <delete-icon-button @click="onDelete(row)" />
-            <toggle-input v-model="row.is_enable" checked-icon="check" unchecked-icon="clear" color="secondary"
-              @update:modelValue="onEnable(row)" />
+            <toggle-input
+              v-model="row.is_enable"
+              checked-icon="check"
+              unchecked-icon="clear"
+              color="secondary"
+              @update:modelValue="onEnable(row)"
+            />
           </template>
         </data-table>
       </card-body>
@@ -36,7 +45,7 @@ const loading = ref(true)
 const dialog = ref()
 const columns = [
   { name: 'title', label: '分類名稱', field: 'title', align: 'center' },
-  { name: 'unit', label: '單位', field: 'contact', align: 'center' },
+  { name: 'unit', label: '單位', field: 'contact', align: 'center' }
 ]
 
 onMounted(async () => {
@@ -45,10 +54,9 @@ onMounted(async () => {
 })
 
 const readListFetch = async (payload) => {
-  return await getList(payload)
-    .then((res) => {
-      rows.value = res.map(item => initializeDates(item))
-    })
+  return await getList(payload).then((res) => {
+    rows.value = res.map((item) => initializeDates(item))
+  })
 }
 
 const updateFetch = async (id, payload) => {
@@ -81,7 +89,6 @@ const onDelete = async (row) => {
   if (delRes) {
     callReadListFetch()
   }
-
 }
 
 const showDialog = ({ id, mode, callRead }) => {

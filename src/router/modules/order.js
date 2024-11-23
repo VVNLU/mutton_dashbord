@@ -18,7 +18,7 @@ const orderRouter = {
       name: 'OrderList',
       meta: {
         title: '訂單管理',
-        icon: 'fa-solid fa-cart-shopping',
+        icon: 'fa-solid fa-cart-shopping'
       }
     },
     {
@@ -26,7 +26,7 @@ const orderRouter = {
       component: () => import('@/pages/order/OrderCreate.vue'),
       name: 'OrderCreate',
       meta: {
-        title: '訂單管理',
+        title: '訂單管理'
       },
       hidden: true
     },
@@ -35,7 +35,7 @@ const orderRouter = {
       component: () => import('@/pages/order/OrderEdit.vue'),
       name: 'OrderEdit',
       meta: {
-        title: '訂單管理',
+        title: '訂單管理'
       },
       hidden: true
     }

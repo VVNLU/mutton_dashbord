@@ -1,5 +1,11 @@
 <template>
-  <text-input v-model="observeValue" type="number" :label="label" :rules="ruleList" @clear="clearFn">
+  <text-input
+    v-model="observeValue"
+    type="number"
+    :label="label"
+    :rules="ruleList"
+    @clear="clearFn"
+  >
     <template v-if="$slots.default" #default>
       <slot name="default" />
     </template>

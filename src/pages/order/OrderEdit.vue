@@ -1,12 +1,21 @@
 <template>
-  <base-dialog v-model="isShowDialog" title="訂單詳情" :confirmButtonText="'送出'" :cancelButtonText="'取消'" @save="onSave"
-    @hide="onHide">
+  <base-dialog
+    v-model="isShowDialog"
+    title="訂單詳情"
+    :confirmButtonText="'送出'"
+    :cancelButtonText="'取消'"
+    @save="onSave"
+    @hide="onHide"
+  >
     <base-form ref="form">
       <div class="row q-col-gutter-x-md">
         <div class="col-6">
           <q-field borderless stack-label label="訂購人">
             <template v-slot:control>
-              <div class="self-center full-width no-outline text-18px" tabindex="0">
+              <div
+                class="self-center full-width no-outline text-18px"
+                tabindex="0"
+              >
                 {{ clientData.client.name }}
               </div>
             </template>
@@ -15,7 +24,10 @@
         <div class="col-6">
           <q-field borderless stack-label label="電話">
             <template v-slot:control>
-              <div class="self-center full-width no-outline text-18px" tabindex="0">
+              <div
+                class="self-center full-width no-outline text-18px"
+                tabindex="0"
+              >
                 {{ clientData.client.tel }}
               </div>
             </template>
@@ -24,7 +36,10 @@
         <div class="col-6">
           <q-field borderless stack-label label="地址">
             <template v-slot:control>
-              <div class="self-center full-width no-outline text-18px" tabindex="0">
+              <div
+                class="self-center full-width no-outline text-18px"
+                tabindex="0"
+              >
                 {{ clientData.client.address }}
               </div>
             </template>
@@ -33,33 +48,53 @@
         <div class="col-6">
           <q-field borderless stack-label label="備註">
             <template v-slot:control>
-              <div class="self-center full-width no-outline text-18px" tabindex="0">
+              <div
+                class="self-center full-width no-outline text-18px"
+                tabindex="0"
+              >
                 {{ clientData.client.remark }}
               </div>
             </template>
           </q-field>
         </div>
         <div class="col-12">
-          <q-table :rows="clientData.contents" :columns="columns" row-key="name" hide-bottom>
+          <q-table
+            :rows="clientData.contents"
+            :columns="columns"
+            row-key="name"
+            hide-bottom
+          >
             <template v-slot:top-left>
               <q-tr>
                 <q-item-label class="text-info">
-                  <q-icon name="receipt_long" class="q-pr-xs text-info" size="1.5em" />
+                  <q-icon
+                    name="receipt_long"
+                    class="q-pr-xs text-info"
+                    size="1.5em"
+                  />
                   {{ currentId }}
                 </q-item-label>
-                <q-item-label class="text-accent text-shadow" v-if="clientData.payment">
+                <q-item-label
+                  class="text-accent text-shadow"
+                  v-if="clientData.payment"
+                >
                   <q-icon name="paid" class="q-pr-xs" size="1.5em" />
                   {{ clientData.payment }}付款
-                  <template v-if="clientData.payment === '轉帳'">: 後五碼
+                  <template v-if="clientData.payment === '轉帳'"
+                    >: 後五碼
                     <span class="text-bold">
                       {{ clientData.accountLastFive }}
                     </span>
                   </template>
                 </q-item-label>
-                <q-item-label class="text-secondary text-shadow" v-if="clientData.ship">
+                <q-item-label
+                  class="text-secondary text-shadow"
+                  v-if="clientData.ship"
+                >
                   <q-icon name="local_shipping" class="q-pr-xs" size="1.5em" />
                   {{ clientData.ship }}出貨
-                  <template v-if="clientData.ship === '宅配'">: 貨運單號
+                  <template v-if="clientData.ship === '宅配'"
+                    >: 貨運單號
                     <span class="text-bold">
                       {{ clientData.orderNumber }}
                     </span>
@@ -68,7 +103,9 @@
               </q-tr>
             </template>
             <template v-slot:top-right>
-              <q-tr class="text-20px text-bold text-red outline rounded q-pa-xs">
+              <q-tr
+                class="text-20px text-bold text-red outline rounded q-pa-xs"
+              >
                 <q-td>總金額:</q-td>
                 <q-td>{{ totalAmount }}</q-td>
               </q-tr>
@@ -76,7 +113,10 @@
           </q-table>
         </div>
         <div class="q-pt-md col-md-4 col-sm-4 col-xs-6">
-          <q-btn-dropdown :color="getStatusColor(clientData.state)" :label="'狀態：' + `${clientData.state}`">
+          <q-btn-dropdown
+            :color="getStatusColor(clientData.state)"
+            :label="'狀態：' + `${clientData.state}`"
+          >
             <q-list>
               <q-item clickable v-close-popup @click="updateState('處理中')">
                 <q-item-section>
@@ -97,8 +137,11 @@
           </q-btn-dropdown>
         </div>
         <div class="q-pt-md col-md-4 col-sm-4 col-xs-6">
-          <q-btn-dropdown :color="getStatusColor(clientData.isPaid)" color="teal"
-            :label="'付款：' + `${clientData.isPaid}`">
+          <q-btn-dropdown
+            :color="getStatusColor(clientData.isPaid)"
+            color="teal"
+            :label="'付款：' + `${clientData.isPaid}`"
+          >
             <q-list>
               <q-item clickable v-close-popup @click="updatePaid('處理中')">
                 <q-item-section>
@@ -114,8 +157,11 @@
           </q-btn-dropdown>
         </div>
         <div class="q-pt-md col-md-4 col-sm-4 col-xs-6">
-          <q-btn-dropdown :color="getStatusColor(clientData.isShipped)" color="indigo"
-            :label="'出貨：' + `${clientData.isShipped}`">
+          <q-btn-dropdown
+            :color="getStatusColor(clientData.isShipped)"
+            color="indigo"
+            :label="'出貨：' + `${clientData.isShipped}`"
+          >
             <q-list>
               <q-item clickable v-close-popup @click="updateShipped('處理中')">
                 <q-item-section>
@@ -131,7 +177,12 @@
           </q-btn-dropdown>
         </div>
         <div class="q-pt-md col-md-4 col-sm-4 col-xs-6">
-          <q-btn class="q-mb-md round outline text-red" icon="delete" label="刪除訂單" @click="onDelete()" />
+          <q-btn
+            class="q-mb-md round outline text-red"
+            icon="delete"
+            label="刪除訂單"
+            @click="onDelete()"
+          />
         </div>
       </div>
     </base-form>
@@ -156,7 +207,7 @@ export default defineComponent({
         name: 'name',
         label: '商品',
         align: 'left',
-        field: row => row.product_title
+        field: (row) => row.product_title
       },
       {
         label: '數量',
@@ -166,7 +217,7 @@ export default defineComponent({
       {
         label: '小計',
         align: 'left',
-        field: row => row.product_quantity * row.product_price
+        field: (row) => row.product_quantity * row.product_price
       }
     ]
 
@@ -185,9 +236,12 @@ export default defineComponent({
     }
 
     const onSave = async () => {
-      const payload = updateDates({
-        ...clientData.value
-      }, 'edit')
+      const payload = updateDates(
+        {
+          ...clientData.value
+        },
+        'edit'
+      )
       const id = currentId.value
       await callUpdateFetch(id, { ...payload })
 
@@ -216,9 +270,9 @@ export default defineComponent({
 
     const getStatusColor = (status) => {
       const colorMap = {
-        '處理中': 'warning text-black',
-        '已完成': 'positive',
-        '已取消': 'negative',
+        處理中: 'warning text-black',
+        已完成: 'positive',
+        已取消: 'negative'
       }
       return colorMap[status] || colorMap.default
     }
@@ -247,7 +301,7 @@ export default defineComponent({
         isShipped: clientData.value.isShipped
       }),
       (newValues) => {
-        const { isPaid, isShipped } = newValues;
+        const { isPaid, isShipped } = newValues
 
         if (isPaid === '已完成' && isShipped === '已完成') {
           clientData.value.state = '已完成'
@@ -265,8 +319,8 @@ export default defineComponent({
         clientData.value.isPaid = newState
         clientData.value.isShipped = newState
       } else if (newState === '處理中') {
-        clientData.value.isPaid = originalValues.isPaid;
-        clientData.value.isShipped = originalValues.isShipped;
+        clientData.value.isPaid = originalValues.isPaid
+        clientData.value.isShipped = originalValues.isShipped
       }
     }
 
@@ -280,27 +334,20 @@ export default defineComponent({
 
     const totalAmount = computed(() => {
       return clientData.value.contents.reduce((sum, item) => {
-        return sum + item.product_quantity * item.product_price;
+        return sum + item.product_quantity * item.product_price
       }, 0)
     })
 
     // use
     const { messageDelete } = useMessageDialog()
-    const { form,
-      data,
-      isShowDialog,
-      showDialog,
-      hideDialog,
-      save } = useDialog({
-        readFetch: readFetch,
+    const { form, data, isShowDialog, showDialog, hideDialog, save } =
+      useDialog({
+        readFetch: readFetch
       })
 
-    const {
-      callUpdateFetch,
-      callDeleteFetch,
-    } = useCRUD({
+    const { callUpdateFetch, callDeleteFetch } = useCRUD({
       updateFetch: updateFetch,
-      deleteFetch: delFetch,
+      deleteFetch: delFetch
     })
 
     return {

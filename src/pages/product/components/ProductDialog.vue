@@ -1,6 +1,12 @@
 <template>
-  <base-dialog v-model="isShowDialog" title="選取原物料" :confirmButtonText="'送出'" :cancelButtonText="'取消'" @save="onSave"
-    @hide="onHide">
+  <base-dialog
+    v-model="isShowDialog"
+    title="選取原物料"
+    :confirmButtonText="'送出'"
+    :cancelButtonText="'取消'"
+    @save="onSave"
+    @hide="onHide"
+  >
     <base-form ref="form">
       <div class="row q-col-gutter-x-md q-col-gutter-y-md">
         <div class="col-12">
@@ -8,8 +14,14 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <base-button v-for="item in materialCategoryData" :label="item.name" :outline="true" :rounded="true"
-                    @click="addNewData(item)" class="classification-btn" />
+                  <base-button
+                    v-for="item in materialCategoryData"
+                    :label="item.name"
+                    :outline="true"
+                    :rounded="true"
+                    @click="addNewData(item)"
+                    class="classification-btn"
+                  />
                 </div>
               </div>
             </card-body>
@@ -25,12 +37,19 @@
               </vxe-column>
               <vxe-column title="數量" min_width="150">
                 <template #default="{ row }">
-                  <number-input v-model="row.quantity" placeholder="請輸入數量" label="數量" />
+                  <number-input
+                    v-model="row.quantity"
+                    placeholder="請輸入數量"
+                    label="數量"
+                  />
                 </template>
               </vxe-column>
               <vxe-column title="操作" fixed="right" width="120">
                 <template #default="{ row }">
-                  <delete-icon-button class="q-mr-xs q-mb-xs" @click="onDelete(row)" />
+                  <delete-icon-button
+                    class="q-mr-xs q-mb-xs"
+                    @click="onDelete(row)"
+                  />
                 </template>
               </vxe-column>
             </vxe-server-table>
@@ -102,7 +121,9 @@ export default defineComponent({
         cancelButtonText: '取消'
       })
       if (!res) return
-      const index = data.value.findIndex(item => item.uniqueItem === row.uniqueItem)
+      const index = data.value.findIndex(
+        (item) => item.uniqueItem === row.uniqueItem
+      )
       data.value.splice(index, 1)
     }
 
@@ -112,13 +133,11 @@ export default defineComponent({
 
     // use
     const { messageDelete } = useMessageDialog()
-    const { dataTable, data } =
-      useVxeServerDataTable({
-        sessionStorageKey: 'dashboardProductDialogServerDataTable'
-      })
+    const { dataTable, data } = useVxeServerDataTable({
+      sessionStorageKey: 'dashboardProductDialogServerDataTable'
+    })
 
-    const { form, isShowDialog, showDialog, save
-    } = useDialog({
+    const { form, isShowDialog, showDialog, save } = useDialog({
       readListFetch: readListMaterialCategoryFetch
     })
 
@@ -134,7 +153,7 @@ export default defineComponent({
       onDelete,
       onHide,
 
-      addNewData,
+      addNewData
     }
   }
 })

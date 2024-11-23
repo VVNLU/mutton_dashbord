@@ -1,5 +1,10 @@
 <template>
-  <base-icon-button icon="edit" :outline="outline" :label="label" :flat="flat" />
+  <base-icon-button
+    icon="edit"
+    :outline="outline"
+    :label="label"
+    :flat="flat"
+  />
 </template>
 
 <script setup>

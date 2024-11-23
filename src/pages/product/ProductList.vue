@@ -10,21 +10,41 @@
     <q-card class="shadow-7">
       <card-body>
         <!-- <product-list-search-block v-model="search" class="q-mb-sm" @changeFilter="onChangeFilter" @reset="onReset" /> -->
-        <vxe-server-table ref="dataTable" :data="data" :total="total" :current="search.page" @sort-change="OnChangeSort"
-          @update:current="onChangePage">
-          <vxe-column v-for="{ field, title, min_width } in tableFields" :key="field" :field="field" :title="title"
-            :min-width="min_width" />
+        <vxe-server-table
+          ref="dataTable"
+          :data="data"
+          :total="total"
+          :current="search.page"
+          @sort-change="OnChangeSort"
+          @update:current="onChangePage"
+        >
+          <vxe-column
+            v-for="{ field, title, min_width } in tableFields"
+            :key="field"
+            :field="field"
+            :title="title"
+            :min-width="min_width"
+          />
           <vxe-column title="上架設定" width="120">
             <template #default="{ row }">
-              <toggle-input v-model="row.isAvailable" :label="row.isAvailable ? '上架' : '不上架'"
-                @update:modelValue="onAvailable(row)" />
+              <toggle-input
+                v-model="row.isAvailable"
+                :label="row.isAvailable ? '上架' : '不上架'"
+                @update:modelValue="onAvailable(row)"
+              />
             </template>
           </vxe-column>
           <vxe-column title="操作" fixed="right" width="115">
             <template #default="{ row }">
               <div class="flex-center row">
-                <edit-icon-button class="q-mr-xs q-mb-xs" :to="'/product/edit/' + row.id" />
-                <delete-icon-button class="q-mr-xs q-mb-xs" @click="onDelete(row)" />
+                <edit-icon-button
+                  class="q-mr-xs q-mb-xs"
+                  :to="'/product/edit/' + row.id"
+                />
+                <delete-icon-button
+                  class="q-mr-xs q-mb-xs"
+                  @click="onDelete(row)"
+                />
               </div>
             </template>
           </vxe-column>
@@ -56,7 +76,7 @@ const tableFields = ref([
   { title: '商品名稱', field: 'title', min_width: '120' },
   { title: '商品敘述', field: 'depiction', min_width: '150' },
   { title: '成本', field: '', min_width: '100' },
-  { title: '定價', field: 'price', min_width: '100' },
+  { title: '定價', field: 'price', min_width: '100' }
 ])
 
 const readListFetch = async (payload) => {

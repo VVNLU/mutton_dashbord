@@ -16,6 +16,6 @@ export default function useQuickState(params = {}) {
     clone,
     reset,
     assign: (newParams) => Object.assign(state, newParams),
-    cloneBackup,
+    cloneBackup
   }
 }

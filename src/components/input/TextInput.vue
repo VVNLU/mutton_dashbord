@@ -1,6 +1,13 @@
 <template>
-  <q-input ref="input" :label="label" v-model="observeValue" :clearable="clearable" :outlined="outlined"
-    :placeholder="placeholder" :rules="ruleList">
+  <q-input
+    ref="input"
+    :label="label"
+    v-model="observeValue"
+    :clearable="clearable"
+    :outlined="outlined"
+    :placeholder="placeholder"
+    :rules="ruleList"
+  >
     <template v-if="$slots.default" #default>
       <slot name="default" />
     </template>
