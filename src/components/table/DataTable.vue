@@ -35,7 +35,11 @@
             <slot name="props" :row="props.row" />
           </q-td>
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
-            {{ props.row[col.name] }}
+            <!-- 多行 -->
+            <div v-if="col.isMultiline" v-html="props.row[col.name]"></div>
+            <div v-else>
+              {{ props.row[col.name] }}
+            </div>
           </q-td>
         </q-tr>
       </template>
