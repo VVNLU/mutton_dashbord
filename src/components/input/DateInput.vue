@@ -43,7 +43,7 @@ import { computed, defineProps, ref, toRefs } from 'vue'
 import { vuelidate } from '@/plugins/vuelidate'
 
 const props = defineProps({
-  modelValue: { type: String },
+  modelValue: { type: [String, Array] },
   label: { type: String },
   placeholder: { type: String, default: '年/月/日' },
   options: { type: Array },

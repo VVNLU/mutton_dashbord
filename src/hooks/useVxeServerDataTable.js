@@ -7,7 +7,7 @@ export default function useVxeServerDataTable({
   sortParams = [], // 排序參數陣列 [{field:欄位, order:升降序}]
   unSessionStorageParams = [], // 不需要儲存於 sessionStorage 的參數 [{field:string}]
   sessionStorageKey = 'dashboardVxeServerDataTable',
-  callback = () => { },
+  callback = () => {}
 }) {
   // use
   const { setSessionStorage, getSessionStorage } = useSessionStorage()
@@ -19,14 +19,16 @@ export default function useVxeServerDataTable({
   const data = ref([]) // 資料內容
   const total = ref(0)
   const sort = ref([])
-  const unSessionStorageParamsField = unSessionStorageParams.map((item) => item.field) // 不需要儲存在 sessionStorage 的欄位名列表
+  const unSessionStorageParamsField = unSessionStorageParams.map(
+    (item) => item.field
+  ) // 不需要儲存在 sessionStorage 的欄位名列表
 
   // 變更頁碼
   const onChangePage = (page) => {
     search.page = page // 更新 search.page
     setSessionStorage(sessionStorageKey, { search, sort: sort.value }) // 將頁碼儲存到 sessionStorage
-    if (callback && typeof (callback) === 'function') {
-      callback()  // 再執行 callback
+    if (callback && typeof callback === 'function') {
+      callback() // 再執行 callback
     }
   }
 
@@ -34,7 +36,7 @@ export default function useVxeServerDataTable({
   const onChangePageSize = (pageSize) => {
     search.page_size = pageSize // 更新 search.page_size
     setSessionStorage(sessionStorageKey, { search, sort: sort.value })
-    if (callback && typeof (callback) === 'function') {
+    if (callback && typeof callback === 'function') {
       callback()
     }
   }
@@ -43,7 +45,7 @@ export default function useVxeServerDataTable({
   const onChangeFilter = () => {
     search.page = 1 // 每次篩選後將頁碼重置為 1
     setSessionStorage(sessionStorageKey, { search, sort: sort.value })
-    if (callback && typeof (callback) === 'function') {
+    if (callback && typeof callback === 'function') {
       callback()
     }
   }
@@ -52,32 +54,42 @@ export default function useVxeServerDataTable({
   const OnChangeSort = async ({ sortList }) => {
     search.page = 1
     if (sortList.length > 0) {
-      search.orderby = sortList.map((item) => `${item.field}:${item.order}`).join(',')
+      search.orderby = sortList
+        .map((item) => `${item.field}:${item.order}`)
+        .join(',')
       sort.value = sortList
     } else {
-      search.orderby = sortParams.map((item) => `${item.field}:${item.order}`).join(',')
+      search.orderby = sortParams
+        .map((item) => `${item.field}:${item.order}`)
+        .join(',')
       sort.value = sortParams
     }
     setSessionStorage(sessionStorageKey, { search, sort: sort.value })
-    if (callback && typeof (callback) === 'function') {
+    if (callback && typeof callback === 'function') {
       callback()
     }
   }
 
   // 重置所有條件
   const onReset = async () => {
-    for (const [key, value] of Object.entries(searchParams)) { // 將 searchParams 物件轉換為一個陣列
+    for (const [key, value] of Object.entries(searchParams)) {
+      // 將 searchParams 物件轉換為一個陣列
       search[key] = value
     }
     search.page = 1
     search.page_size = 10
-    search.orderby = sortParams.map((item) => `${item.field}:${item.order}`).join(',')
+    search.orderby = sortParams
+      .map((item) => `${item.field}:${item.order}`)
+      .join(',')
     sort.value = sortParams
     setSessionStorage(sessionStorageKey, { search, sort: sort.value })
 
-    if (callback && typeof (callback) === 'function') {
+    if (callback && typeof callback === 'function') {
       await callback()
-      dataTable.value && (sessionStorage.sort.forEach((item) => { dataTable.value.sort(item) }))
+      dataTable.value &&
+        sessionStorage.sort.forEach((item) => {
+          dataTable.value.sort(item)
+        })
     }
   }
 
@@ -88,31 +100,36 @@ export default function useVxeServerDataTable({
         search: {
           page: 1,
           page_size: 10,
-          orderby: sortParams.map((item) => `${item.field}:${item.order}`).join(','),
+          orderby: sortParams
+            .map((item) => `${item.field}:${item.order}`)
+            .join(',')
         },
-        sort: sortParams,
+        sort: sortParams
       }
       setSessionStorage(sessionStorageKey, sessionStorageObj)
       sessionStorage = getSessionStorage(sessionStorageKey)
     }
 
-    mapKeys(sessionStorage.search, (_, key) => { // 取出 sessionStorage.search
+    mapKeys(sessionStorage.search, (_, key) => {
+      // 取出 sessionStorage.search
       search[key] = sessionStorage.search[key] // 根據 key 取得對應的值
     })
 
     sort.value = sessionStorage.sort
 
     for (const [key, value] of Object.entries(searchParams)) {
-      (!sessionStorage.search[key] && !unSessionStorageParamsField.includes(key)) && (search[key] = value) // 符合兩個條件時，執行 (search[key] = value)
+      !sessionStorage.search[key] &&
+        !unSessionStorageParamsField.includes(key) &&
+        (search[key] = value) // 符合兩個條件時，執行 (search[key] = value)
     }
 
     setSessionStorage(sessionStorageKey, { search, sort: sort.value }) // 確保第一輪處理後的同步狀態被永久保存
 
     for (const [key, value] of Object.entries(searchParams)) {
-      (unSessionStorageParamsField.includes(key)) && (search[key] = value)
+      unSessionStorageParamsField.includes(key) && (search[key] = value)
     }
 
-    if (callback && typeof (callback) === 'function') {
+    if (callback && typeof callback === 'function') {
       await callback()
 
       if (dataTable.value && Array.isArray(dataTable.value)) {
@@ -144,6 +161,6 @@ export default function useVxeServerDataTable({
     onChangePageSize,
     onChangeFilter,
     OnChangeSort,
-    onReset,
+    onReset
   }
 }

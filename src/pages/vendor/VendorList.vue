@@ -3,14 +3,18 @@
     <page-header>
       {{ $route.meta.title }}
       <template #action>
-        <add-button @click="showDialog({ id: null, mode: 'create', callRead: false })" />
+        <add-button
+          @click="showDialog({ id: null, mode: 'create', callRead: false })"
+        />
       </template>
     </page-header>
     <q-card class="shadow-7">
       <card-body>
         <data-table :columns="columns" :rows="rows" :loading="loading">
           <template #props="{ row }">
-            <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
+            <edit-icon-button
+              @click="showDialog({ id: row.id, mode: 'edit', callRead: true })"
+            />
             <delete-icon-button @click="onDelete(row)" />
           </template>
         </data-table>
@@ -38,7 +42,7 @@ const columns = [
   { name: 'tel', label: '聯絡電話', field: 'tel', align: 'center' },
   { name: 'address', label: '公司地址', field: 'address', align: 'center' },
   { name: 'supplies', label: '供應品項', field: 'supplies', align: 'center' },
-  { name: 'remark', label: '備註', field: 'remark', align: 'center' },
+  { name: 'remark', label: '備註', field: 'remark', align: 'center' }
 ]
 
 onMounted(async () => {
@@ -47,10 +51,9 @@ onMounted(async () => {
 })
 
 const readListFetch = async (payload) => {
-  return await getList(payload)
-    .then((res) => {
-      rows.value = res.map(item => initializeDates(item))
-    })
+  return await getList(payload).then((res) => {
+    rows.value = res.map((item) => initializeDates(item))
+  })
 }
 
 const updateFetch = async (id, payload) => {
@@ -77,7 +80,6 @@ const onDelete = async (row) => {
   if (delRes) {
     callReadListFetch()
   }
-
 }
 
 const showDialog = ({ id, mode, callRead }) => {

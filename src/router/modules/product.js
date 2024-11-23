@@ -18,7 +18,7 @@ const productRouter = {
       name: 'ProductList',
       meta: {
         title: '商品管理',
-        icon: 'fa-solid fa-basket-shopping',
+        icon: 'fa-solid fa-basket-shopping'
       }
     },
     {
@@ -26,7 +26,7 @@ const productRouter = {
       component: () => import('@/pages/product/ProductCreate.vue'),
       name: 'ProductCreate',
       meta: {
-        title: '商品管理',
+        title: '商品管理'
       },
       hidden: true
     },
@@ -35,7 +35,7 @@ const productRouter = {
       component: () => import('@/pages/product/ProductEdit.vue'),
       name: 'ProductEdit',
       meta: {
-        title: '商品管理',
+        title: '商品管理'
       },
       hidden: true
     }

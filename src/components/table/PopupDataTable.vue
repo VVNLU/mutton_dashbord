@@ -1,13 +1,17 @@
 <template>
   <div class="q-pa-md">
-    <q-table :rows="rows" :columns="columns" row-key="name" :filter="filter" binary-state-sort>
+    <q-table
+      :rows="rows"
+      :columns="columns"
+      row-key="name"
+      :filter="filter"
+      binary-state-sort
+    >
       <!-- 沒有資料的提示 -->
       <template v-slot:no-data>
         <div class="full-width row flex-center text-indigo q-gutter-sm">
           <q-icon size="2em" name="sentiment_dissatisfied" />
-          <span>
-            目前尚未添加任何資料。
-          </span>
+          <span> 目前尚未添加任何資料。 </span>
         </div>
       </template>
       <!-- 刪除按鈕插槽 -->
@@ -29,8 +33,17 @@
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
             <div v-if="col.isPopupEdit">
               {{ props.row[col.name] }}
-              <q-popup-edit v-model="props.row[col.name]" v-slot="scope" buttons>
-                <q-input type="number" v-model.number="scope.value" dense autofocus />
+              <q-popup-edit
+                v-model="props.row[col.name]"
+                v-slot="scope"
+                buttons
+              >
+                <q-input
+                  type="number"
+                  v-model.number="scope.value"
+                  dense
+                  autofocus
+                />
               </q-popup-edit>
             </div>
             <div v-else>
@@ -61,7 +74,7 @@ const props = defineProps({
   },
   loading: {
     type: Boolean
-  },
+  }
 })
 
 const filter = ref('')

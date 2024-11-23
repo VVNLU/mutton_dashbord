@@ -9,13 +9,27 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-md-6 col-sm-4 col-xs-12">
-                  <text-input v-model="data.title" label="商品名稱" placeholder="請輸入商品名稱" :required="true" />
+                  <text-input
+                    v-model="data.title"
+                    label="商品名稱"
+                    placeholder="請輸入商品名稱"
+                    :required="true"
+                  />
                 </div>
                 <div class="col-md-6 col-sm-4 col-xs-12">
-                  <text-input v-model="data.depiction" label="商品敘述" placeholder="請輸入商品敘述" />
+                  <text-input
+                    v-model="data.depiction"
+                    label="商品敘述"
+                    placeholder="請輸入商品敘述"
+                  />
                 </div>
                 <div class="col-md-6 col-sm-4 col-xs-12">
-                  <number-input v-model="data.price" label="售價" placeholder="請輸入商品售價" :required="true" />
+                  <number-input
+                    v-model="data.price"
+                    label="售價"
+                    placeholder="請輸入商品售價"
+                    :required="true"
+                  />
                 </div>
               </div>
             </card-body>
@@ -23,7 +37,8 @@
         </div>
         <div class="col-md-6 col-sm-12 col-xs-12">
           <q-card class="h-full shadow-7">
-            <card-header> 商品原物料
+            <card-header>
+              商品原物料
               <template #action>
                 <add-button @click="showDialog({})" />
               </template>
@@ -39,12 +54,18 @@
                     </vxe-column>
                     <vxe-column title="數量" min_width="130">
                       <template #default="{ row }">
-                        <number-input v-model="row.quantity" placeholder="請輸入數量" />
+                        <number-input
+                          v-model="row.quantity"
+                          placeholder="請輸入數量"
+                        />
                       </template>
                     </vxe-column>
                     <vxe-column title="操作" fixed="right" width="115">
                       <template #default="{ row }">
-                        <delete-icon-button class="q-mr-xs q-mb-xs" @click="onDelete(row)" />
+                        <delete-icon-button
+                          class="q-mr-xs q-mb-xs"
+                          @click="onDelete(row)"
+                        />
                       </template>
                     </vxe-column>
                   </vxe-server-table>
@@ -56,8 +77,11 @@
       </div>
     </base-form>
 
-    <product-dialog ref="dialog" v-model:detailData="data.contents" @save="handleSave" />
-
+    <product-dialog
+      ref="dialog"
+      v-model:detailData="data.contents"
+      @save="handleSave"
+    />
   </q-page>
   <fixed-footer @save="onSubmit" />
 </template>
@@ -107,13 +131,18 @@ const updateFetch = async (id, payload) => {
 const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
   data.value = initializeDates(res)
-  data.value.contents = Array.isArray(data.value.contents) ? data.value.contents : [data.value.contents]
+  data.value.contents = Array.isArray(data.value.contents)
+    ? data.value.contents
+    : [data.value.contents]
 }
 
 const onSubmit = async () => {
   form.value.validate().then(async (success) => {
     if (success) {
-      const payload = updateDates({ ...data.value, contents: data.value.contents }, mode.value)
+      const payload = updateDates(
+        { ...data.value, contents: data.value.contents },
+        mode.value
+      )
       const urlObj = {
         create: () => {
           return callCreateFetch({ ...payload, isAvailable: true })
@@ -138,7 +167,9 @@ const onDelete = async (row) => {
   })
   if (!res) return
 
-  const index = data.value.contents.findIndex(item => item.uniqueItem === row.uniqueItem)
+  const index = data.value.contents.findIndex(
+    (item) => item.uniqueItem === row.uniqueItem
+  )
   if (index > -1) {
     data.value.contents.splice(index, 1)
     data.value.contents = [...data.value.contents]
@@ -149,22 +180,16 @@ const showDialog = () => {
   dialog.value.showDialog({ data: data.value.contents })
 }
 
-const { dataTable, data } =
-  useVxeServerDataTable({
-    sessionStorageKey: 'dashboardMaterialDetailServerDataTable'
-  })
+const { dataTable, data } = useVxeServerDataTable({
+  sessionStorageKey: 'dashboardMaterialDetailServerDataTable'
+})
 
 const { goBack } = useGoBack()
 const { messageDelete } = useMessageDialog()
-const {
-  form,
-  callReadFetch,
-  callCreateFetch,
-  callUpdateFetch,
-} = useCRUD({
+const { form, callReadFetch, callCreateFetch, callUpdateFetch } = useCRUD({
   readFetch: readFetch,
   createFetch: createFetch,
-  updateFetch: updateFetch,
+  updateFetch: updateFetch
 })
 
 watch(

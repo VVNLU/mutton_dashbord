@@ -1,15 +1,35 @@
 <template>
   <div>
     <div v-show="!isReadingList">
-      <vxe-table ref="dataTable" class="q-mb-sm" auto-resize round stripe :key="refreshKey" :data="data"
-        :show-footer="showFooter" :footer-span-method="footerSpanMethod" :footer-method="footerMethod"
-        :checkbox-config="observeCheckboxConfig" :tree-config="treeConfig" :row-config="observeRowConfig"
-        :max-height="maxHeight" :cell-class-name="cellClassName" @sort-change="onChangeSort"
-        @checkbox-all="onCheckboxAll" @checkbox-change="onCheckboxChange">
+      <vxe-table
+        ref="dataTable"
+        class="q-mb-sm"
+        auto-resize
+        round
+        stripe
+        :key="refreshKey"
+        :data="data"
+        :show-footer="showFooter"
+        :footer-span-method="footerSpanMethod"
+        :footer-method="footerMethod"
+        :checkbox-config="observeCheckboxConfig"
+        :tree-config="treeConfig"
+        :row-config="observeRowConfig"
+        :max-height="maxHeight"
+        :cell-class-name="cellClassName"
+        @sort-change="onChangeSort"
+        @checkbox-all="onCheckboxAll"
+        @checkbox-change="onCheckboxChange"
+      >
         <slot />
       </vxe-table>
-      <pagination v-if="total > 0 && showPagination" :total="total" :current="current" :auto-scroll="false"
-        @update:current="onUpdateCurrent" />
+      <pagination
+        v-if="total > 0 && showPagination"
+        :total="total"
+        :current="current"
+        :auto-scroll="false"
+        @update:current="onUpdateCurrent"
+      />
     </div>
   </div>
 </template>

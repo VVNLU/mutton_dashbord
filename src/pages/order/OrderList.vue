@@ -10,10 +10,22 @@
     <q-card class="shadow-7">
       <card-body>
         <!-- <order-list-search-block v-model="search" class="q-mb-sm" @changeFilter="onChangeFilter" @reset="onReset" /> -->
-        <vxe-server-table ref="dataTable" :data="data" :total="total" :current="search.page" @sort-change="OnChangeSort"
-          @update:current="onChangePage">
-          <vxe-column v-for="{ field, title, min_width, type } in tableFields" :key="field" :field="field"
-            :title="title" :min-width="min_width" :type="type">
+        <vxe-server-table
+          ref="dataTable"
+          :data="data"
+          :total="total"
+          :current="search.page"
+          @sort-change="OnChangeSort"
+          @update:current="onChangePage"
+        >
+          <vxe-column
+            v-for="{ field, title, min_width, type } in tableFields"
+            :key="field"
+            :field="field"
+            :title="title"
+            :min-width="min_width"
+            :type="type"
+          >
             <template v-if="type === 'html'" #default="{ row, column }">
               <div :class="getCellClassName({ row, column })">
                 {{ row[field] }}
@@ -33,8 +45,13 @@
           <vxe-column title="操作" fixed="right" width="60">
             <template #default="{ row }">
               <div class="flex-center row">
-                <edit-icon-button icon="search" class="q-mr-xs q-mb-xs"
-                  @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
+                <edit-icon-button
+                  icon="search"
+                  class="q-mr-xs q-mb-xs"
+                  @click="
+                    showDialog({ id: row.id, mode: 'edit', callRead: true })
+                  "
+                />
               </div>
             </template>
           </vxe-column>
@@ -72,13 +89,23 @@ const tableFields = ref([
   { title: '電話', field: 'client.tel', min_width: '120' },
   { title: '狀態', field: 'state', min_width: '80', type: 'html' },
   { title: '交易方式', field: 'payment', min_width: '80' },
-  { title: '後五碼', field: 'accountLastFive', min_width: '80', type: 'accountLastFive' },
+  {
+    title: '後五碼',
+    field: 'accountLastFive',
+    min_width: '80',
+    type: 'accountLastFive'
+  },
   { title: '是否付款', field: 'isPaid', min_width: '80', type: 'html' },
   { title: '出貨方式', field: 'ship', min_width: '80' },
-  { title: '貨運單號', field: 'orderNumber', min_width: '120', type: 'orderNumber' },
+  {
+    title: '貨運單號',
+    field: 'orderNumber',
+    min_width: '120',
+    type: 'orderNumber'
+  },
   { title: '是否出貨', field: 'isShipped', min_width: '80', type: 'html' },
   { title: '人員', field: '', min_width: '80' },
-  { title: '備註', field: 'client.remark', min_width: '120' },
+  { title: '備註', field: 'client.remark', min_width: '120' }
 ])
 
 onMounted(() => {
@@ -89,22 +116,39 @@ const getCellClassName = ({ row = {}, column = {} } = {}) => {
   const field = column.field
   switch (field) {
     case 'state':
-      return row.state === '處理中' ? 'processing ' : row.state === '已完成' ? 'completed' : row.state === '已取消' ? 'canceled' : ''
+      return row.state === '處理中'
+        ? 'processing '
+        : row.state === '已完成'
+          ? 'completed'
+          : row.state === '已取消'
+            ? 'canceled'
+            : ''
     case 'isPaid':
-      return row.isPaid === '處理中' ? 'processing' : row.isPaid === '已完成' ? 'completed' : row.isPaid === '已取消' ? 'canceled' : ''
+      return row.isPaid === '處理中'
+        ? 'processing'
+        : row.isPaid === '已完成'
+          ? 'completed'
+          : row.isPaid === '已取消'
+            ? 'canceled'
+            : ''
     case 'isShipped':
-      return row.isShipped === '處理中' ? 'processing' : row.isShipped === '已完成' ? 'completed' : row.isShipped === '已取消' ? 'canceled' : ''
+      return row.isShipped === '處理中'
+        ? 'processing'
+        : row.isShipped === '已完成'
+          ? 'completed'
+          : row.isShipped === '已取消'
+            ? 'canceled'
+            : ''
     default:
       return ''
   }
 }
 
 const readListFetch = async (payload) => {
-  return await getList(payload)
-    .then((res) => {
-      data.value = res
-      total.value = res.length
-    })
+  return await getList(payload).then((res) => {
+    data.value = res
+    total.value = res.length
+  })
 }
 
 const updateFetch = async (id, payload) => {

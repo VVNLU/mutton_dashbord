@@ -1,5 +1,11 @@
 <template>
-  <base-icon-button color="red" icon="delete" :outline="outline" :label="label" :flat="flat" />
+  <base-icon-button
+    color="red"
+    icon="delete"
+    :outline="outline"
+    :label="label"
+    :flat="flat"
+  />
 </template>
 
 <script setup>

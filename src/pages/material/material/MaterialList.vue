@@ -72,7 +72,7 @@ const columns = [
     field: 'materialTotal',
     align: 'center',
     isMultiline: true
-  },
+  }
 ]
 
 onMounted(async () => {
@@ -81,28 +81,27 @@ onMounted(async () => {
 })
 
 const readListFetch = async (payload) => {
-  return await getList(payload)
-    .then((res) => {
-      rows.value = res.map(item => {
-        const materialQuantities = item.contents.map(item => item.quantity)
-        const materialTotals = item.contents.map(item => item.total)
+  return await getList(payload).then((res) => {
+    rows.value = res.map((item) => {
+      const materialQuantities = item.contents.map((item) => item.quantity)
+      const materialTotals = item.contents.map((item) => item.total)
 
-        // 計算 materialPrice，並設為 materialTotal / materialQuantity
-        const materialPrices = materialTotals.map((total, index) => {
-          const quantity = materialQuantities[index]
-          return (quantity > 0) ? (total / quantity).toFixed(2) : '0.00'
-        })
-
-        return {
-          ...item,
-          materialTitle: item.contents.map(item => item.title).join('<br>'),
-          materialQuantity: materialQuantities.join('<br>'),
-          materialTotal: materialTotals.join('<br>'),
-          materialUnit: item.contents.map(item => item.unit).join('<br>'),
-          materialPrice: materialPrices.join('<br>'),
-        }
+      // 計算 materialPrice，並設為 materialTotal / materialQuantity
+      const materialPrices = materialTotals.map((total, index) => {
+        const quantity = materialQuantities[index]
+        return quantity > 0 ? (total / quantity).toFixed(2) : '0.00'
       })
+
+      return {
+        ...item,
+        materialTitle: item.contents.map((item) => item.title).join('<br>'),
+        materialQuantity: materialQuantities.join('<br>'),
+        materialTotal: materialTotals.join('<br>'),
+        materialUnit: item.contents.map((item) => item.unit).join('<br>'),
+        materialPrice: materialPrices.join('<br>')
+      }
     })
+  })
 }
 
 const updateFetch = async (id, payload) => {

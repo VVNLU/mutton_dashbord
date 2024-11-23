@@ -9,8 +9,13 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-md-6 col-sm-12 col-xs-12">
-                  <date-input v-model="manufacturingDate" class="w-full" label="日期 *" placeholder="請選擇日期"
-                    :rules="[$rules.required('日期必填')]" />
+                  <date-input
+                    v-model="manufacturingDate"
+                    class="w-full"
+                    label="日期 *"
+                    placeholder="請選擇日期"
+                    :rules="[$rules.required('日期必填')]"
+                  />
                 </div>
               </div>
             </card-body>
@@ -22,8 +27,14 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <base-button v-for="item in materialCategoryData" :label="item.title" :outline="true" :rounded="true"
-                    @click="addNewData(item)" class="classification-btn" />
+                  <base-button
+                    v-for="item in materialCategoryData"
+                    :label="item.title"
+                    :outline="true"
+                    :rounded="true"
+                    @click="addNewData(item)"
+                    class="classification-btn"
+                  />
                 </div>
               </div>
             </card-body>
@@ -76,9 +87,21 @@ const { notifyAPIError } = useNotify()
 
 const columns = [
   { name: 'title', label: '項目', field: 'title', align: 'center' },
-  { name: 'quantity', label: '數量', field: 'quantity', align: 'center', isPopupEdit: true },
+  {
+    name: 'quantity',
+    label: '數量',
+    field: 'quantity',
+    align: 'center',
+    isPopupEdit: true
+  },
   { name: 'unit', label: '單位', field: 'unit', align: 'center' },
-  { name: 'total', label: '總額', field: 'total', align: 'center', isPopupEdit: true },
+  {
+    name: 'total',
+    label: '總額',
+    field: 'total',
+    align: 'center',
+    isPopupEdit: true
+  }
 ]
 
 onMounted(async () => {
@@ -90,7 +113,7 @@ onMounted(async () => {
 })
 
 const addNewData = async (item) => {
-  const isDuplicate = rows.value.some(row => row.id === item.id)
+  const isDuplicate = rows.value.some((row) => row.id === item.id)
 
   if (isDuplicate) {
     notifyAPIError({ message: '已有 ' + `${item.title}` + ' 原物料了' })
@@ -138,10 +161,13 @@ const refreshReadData = async (id) => {
 const onSubmit = async () => {
   form.value.validate().then(async (success) => {
     if (success) {
-      const payload = updateDates({
-        manufacturingDate: manufacturingDate.value,
-        contents: rows.value
-      }, mode.value)
+      const payload = updateDates(
+        {
+          manufacturingDate: manufacturingDate.value,
+          contents: rows.value
+        },
+        mode.value
+      )
       const urlObj = {
         create: () => {
           return callCreateFetch({ ...payload })

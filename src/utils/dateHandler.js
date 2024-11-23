@@ -9,7 +9,7 @@ export function initializeDates(data) {
   return {
     ...data,
     createDate: data.createDate ? convertDateTime(data.createDate) : null,
-    updateDate: data.updateDate ? convertDateTime(data.updateDate) : null,
+    updateDate: data.updateDate ? convertDateTime(data.updateDate) : null
   }
 }
 

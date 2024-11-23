@@ -1,12 +1,32 @@
 <template>
-  <q-dialog v-model="observeValue" :persistent="persistent" @show="onShow" @hide="onHide">
+  <q-dialog
+    v-model="observeValue"
+    :persistent="persistent"
+    @show="onShow"
+    @hide="onHide"
+  >
     <q-card :class="sizeClass">
-      <q-card-section :class="[headerBgColor, textColor, 'row', 'items-center', 'dialog-header']">
+      <q-card-section
+        :class="[
+          headerBgColor,
+          textColor,
+          'row',
+          'items-center',
+          'dialog-header'
+        ]"
+      >
         <slot name="title">
           <div class="text-h6">{{ title }}</div>
         </slot>
         <q-space />
-        <q-btn v-close-popup icon="far fa-times-circle" flat round dense @click="onCancel" />
+        <q-btn
+          v-close-popup
+          icon="far fa-times-circle"
+          flat
+          round
+          dense
+          @click="onCancel"
+        />
       </q-card-section>
       <q-separator />
       <q-card-section class="scroll q-dialog-body">
@@ -15,10 +35,23 @@
       <q-separator />
       <q-card-actions class="q-dialog-footer" align="right">
         <slot name="footer" class="text-primary">
-          <confirm-button v-if="showSave" padding="sm 2.5em" class="q-mr-sm" :color="confirmButtonColor"
-            :label="confirmButtonText" @click="onSave" />
-          <cancel-button v-if="showCancel" v-close-popup class="text-black" padding="sm 2.5em"
-            :color="cancelButtonColor" :label="cancelButtonText" @click="onCancel" />
+          <confirm-button
+            v-if="showSave"
+            padding="sm 2.5em"
+            class="q-mr-sm"
+            :color="confirmButtonColor"
+            :label="confirmButtonText"
+            @click="onSave"
+          />
+          <cancel-button
+            v-if="showCancel"
+            v-close-popup
+            class="text-black"
+            padding="sm 2.5em"
+            :color="cancelButtonColor"
+            :label="cancelButtonText"
+            @click="onCancel"
+          />
         </slot>
       </q-card-actions>
     </q-card>

@@ -45,8 +45,7 @@ const materialRouter = {
       children: [
         {
           path: '',
-          component: () =>
-            import('@/pages/material/material/MaterialList.vue'),
+          component: () => import('@/pages/material/material/MaterialList.vue'),
           name: 'MaterialList',
           meta: {
             title: '原物料紀錄',
@@ -65,8 +64,7 @@ const materialRouter = {
         },
         {
           path: 'edit/:id([A-Za-z0-9_]+)',
-          component: () =>
-            import('@/pages/material/material/MaterialEdit.vue'),
+          component: () => import('@/pages/material/material/MaterialEdit.vue'),
           name: 'MaterialEdit',
           meta: {
             title: '原物料詳情'

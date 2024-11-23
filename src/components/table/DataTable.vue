@@ -1,7 +1,16 @@
 <template>
   <div>
-    <q-table class="my-sticky-header-table" :rows="rows" :columns="columns" :filter="filter" row-key="name"
-      :loading="loading" :pagination="initialPagination" flat bordered>
+    <q-table
+      class="my-sticky-header-table"
+      :rows="rows"
+      :columns="columns"
+      :filter="filter"
+      row-key="name"
+      :loading="loading"
+      :pagination="initialPagination"
+      flat
+      bordered
+    >
       <!-- 搜尋欄位 -->
       <template v-slot:top-left>
         <q-input dense debounce="300" v-model="filter" placeholder="搜尋">
@@ -14,9 +23,14 @@
       <!-- 沒有資料的提示 -->
       <template v-slot:no-data="{ filter }">
         <div class="full-width row flex-center text-indigo q-gutter-sm">
-          <q-icon size="2em" :name="filter ? 'search_off' : 'sentiment_dissatisfied'" />
+          <q-icon
+            size="2em"
+            :name="filter ? 'search_off' : 'sentiment_dissatisfied'"
+          />
           <span>
-            很抱歉，{{ filter ? '沒有符合搜尋條件的結果。' : '目前沒有任何資料可顯示。' }}
+            很抱歉，{{
+              filter ? '沒有符合搜尋條件的結果。' : '目前沒有任何資料可顯示。'
+            }}
           </span>
         </div>
       </template>
@@ -73,7 +87,7 @@ const filter = ref('')
 
 const initialPagination = {
   sortBy: 'desc',
-  descending: false,
+  descending: false
 }
 
 const onCancel = () => {
@@ -82,7 +96,6 @@ const onCancel = () => {
 </script>
 <style lang="scss" scoped>
 .my-sticky-header-table {
-
   td:first-child,
   .th-first {
     background-color: #fff !important;
