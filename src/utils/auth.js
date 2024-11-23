@@ -1,21 +1,17 @@
-const TokenKey = 'Dashboard-Rwd-Base-Token'
-const UIDKey = 'Dashboard-Rwd-Base-UID'
-const RoleKey = 'Dashboard-Rwd-Base-Role'
+import { LOCAL_STORAGE_TOKEN, LOCAL_STORAGE_USER_ID } from '../config/constant'
 
 export function setAuthData(token, uid) {
-  localStorage.setItem(TokenKey, token)
-  localStorage.setItem(UIDKey, uid)
+  localStorage.setItem(LOCAL_STORAGE_TOKEN, token)
+  localStorage.setItem(LOCAL_STORAGE_USER_ID, uid)
 }
 
 export function getAuthData() {
-  const token = localStorage.getItem(TokenKey)
-  const uid = localStorage.getItem(UIDKey)
-  const role = localStorage.getItem(RoleKey)
-  return { token, uid, role }
+  const token = localStorage.getItem(LOCAL_STORAGE_TOKEN)
+  const uid = localStorage.getItem(LOCAL_STORAGE_USER_ID)
+  return { token, uid }
 }
 
 export function removeAuthData() {
-  localStorage.removeItem(TokenKey)
-  localStorage.removeItem(UIDKey)
-  localStorage.removeItem(RoleKey)
+  localStorage.removeItem(LOCAL_STORAGE_TOKEN)
+  localStorage.removeItem(LOCAL_STORAGE_USER_ID)
 }

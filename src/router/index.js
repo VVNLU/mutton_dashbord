@@ -8,6 +8,7 @@ import materialRouter from './modules/material'
 import vendorRouter from './modules/vendor'
 import productRouter from './modules/product'
 import orderRouter from './modules/order'
+import { LOCAL_STORAGE_TOKEN } from '../config/constant'
 
 export const constantRoutes = [
   {
@@ -23,10 +24,10 @@ export const constantRoutes = [
   {
     path: '/',
     component: MainLayout,
-    redirect: '/dashboard',
+    redirect: '/',
     children: [
       {
-        path: 'dashboard',
+        path: '/',
         component: () => import('@/pages/dashboard/index.vue'),
         name: 'dashboard'
       }
@@ -48,32 +49,12 @@ const router = createRouter({
   routes: [...constantRoutes, ...asyncRoutes]
 })
 
-// router.beforeEach((to) => {
-//   if (
-//     to.name !== 'login' &&
-//     to.name !== 'register' &&
-//     localStorage.getItem('Dashboard-Rwd-Base-Token') === null
-//   ) {
-//     return { name: 'login' || 'register' }
-//   }
-// })
-// router.beforeEach((to) => {
-//   if (
-//     to.name === 'login' &&
-//     localStorage.getItem('Dashboard-Rwd-Base-Token') !== null
-//   ) {
-//     return { name: 'dashboard' }
-//   }
-// })
-
-// export function addRoutes(routes = [], { parent = '' }) {
-//   routes.forEach((route) => {
-//     if (parent) {
-//       router.addRoute(parent, route)
-//     } else {
-//       router.addRoute(route)
-//     }
-//   })
-// }
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem(LOCAL_STORAGE_TOKEN)
+  if (to.name !== 'login' && to.name !== 'register' && !token) {
+    next({ name: 'login' })
+  }
+  next()
+})
 
 export default router
