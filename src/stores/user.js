@@ -13,8 +13,7 @@ export const useUser = defineStore({
   id: 'user',
   state: () => ({
     user: null,
-    token: getAuthData(), // 初始化 token
-    role: null
+    token: getAuthData() // 初始化 token
   }),
   actions: {
     async login(email, password) {
