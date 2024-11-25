@@ -8,7 +8,7 @@ const orderRouter = {
   meta: {
     title: '訂單管理',
     slug: 'link',
-    icon: 'menu_open'
+    icon: 'fa-solid fa-cart-shopping'
   },
   redirect: { name: 'OrderList' },
   children: [
@@ -18,7 +18,6 @@ const orderRouter = {
       name: 'OrderList',
       meta: {
         title: '訂單管理',
-        icon: 'fa-solid fa-cart-shopping'
       }
     },
     {

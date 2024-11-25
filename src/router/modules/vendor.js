@@ -8,7 +8,7 @@ const vendorRouter = {
   meta: {
     title: '供應商管理',
     slug: 'link',
-    icon: 'menu_open'
+    icon: 'fa-solid fa-address-book'
   },
   redirect: { name: 'vendorList' },
   children: [
@@ -18,7 +18,6 @@ const vendorRouter = {
       name: 'vendorList',
       meta: {
         title: '供應商管理',
-        icon: 'fa-solid fa-address-book'
       }
     }
   ]
