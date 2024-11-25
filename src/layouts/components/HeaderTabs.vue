@@ -5,7 +5,17 @@
     <template v-for="(routeItem, routeIndex) in asyncRoutes" :key="routeIndex">
       <!-- group 有多個元素，則使用下拉選單 -->
       <template v-if="routeItem.group && routeItem.group.length > 1">
-        <q-btn-dropdown auto-close stretch flat :label="isXs ? '' : routeItem.meta.title" :icon="routeItem.meta.icon">
+        <q-btn-dropdown auto-close stretch flat>
+          <template v-slot:label>
+            <div>
+              <div class="row justify-around items-center no-wrap">
+                <q-icon :name="routeItem.meta.icon" />
+              </div>
+              <div v-show="!isXs" class="row items-center no-wrap">
+                {{ routeItem.meta.title }}
+              </div>
+            </div>
+          </template>
           <q-list>
             <q-item v-for="(child, childIndex) in routeItem.children" :key="childIndex" clickable
               @click="navigateTo(child.path)">
