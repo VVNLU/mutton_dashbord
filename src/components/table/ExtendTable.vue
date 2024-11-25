@@ -13,8 +13,11 @@
             {{ column.label }}
           </div>
           <div>
-            <span v-if="column.name !== 'quantity'">
+            <span v-if="column.name !== 'quantity' && column.name !== 'price'" class=" rowStyle">
               {{ row[column.name] }}
+            </span>
+            <span v-else-if="column.name === 'price'" class="rowStyle">
+              $ {{ row[column.name] }}
             </span>
             <div v-else style="width: 80px">
               <q-input type="number" v-model.number="row[column.name]" dense autofocus clearable />
@@ -57,3 +60,12 @@ const props = defineProps({
 
 const expanded = ref(false)
 </script>
+
+<style lang="scss" scoped>
+.rowStyle {
+  background: #fff9c4;
+  border-radius: 15px;
+  padding: 5px 10px;
+  display: inline-block;
+}
+</style>
