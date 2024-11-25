@@ -1,12 +1,6 @@
 <template>
-  <base-dialog
-    v-model="isShowDialog"
-    title="選取原物料"
-    :confirmButtonText="'送出'"
-    :cancelButtonText="'取消'"
-    @save="onSave"
-    @hide="onHide"
-  >
+  <base-dialog v-model="isShowDialog" title="選取原物料" :confirmButtonText="'送出'" :cancelButtonText="'取消'" @save="onSave"
+    @hide="onHide" :isReading="isReading">
     <base-form ref="form">
       <div class="row q-col-gutter-x-md q-col-gutter-y-md">
         <div class="col-12">
@@ -14,14 +8,8 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <base-button
-                    v-for="item in materialCategoryData"
-                    :label="item.name"
-                    :outline="true"
-                    :rounded="true"
-                    @click="addNewData(item)"
-                    class="classification-btn"
-                  />
+                  <base-button v-for="item in materialCategoryData" :label="item.title" :outline="true" :rounded="true"
+                    @click="addNewData(item)" class="q-ma-xs" />
                 </div>
               </div>
             </card-body>
@@ -29,30 +17,23 @@
         </div>
         <div class="col-12">
           <q-card class="shadow-7">
-            <vxe-server-table ref="dataTable" :data="data">
-              <vxe-column title="項目" min_width="100">
-                <template #default="{ row }">
-                  <div>{{ row.name }}</div>
-                </template>
-              </vxe-column>
-              <vxe-column title="數量" min_width="150">
-                <template #default="{ row }">
-                  <number-input
-                    v-model="row.quantity"
-                    placeholder="請輸入數量"
-                    label="數量"
-                  />
-                </template>
-              </vxe-column>
-              <vxe-column title="操作" fixed="right" width="120">
-                <template #default="{ row }">
-                  <delete-icon-button
-                    class="q-mr-xs q-mb-xs"
-                    @click="onDelete(row)"
-                  />
-                </template>
-              </vxe-column>
-            </vxe-server-table>
+            <card-body>
+              <toggle-input v-model="switchStyle" :label="switchStyle ? '網格式' : '條列式'" />
+              <div v-if="switchStyle">
+                <extend-table :isExpanded="false" :columns="columns" :rows="rows">
+                  <template #action="{ row }">
+                    <delete-icon-button @click="onDelete(row)" />
+                  </template>
+                </extend-table>
+              </div>
+              <div v-else>
+                <popup-data-table :columns="columns" :rows="rows">
+                  <template #props="{ row }">
+                    <delete-icon-button @click="onDelete(row)" />
+                  </template>
+                </popup-data-table>
+              </div>
+            </card-body>
           </q-card>
         </div>
       </div>
@@ -65,7 +46,8 @@ import { defineComponent, ref, onMounted, watch } from 'vue-demi'
 import { getList } from '@/api/materialCategory'
 import useDialog from '@/hooks/useDialog'
 import useMessageDialog from '@/hooks/useMessageDialog'
-import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
+import useNotify from '@/hooks/useNotify'
+import useCRUD from '@/hooks/useCRUD'
 
 export default defineComponent({
   props: {
@@ -76,41 +58,72 @@ export default defineComponent({
   },
   emits: ['update:detailData', 'save'],
   setup(props, { emit }) {
+    const { notifyAPIError } = useNotify()
+
     const materialCategoryData = ref([])
+    const rows = ref([])
+    const switchStyle = ref(true)
+    const isReading = ref(false)
+
+    const columns = [
+      {
+        name: 'title',
+        label: '項目',
+        field: 'title',
+        align: 'center'
+      },
+      {
+        name: 'quantity',
+        label: '數量',
+        field: 'quantity',
+        align: 'center',
+        isPopupEdit: true
+      },
+    ]
 
     onMounted(async () => {
+      isReading.value = true
       await readListMaterialCategoryFetch()
+      isReading.value = false
 
-      data.value = [...props.detailData]
+      rows.value = [...props.detailData]
     })
 
     watch(
       () => props.detailData,
       (newVal) => {
-        data.value = [...newVal]
+        rows.value = [...newVal]
       }
     )
 
     const addNewData = async (item) => {
-      data.value.push({
-        id: item.id,
-        name: item.name,
-        quantity: null,
-        uniqueItem: Date.now() + Math.random() // 判斷項目重複時要刪除哪一個
-      })
+      const isDuplicate = rows.value.some((row) => row.material_id === item.id)
+
+      if (isDuplicate) {
+        notifyAPIError({ message: '已有 ' + `${item.title}` + ' 原物料了' })
+        return
+      }
+
+      rows.value = [...rows.value, {
+        material_id: item.id,
+        title: item.title,
+        quantity: 0,
+      }]
     }
 
     const readListMaterialCategoryFetch = async () => {
       const res = await getList()
       materialCategoryData.value = res.map((item) => ({
         id: item.id,
-        name: item.name
+        title: item.title
       }))
     }
 
     const onSave = async () => {
       const [res] = await save()
-      if (res) emit('save', data.value)
+      if (res) {
+        emit('save', rows.value)
+      }
     }
 
     const onDelete = async (row) => {
@@ -121,31 +134,41 @@ export default defineComponent({
         cancelButtonText: '取消'
       })
       if (!res) return
-      const index = data.value.findIndex(
-        (item) => item.uniqueItem === row.uniqueItem
-      )
-      data.value.splice(index, 1)
+
+      const index = rows.value.indexOf(row)
+      if (index !== -1) {
+        rows.value.splice(index, 1)
+      }
+      await callDeleteFetch()
     }
 
     const onHide = () => {
-      data.value = [...props.detailData]
+      rows.value = [...props.detailData]
     }
 
     // use
     const { messageDelete } = useMessageDialog()
-    const { dataTable, data } = useVxeServerDataTable({
-      sessionStorageKey: 'dashboardProductDialogServerDataTable'
-    })
 
-    const { form, isShowDialog, showDialog, save } = useDialog({
+    const {
+      form,
+      isShowDialog,
+      showDialog,
+      save
+    } = useDialog({
       readListFetch: readListMaterialCategoryFetch
     })
 
+    const {
+      callDeleteFetch
+    } = useCRUD({})
+
     return {
       materialCategoryData,
+      rows,
+      columns,
+      switchStyle,
+      isReading,
 
-      dataTable,
-      data,
       form,
       isShowDialog,
       showDialog,
@@ -158,9 +181,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-.classification-btn {
-  margin-right: 10px;
-}
-</style>

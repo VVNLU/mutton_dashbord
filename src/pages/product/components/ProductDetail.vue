@@ -8,28 +8,14 @@
             <card-header> 商品資訊 </card-header>
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
-                <div class="col-md-6 col-sm-4 col-xs-12">
-                  <text-input
-                    v-model="data.title"
-                    label="商品名稱"
-                    placeholder="請輸入商品名稱"
-                    :required="true"
-                  />
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <text-input v-model="rows.title" label="商品名稱" placeholder="請輸入商品名稱" :required="true" />
                 </div>
-                <div class="col-md-6 col-sm-4 col-xs-12">
-                  <text-input
-                    v-model="data.depiction"
-                    label="商品敘述"
-                    placeholder="請輸入商品敘述"
-                  />
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <text-input v-model="rows.depiction" label="商品敘述" placeholder="請輸入商品敘述" />
                 </div>
-                <div class="col-md-6 col-sm-4 col-xs-12">
-                  <number-input
-                    v-model="data.price"
-                    label="售價"
-                    placeholder="請輸入商品售價"
-                    :required="true"
-                  />
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <number-input v-model="rows.price" label="售價" placeholder="請輸入商品售價" :required="true" />
                 </div>
               </div>
             </card-body>
@@ -43,32 +29,12 @@
                 <add-button @click="showDialog({})" />
               </template>
             </card-header>
-            <card-body class="q-pt-none">
+            <card-body>
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <vxe-server-table ref="dataTable" :data="data.contents">
-                    <vxe-column title="項目" min_width="130">
-                      <template #default="{ row }">
-                        <div>{{ row.name }}</div>
-                      </template>
-                    </vxe-column>
-                    <vxe-column title="數量" min_width="130">
-                      <template #default="{ row }">
-                        <number-input
-                          v-model="row.quantity"
-                          placeholder="請輸入數量"
-                        />
-                      </template>
-                    </vxe-column>
-                    <vxe-column title="操作" fixed="right" width="115">
-                      <template #default="{ row }">
-                        <delete-icon-button
-                          class="q-mr-xs q-mb-xs"
-                          @click="onDelete(row)"
-                        />
-                      </template>
-                    </vxe-column>
-                  </vxe-server-table>
+                  <toggle-input v-model="switchStyle" :label="switchStyle ? '網格式' : '條列式'" />
+                  <data-table v-if="switchStyle" grid :columns="columns" :rows="rows.contents" />
+                  <data-table v-else :columns="columns" :rows="rows.contents" />
                 </div>
               </div>
             </card-body>
@@ -77,11 +43,7 @@
       </div>
     </base-form>
 
-    <product-dialog
-      ref="dialog"
-      v-model:detailData="data.contents"
-      @save="handleSave"
-    />
+    <product-dialog ref="dialog" v-model:detailData="rows.contents" @save="handleSave" />
   </q-page>
   <fixed-footer @save="onSubmit" />
 </template>
@@ -93,8 +55,6 @@ import { getData, addData, updateData } from '@/api/product'
 import { initializeDates, updateDates } from '@/utils/dateHandler'
 import useCRUD from '@/hooks/useCRUD'
 import useGoBack from '@/hooks/useGoBack'
-import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
-import useMessageDialog from '@/hooks/useMessageDialog'
 import ProductDialog from './ProductDialog.vue'
 
 const props = defineProps({
@@ -105,6 +65,24 @@ const { mode } = toRefs(props)
 const route = useRoute()
 const id = route.params.id || null
 const dialog = ref()
+const rows = ref([])
+const switchStyle = ref(true)
+
+const columns = [
+  {
+    name: 'title',
+    label: '項目',
+    field: 'title',
+    align: 'left'
+  },
+  {
+    name: 'quantity',
+    label: '數量',
+    field: 'quantity',
+    align: 'left',
+    isPopupEdit: true
+  },
+]
 
 onMounted(async () => {
   if (id) {
@@ -113,7 +91,7 @@ onMounted(async () => {
 })
 
 const handleSave = (addData) => {
-  data.value.contents = addData
+  rows.value.contents = addData
 }
 
 const readFetch = async (id) => {
@@ -130,22 +108,23 @@ const updateFetch = async (id, payload) => {
 
 const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
-  data.value = initializeDates(res)
-  data.value.contents = Array.isArray(data.value.contents)
-    ? data.value.contents
-    : [data.value.contents]
+  console.log('res', res)
+  rows.value = initializeDates(res)
+  rows.value.contents = Array.isArray(rows.value.contents)
+    ? rows.value.contents
+    : [rows.value.contents]
 }
 
 const onSubmit = async () => {
   form.value.validate().then(async (success) => {
     if (success) {
       const payload = updateDates(
-        { ...data.value, contents: data.value.contents },
+        { ...rows.value, contents: rows.value.contents },
         mode.value
       )
       const urlObj = {
         create: () => {
-          return callCreateFetch({ ...payload, isAvailable: true })
+          return callCreateFetch({ ...payload })
         },
         edit: () => {
           return callUpdateFetch(id, { ...payload })
@@ -158,34 +137,11 @@ const onSubmit = async () => {
   })
 }
 
-const onDelete = async (row) => {
-  const res = await messageDelete({
-    title: '刪除',
-    message: '確認刪除原物料？',
-    confirmButtonText: '確認',
-    cancelButtonText: '取消'
-  })
-  if (!res) return
-
-  const index = data.value.contents.findIndex(
-    (item) => item.uniqueItem === row.uniqueItem
-  )
-  if (index > -1) {
-    data.value.contents.splice(index, 1)
-    data.value.contents = [...data.value.contents]
-  }
-}
-
 const showDialog = () => {
-  dialog.value.showDialog({ data: data.value.contents })
+  dialog.value.showDialog({ rows: rows.value.contents })
 }
-
-const { dataTable, data } = useVxeServerDataTable({
-  sessionStorageKey: 'dashboardMaterialDetailServerDataTable'
-})
 
 const { goBack } = useGoBack()
-const { messageDelete } = useMessageDialog()
 const { form, callReadFetch, callCreateFetch, callUpdateFetch } = useCRUD({
   readFetch: readFetch,
   createFetch: createFetch,
@@ -193,7 +149,7 @@ const { form, callReadFetch, callCreateFetch, callUpdateFetch } = useCRUD({
 })
 
 watch(
-  () => data.value.contents,
+  () => rows.value.contents,
   (newContents) => {
     if (dialog.value) {
       dialog.value.$emit('update:detailData', newContents)
