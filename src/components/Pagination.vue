@@ -1,107 +1,55 @@
 <template>
   <div class="flex items-center justify-left">
     <span class="q-ml-sm"> 共 {{ total }} 項 </span>
-    <span v-if="showPageSize">
-      <select-input
-        class="w-95px pagination-select"
-        dense
-        emit-value
-        v-model="pageSize"
-        option-label="label"
-        option-value="value"
-        :clearable="false"
-        :options="pageSizeOptions"
-        @update:modelValue="changePageSize"
-      />
-    </span>
-    <q-pagination
-      boundary-links
-      v-model="observeCurrent"
-      :max="maxSize"
-      :max-page="4"
-      :boundary-number="false"
-      icon-first="keyboard_double_arrow_left"
-      icon-last="keyboard_double_arrow_right"
-      @update:modelValue="handleCurrentChange"
-    />
-    <span>前往</span>
-    <text-input
-      class="w-55px pagination-input q-pt-md"
-      dense
-      v-model.lazy="toPage"
-      :clearable="false"
-      @change="changeToPage"
-      @keyup.enter="changeToPage"
-    />
-    <span>頁</span>
+    <q-pagination boundary-links v-model="observeCurrent" :max="maxSize" @update:modelValue="handleCurrentChange" />
   </div>
 </template>
 
 <script setup>
 import { computed, defineProps, ref, watch } from 'vue'
 import { useVModel } from '@vueuse/core'
-import { scrollTo } from '@/utils/scroll-to'
 
 const props = defineProps({
   current: { type: Number, default: 1 },
-  limit: { type: Number, default: 10 },
+  limit: { type: Number, default: 5 },
   total: { type: Number, default: 0 },
+  rows: { type: Array, required: true },
   autoScroll: { type: Boolean, default: true },
-  showPageSize: { type: Boolean, default: false }
 })
 const emit = defineEmits(['update:current', 'update:pageSize'])
 
-const toPage = ref(props.current)
-const pageSize = ref(props.limit)
 const observeCurrent = useVModel(props, 'current', emit)
-const pageSizeOptions = ref([
-  { label: '10 / 頁', value: 10 },
-  { label: '25 / 頁', value: 25 },
-  { label: '50 / 頁', value: 50 }
-])
+const pageSize = ref(props.limit)
+const paginatedRows = ref([])
 
-const maxSize = computed(() => {
-  const total = +props.total
-  const limit = +props.limit
-  return Math.ceil(+(total / limit))
-})
-const changeToPage = () => {
-  toPage.value = +toPage.value
-  const val = toPage.value
-  const maxSizeVal = maxSize.value
-  const r = /^\+?[1-9][0-9]*$/
-  if (!r.test(val)) {
-    toPage.value = 1
-  } else if (r.test(val) && val >= maxSizeVal) {
-    toPage.value = maxSizeVal
-  }
-  emit('update:current', toPage.value)
-  if (props.autoScroll) {
-    scrollTo(0, 800)
-  }
+// 計算最大頁數
+const maxSize = computed(() => Math.ceil(props.total / props.limit))
+
+// 計算分頁後的資料
+const computePaginatedRows = () => {
+  const start = (observeCurrent.value - 1) * props.limit
+  const end = start + props.limit
+  paginatedRows.value = props.rows.slice(start, end)
+
+  console.log('當前頁碼:', observeCurrent.value)
+  console.log('每頁顯示資料筆數:', props.limit)
+  console.log('起始索引:', start, '結束索引:', end)
+  console.log('分頁後的資料:', paginatedRows.value)
+
+  emit('update:paginatedRows', paginatedRows.value) // 傳遞分頁後的資料
 }
+
+// 監聽當前頁碼或資料變化時重新計算
+watch([() => props.rows, () => observeCurrent.value], computePaginatedRows, { immediate: true })
+watch([() => props.rows, () => observeCurrent.value], () => {
+  console.log('rows 發生變化:', props.rows)
+  console.log('observeCurrent 發生變化:', observeCurrent.value)
+  computePaginatedRows()
+}, { immediate: true })
+
 const handleCurrentChange = (val) => {
-  toPage.value = 1
-  if (props.autoScroll) {
-    scrollTo(0, 800)
-  }
+  observeCurrent.value = val
 }
-const changePageSize = () => {
-  emit('update:pageSize', pageSize.value)
-}
-
-watch(
-  () => props.current,
-  (newValue) => {
-    toPage.value = newValue
-  }
-)
-watch(
-  () => props.limit,
-  (newValue) => {
-    pageSize.value = newValue
-  }
-)
 </script>
 
 <style lang="scss" scoped>
