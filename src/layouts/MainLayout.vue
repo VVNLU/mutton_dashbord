@@ -1,7 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <Header />
-    <Sidebar />
+    <HeaderTabs />
     <q-page-container>
       <router-view v-slot="{ Component, route }">
         <transition name="slide-fade">
@@ -15,8 +14,7 @@
 </template>
 
 <script setup>
-import Header from './components/Header.vue'
-import Sidebar from './components/sidebar/Sidebar.vue'
+import HeaderTabs from './components/HeaderTabs.vue'
 </script>
 
 <style lang="scss" scoped>

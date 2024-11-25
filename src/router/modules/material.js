@@ -17,7 +17,9 @@ const materialRouter = {
       path: '/material-category',
       name: 'MaterialCategory',
       meta: {
-        slug: 'link'
+        title: '原物料',
+        slug: 'link',
+        icon: 'chevron_right'
       },
       redirect: { name: 'MaterialCategoryList' },
       children: [
@@ -30,16 +32,17 @@ const materialRouter = {
           name: 'MaterialCategoryList',
           meta: {
             title: '原物料',
-            icon: 'chevron_right'
           }
         }
       ]
     },
     // 原物料紀錄
     {
-      path: '',
+      path: '/material',
       meta: {
-        slug: 'link'
+        title: '原物料紀錄',
+        slug: 'link',
+        icon: 'chevron_right'
       },
       redirect: { name: 'MaterialList' },
       children: [
@@ -49,7 +52,6 @@ const materialRouter = {
           name: 'MaterialList',
           meta: {
             title: '原物料紀錄',
-            icon: 'chevron_right'
           }
         },
         {

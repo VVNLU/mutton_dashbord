@@ -8,7 +8,7 @@ const productRouter = {
   meta: {
     title: '商品管理',
     slug: 'link',
-    icon: 'menu_open'
+    icon: 'fa-solid fa-basket-shopping'
   },
   redirect: { name: 'ProductList' },
   children: [
@@ -18,7 +18,6 @@ const productRouter = {
       name: 'ProductList',
       meta: {
         title: '商品管理',
-        icon: 'fa-solid fa-basket-shopping'
       }
     },
     {
