@@ -20,11 +20,11 @@
             <card-body>
               <toggle-input v-model="switchStyle" :label="switchStyle ? '網格式' : '條列式'" />
               <div v-if="switchStyle">
-                <extend-table :isExpanded="false" :columns="columns" :rows="rows">
+                <grid-table :columns="columns" :rows="rows">
                   <template #action="{ row }">
                     <delete-icon-button @click="onDelete(row)" />
                   </template>
-                </extend-table>
+                </grid-table>
               </div>
               <div v-else>
                 <popup-data-table :columns="columns" :rows="rows">
