@@ -116,6 +116,8 @@ const refreshReadData = async (id) => {
 }
 
 const onSubmit = async () => {
+  rows.value.depiction = rows.value.depiction?.trim() || '無'
+
   form.value.validate().then(async (success) => {
     if (success) {
       const payload = updateDates(
