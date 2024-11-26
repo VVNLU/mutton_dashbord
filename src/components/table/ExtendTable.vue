@@ -7,9 +7,9 @@
       </span>
     </div>
     <q-card flat bordered v-for="(row, index) in rows" :key="index">
-      <q-card-section>
+      <q-card-section class="row items-start q-gutter-md">
         <div v-for="column in columns" :key="column.name">
-          <div class="text-bold q-pt-xs q-pb-xs">
+          <div class="text-bold text-16px q-pb-xs">
             {{ column.label }}
           </div>
           <div>
@@ -24,12 +24,11 @@
             </div>
           </div>
         </div>
+        <q-space />
+        <q-card-actions class="justify-around q-pa-none">
+          <slot name="action" :row="row" />
+        </q-card-actions>
       </q-card-section>
-
-      <!-- <插入按鈕 /> -->
-      <q-card-actions class="justify-around q-pa-none">
-        <slot name="action" :row="row" />
-      </q-card-actions>
 
       <!-- <下拉選單 /> -->
       <q-card-actions v-show="isExpanded">
@@ -64,8 +63,8 @@ const expanded = ref(false)
 <style lang="scss" scoped>
 .rowStyle {
   background: #fff9c4;
-  border-radius: 15px;
-  padding: 5px 10px;
+  border-radius: 10px;
+  padding: 2px 5px;
   display: inline-block;
 }
 </style>
