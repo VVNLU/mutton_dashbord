@@ -8,15 +8,26 @@
     </page-header>
     <q-card class="shadow-7">
       <card-body>
-        <data-table :columns="columns" :rows="rows" :loading="loading">
-          <template v-slot:body-cell-materialTitle="{ row }">
-            <div v-html="row.materialTitle"></div>
-          </template>
-          <template #props="{ row }">
-            <edit-icon-button :to="'/material/edit/' + row.id" />
-            <delete-icon-button @click="onDelete(row)" />
-          </template>
-        </data-table>
+        <toggle-input v-model="switchStyle" :label="switchStyle ? '網格式' : '條列式'" />
+        <div v-if="switchStyle">
+          <extend-grid-table :columns="columns" :rows="rows">
+            <template #action="{ row }">
+              <edit-icon-button :to="'/material/edit/' + row.id" />
+              <delete-icon-button @click="onDelete(row)" />
+            </template>
+          </extend-grid-table>
+        </div>
+        <div v-else>
+          <data-table :columns="columns" :rows="rows" :loading="loading">
+            <template v-slot:body-cell-materialTitle="{ row }">
+              <div v-html="row.materialTitle"></div>
+            </template>
+            <template #props="{ row }">
+              <edit-icon-button :to="'/material/edit/' + row.id" />
+              <delete-icon-button @click="onDelete(row)" />
+            </template>
+          </data-table>
+        </div>
       </card-body>
     </q-card>
   </q-page>
@@ -24,17 +35,19 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getList, updateData, deleteData } from '@/api/material'
+import { getList, updateData, deleteData } from '@/api/materialRecord'
 import useMessageDialog from '@/hooks/useMessageDialog'
 import useCRUD from '@/hooks/useCRUD'
 
 const rows = ref([])
 const loading = ref(true)
+const switchStyle = ref(true)
+
 const columns = [
   {
-    name: 'manufacturingDate',
+    name: 'date',
     label: '日期',
-    field: 'manufacturingDate',
+    field: 'date',
     align: 'center',
     sortable: true
   },
@@ -70,6 +83,13 @@ const columns = [
     name: 'materialTotal',
     label: '總價',
     field: 'materialTotal',
+    align: 'center',
+    isMultiline: true
+  },
+  {
+    name: 'remark',
+    label: '備註',
+    field: 'remark',
     align: 'center',
     isMultiline: true
   }

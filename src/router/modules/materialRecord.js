@@ -1,6 +1,6 @@
 import MainLayout from '@/layouts/MainLayout.vue'
 
-const materialRouter = {
+const materialRecordRouter = {
   path: '/material',
   group: ['/material-category', '/material'],
   groupName: 'first',
@@ -48,7 +48,7 @@ const materialRouter = {
       children: [
         {
           path: '',
-          component: () => import('@/pages/material/material/MaterialList.vue'),
+          component: () => import('@/pages/material/material-record/MaterialRecordList.vue'),
           name: 'MaterialList',
           meta: {
             title: '原物料紀錄',
@@ -57,7 +57,7 @@ const materialRouter = {
         {
           path: 'create',
           component: () =>
-            import('@/pages/material/material/MaterialCreate.vue'),
+            import('@/pages/material/material-record/MaterialRecordCreate.vue'),
           name: 'MaterialCreate',
           meta: {
             title: '原物料詳情'
@@ -66,7 +66,7 @@ const materialRouter = {
         },
         {
           path: 'edit/:id([A-Za-z0-9_]+)',
-          component: () => import('@/pages/material/material/MaterialEdit.vue'),
+          component: () => import('@/pages/material/material-record/MaterialRecordEdit.vue'),
           name: 'MaterialEdit',
           meta: {
             title: '原物料詳情'
@@ -78,4 +78,4 @@ const materialRouter = {
   ]
 }
 
-export default materialRouter
+export default materialRecordRouter

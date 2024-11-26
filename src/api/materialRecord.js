@@ -13,7 +13,7 @@ import {
 // 新增
 export const addData = async (data) => {
   try {
-    const docRef = await addDoc(collection(db, 'material'), data)
+    const docRef = await addDoc(collection(db, 'material_record'), data)
     return docRef
   } catch (error) {
     console.error('Error written document: ', error)
@@ -24,7 +24,7 @@ export const addData = async (data) => {
 // 讀取單筆數據
 export const getData = async (id) => {
   try {
-    const docRef = await getDoc(doc(db, 'material', id))
+    const docRef = await getDoc(doc(db, 'material_record', id))
     return docRef.data()
   } catch (error) {
     console.error('Error getting documents: ', error)
@@ -35,7 +35,7 @@ export const getData = async (id) => {
 // 讀取列表數據
 export const getList = async () => {
   try {
-    const docRef = await getDocs(collection(db, 'material'))
+    const docRef = await getDocs(collection(db, 'material_record'))
     const data = docRef.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
     return data
   } catch (error) {
@@ -47,7 +47,7 @@ export const getList = async () => {
 // 更新數據
 export const updateData = async (docId, newData) => {
   try {
-    const newDocRef = await updateDoc(doc(db, 'material', docId), newData)
+    const newDocRef = await updateDoc(doc(db, 'material_record', docId), newData)
     return newDocRef
   } catch (error) {
     console.error('Error updating document:', error)
@@ -58,7 +58,7 @@ export const updateData = async (docId, newData) => {
 // 刪除某一數據
 export const removeData = async (docId, docIndex) => {
   try {
-    const docRef = doc(db, 'material', docId)
+    const docRef = doc(db, 'material_record', docId)
     const docSnapshot = await getDoc(docRef)
     if (!docSnapshot.exists()) {
       throw new Error('Document does not exist!')
@@ -77,7 +77,7 @@ export const removeData = async (docId, docIndex) => {
 // 刪除整筆數據
 export const deleteData = async (docId) => {
   try {
-    const docRef = await deleteDoc(doc(db, 'material', docId))
+    const docRef = await deleteDoc(doc(db, 'material_record', docId))
     return docRef
   } catch (error) {
     console.error('Error deleting document: ', error)
