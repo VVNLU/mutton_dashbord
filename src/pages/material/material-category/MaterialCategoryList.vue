@@ -3,28 +3,28 @@
     <page-header>
       {{ $route.meta.title }}
       <template #action>
-        <add-button
-          @click="showDialog({ id: null, mode: 'create', callRead: false })"
-        />
+        <add-button @click="showDialog({ id: null, mode: 'create', callRead: false })" />
       </template>
     </page-header>
     <q-card class="shadow-7">
       <card-body>
-        <data-table :columns="columns" :rows="rows" :loading="loading">
-          <template #props="{ row }">
-            <edit-icon-button
-              @click="showDialog({ id: row.id, mode: 'edit', callRead: true })"
-            />
-            <delete-icon-button @click="onDelete(row)" />
-            <toggle-input
-              v-model="row.is_enable"
-              checked-icon="check"
-              unchecked-icon="clear"
-              color="secondary"
-              @update:modelValue="onEnable(row)"
-            />
-          </template>
-        </data-table>
+        <toggle-input v-model="switchStyle" :label="switchStyle ? '網格式' : '條列式'" />
+        <div v-if="switchStyle">
+          <extend-table :isExpanded="false" :columns="columns" :rows="rows">
+            <template #action="{ row }">
+              <edit-icon-button :to="'/product/edit/' + row.id" />
+              <delete-icon-button @click="onDelete(row)" />
+            </template>
+          </extend-table>
+        </div>
+        <div v-else>
+          <data-table :columns="columns" :rows="rows" :loading="loading">
+            <template #props="{ row }">
+              <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
+              <delete-icon-button @click="onDelete(row)" />
+            </template>
+          </data-table>
+        </div>
       </card-body>
     </q-card>
 
@@ -34,8 +34,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getList, updateData, deleteData } from '@/api/materialCategory'
-import { initializeDates, updateDates } from '@/utils/dateHandler'
+import { getList, deleteData } from '@/api/materialCategory'
+import { initializeDates } from '@/utils/dateHandler'
 import MaterialDialog from './components/MaterialCategoryDialog.vue'
 import useMessageDialog from '@/hooks/useMessageDialog'
 import useCRUD from '@/hooks/useCRUD'
@@ -43,6 +43,8 @@ import useCRUD from '@/hooks/useCRUD'
 const rows = ref([])
 const loading = ref(true)
 const dialog = ref()
+const switchStyle = ref(true)
+
 const columns = [
   { name: 'title', label: '分類名稱', field: 'title', align: 'center' },
   { name: 'unit', label: '單位', field: 'contact', align: 'center' }
@@ -55,12 +57,9 @@ onMounted(async () => {
 
 const readListFetch = async (payload) => {
   return await getList(payload).then((res) => {
-    rows.value = res.map((item) => initializeDates(item))
+    rows.value = res
+    // rows.value = res.map((item) => initializeDates(item))
   })
-}
-
-const updateFetch = async (id, payload) => {
-  return await updateData(id, payload)
 }
 
 const delFetch = async (id) => {
@@ -69,12 +68,6 @@ const delFetch = async (id) => {
 
 const refreshFetch = async () => {
   await callReadListFetch()
-}
-
-const onEnable = async (row) => {
-  const payload = updateDates({ is_enable: row.is_enable }, 'edit') // 更新時間
-  const [res] = await callUpdateFetch(row.id, { ...payload })
-  if (res) refreshFetch()
 }
 
 const onDelete = async (row) => {
@@ -95,8 +88,7 @@ const showDialog = ({ id, mode, callRead }) => {
   dialog.value.showDialog({ id, mode, callRead })
 }
 
-const { callReadListFetch, callUpdateFetch, callDeleteFetch } = useCRUD({
-  updateFetch,
+const { callReadListFetch, callDeleteFetch } = useCRUD({
   readListFetch,
   deleteFetch: delFetch
 })
