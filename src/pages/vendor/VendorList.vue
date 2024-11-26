@@ -3,21 +3,28 @@
     <page-header>
       {{ $route.meta.title }}
       <template #action>
-        <add-button
-          @click="showDialog({ id: null, mode: 'create', callRead: false })"
-        />
+        <add-button @click="showDialog({ id: null, mode: 'create', callRead: false })" />
       </template>
     </page-header>
     <q-card class="shadow-7">
       <card-body>
-        <data-table :columns="columns" :rows="rows" :loading="loading">
-          <template #props="{ row }">
-            <edit-icon-button
-              @click="showDialog({ id: row.id, mode: 'edit', callRead: true })"
-            />
-            <delete-icon-button @click="onDelete(row)" />
-          </template>
-        </data-table>
+        <toggle-input v-model="switchStyle" :label="switchStyle ? '網格式' : '條列式'" />
+        <div v-if="switchStyle">
+          <grid-table :columns="columns" :rows="rows">
+            <template #action="{ row }">
+              <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
+              <delete-icon-button @click="onDelete(row)" />
+            </template>
+          </grid-table>
+        </div>
+        <div v-else>
+          <data-table :columns="columns" :rows="rows" :loading="loading">
+            <template #props="{ row }">
+              <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
+              <delete-icon-button @click="onDelete(row)" />
+            </template>
+          </data-table>
+        </div>
       </card-body>
     </q-card>
 
@@ -36,6 +43,8 @@ import useCRUD from '@/hooks/useCRUD'
 const rows = ref([])
 const loading = ref(true)
 const dialog = ref()
+const switchStyle = ref(true)
+
 const columns = [
   { name: 'title', label: '公司名稱', field: 'title', align: 'center' },
   { name: 'contact', label: '聯絡人', field: 'contact', align: 'center' },

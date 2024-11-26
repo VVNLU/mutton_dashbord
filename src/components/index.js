@@ -39,7 +39,8 @@ import BaseUploader from './uploader/BaseUploader.vue'
 import ImageUploader from './uploader/ImageUploader.vue'
 import DataTable from './table/DataTable.vue'
 import PopupDataTable from './table/PopupDataTable.vue'
-import ExtendTable from './table/ExtendTable.vue'
+import GridTable from './table/GridTable.vue'
+import ExtendGridTable from './table/ExtendGridTable.vue'
 
 export default {
   install(app) {
@@ -84,6 +85,7 @@ export default {
     app.component('ImageUploader', ImageUploader)
     app.component('DataTable', DataTable)
     app.component('PopupDataTable', PopupDataTable)
-    app.component('ExtendTable', ExtendTable)
+    app.component('GridTable', GridTable)
+    app.component('ExtendGridTable', ExtendGridTable)
   }
 }
