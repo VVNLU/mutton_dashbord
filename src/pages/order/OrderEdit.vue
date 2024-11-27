@@ -1,21 +1,12 @@
 <template>
-  <base-dialog
-    v-model="isShowDialog"
-    title="訂單詳情"
-    :confirmButtonText="'送出'"
-    :cancelButtonText="'取消'"
-    @save="onSave"
-    @hide="onHide"
-  >
+  <base-dialog v-model="isShowDialog" title="訂單詳情" :confirmButtonText="'送出'" :cancelButtonText="'取消'" @save="onSave"
+    @hide="onHide">
     <base-form ref="form">
-      <div class="row q-col-gutter-x-md">
+      <div class="row ">
         <div class="col-6">
           <q-field borderless stack-label label="訂購人">
             <template v-slot:control>
-              <div
-                class="self-center full-width no-outline text-18px"
-                tabindex="0"
-              >
+              <div class="self-center full-width no-outline text-18px" tabindex="0">
                 {{ clientData.client.name }}
               </div>
             </template>
@@ -24,10 +15,7 @@
         <div class="col-6">
           <q-field borderless stack-label label="電話">
             <template v-slot:control>
-              <div
-                class="self-center full-width no-outline text-18px"
-                tabindex="0"
-              >
+              <div class="self-center full-width no-outline text-18px" tabindex="0">
                 {{ clientData.client.tel }}
               </div>
             </template>
@@ -36,10 +24,7 @@
         <div class="col-6">
           <q-field borderless stack-label label="地址">
             <template v-slot:control>
-              <div
-                class="self-center full-width no-outline text-18px"
-                tabindex="0"
-              >
+              <div class="self-center full-width no-outline text-18px" tabindex="0">
                 {{ clientData.client.address }}
               </div>
             </template>
@@ -48,53 +33,51 @@
         <div class="col-6">
           <q-field borderless stack-label label="備註">
             <template v-slot:control>
-              <div
-                class="self-center full-width no-outline text-18px"
-                tabindex="0"
-              >
+              <div class="self-center full-width no-outline text-18px" tabindex="0">
                 {{ clientData.client.remark }}
               </div>
             </template>
           </q-field>
         </div>
+        <div class="row justify-center col-12 q-mb-sm">
+          <!-- 狀態 -->
+          <div class="col-md-4 col-sm-4 col-xs-12 row justify-center">
+            <q-chip :class="getStateColor(clientData.state)" :icon="getStateIcon(clientData.state)">
+              訂單狀態：{{ clientData.state }}
+            </q-chip>
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-6">
+            <q-chip :class="getStateColor(clientData.isPaid)" :icon="getStateIcon(clientData.isPaid)">
+              金流狀態：{{ clientData.isPaid }}
+            </q-chip>
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-6">
+            <q-chip :class="getStateColor(clientData.isShipped)" :icon="getStateIcon(clientData.isShipped)">
+              出貨狀態：{{ clientData.isShipped }}
+            </q-chip>
+          </div>
+        </div>
         <div class="col-12">
-          <q-table
-            :rows="clientData.contents"
-            :columns="columns"
-            row-key="name"
-            hide-bottom
-          >
+          <q-table :rows="clientData.contents" :columns="columns" row-key="name" hide-bottom>
             <template v-slot:top-left>
               <q-tr>
                 <q-item-label class="text-info">
-                  <q-icon
-                    name="receipt_long"
-                    class="q-pr-xs text-info"
-                    size="1.5em"
-                  />
+                  <q-icon name="receipt_long" class="q-pr-xs text-info" size="1.5em" />
                   {{ currentId }}
                 </q-item-label>
-                <q-item-label
-                  class="text-accent text-shadow"
-                  v-if="clientData.payment"
-                >
+                <q-item-label class="text-accent text-shadow" v-if="clientData.payment">
                   <q-icon name="paid" class="q-pr-xs" size="1.5em" />
                   {{ clientData.payment }}付款
-                  <template v-if="clientData.payment === '轉帳'"
-                    >: 後五碼
+                  <template v-if="clientData.payment === '轉帳'">: 後五碼
                     <span class="text-bold">
                       {{ clientData.accountLastFive }}
                     </span>
                   </template>
                 </q-item-label>
-                <q-item-label
-                  class="text-secondary text-shadow"
-                  v-if="clientData.ship"
-                >
+                <q-item-label class="text-secondary text-shadow" v-if="clientData.ship">
                   <q-icon name="local_shipping" class="q-pr-xs" size="1.5em" />
                   {{ clientData.ship }}出貨
-                  <template v-if="clientData.ship === '宅配'"
-                    >: 貨運單號
+                  <template v-if="clientData.ship === '宅配'">: 貨運單號
                     <span class="text-bold">
                       {{ clientData.orderNumber }}
                     </span>
@@ -103,86 +86,31 @@
               </q-tr>
             </template>
             <template v-slot:top-right>
-              <q-tr
-                class="text-20px text-bold text-red outline rounded q-pa-xs"
-              >
+              <q-tr class="text-20px text-bold text-red outline rounded q-pa-xs q-mt-xs">
                 <q-td>總金額:</q-td>
                 <q-td>{{ totalAmount }}</q-td>
               </q-tr>
             </template>
           </q-table>
         </div>
-        <div class="q-pt-md col-md-4 col-sm-4 col-xs-6">
-          <q-btn-dropdown
-            :color="getStatusColor(clientData.state)"
-            :label="'狀態：' + `${clientData.state}`"
-          >
-            <q-list>
-              <q-item clickable v-close-popup @click="updateState('處理中')">
-                <q-item-section>
-                  <q-item-label>處理中</q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup @click="updateState('已完成')">
-                <q-item-section>
-                  <q-item-label>已完成</q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup @click="updateState('已取消')">
-                <q-item-section>
-                  <q-item-label>已取消</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
-        </div>
-        <div class="q-pt-md col-md-4 col-sm-4 col-xs-6">
-          <q-btn-dropdown
-            :color="getStatusColor(clientData.isPaid)"
-            color="teal"
-            :label="'付款：' + `${clientData.isPaid}`"
-          >
-            <q-list>
-              <q-item clickable v-close-popup @click="updatePaid('處理中')">
-                <q-item-section>
-                  <q-item-label>處理中</q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup @click="updatePaid('已完成')">
-                <q-item-section>
-                  <q-item-label>已完成</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
-        </div>
-        <div class="q-pt-md col-md-4 col-sm-4 col-xs-6">
-          <q-btn-dropdown
-            :color="getStatusColor(clientData.isShipped)"
-            color="indigo"
-            :label="'出貨：' + `${clientData.isShipped}`"
-          >
-            <q-list>
-              <q-item clickable v-close-popup @click="updateShipped('處理中')">
-                <q-item-section>
-                  <q-item-label>處理中</q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup @click="updateShipped('已完成')">
-                <q-item-section>
-                  <q-item-label>已完成</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
-        </div>
-        <div class="q-pt-md col-md-4 col-sm-4 col-xs-6">
-          <q-btn
-            class="q-mb-md round outline text-red"
-            icon="delete"
-            label="刪除訂單"
-            @click="onDelete()"
-          />
+        <div class="col-12 q-pt-md row justify-center">
+          <div class="col-4">
+            <!-- 收款 -->
+            <q-btn :disable="clientData.isPaid === '已收款'" icon="fa-regular fa-square-check" label="收款"
+              @click="updatePaidStatus" rounded :stack="isXsScreen" color="teal" />
+          </div>
+          <div class="col-4">
+            <!-- 收款 -->
+            <q-btn :disable="clientData.isShipped === '已出貨'" icon="fa-regular fa-square-check" label="出貨"
+              @click="updateShipStatus" rounded :stack="isXsScreen" color="cyan" />
+          </div>
+          <div class="col-4">
+            <!-- 取消目前和刪除相同，之後會再添加退貨或退款 -->
+            <q-btn v-if="initialState === '已完成'" class="text-red" icon="fa-solid fa-trash-can" label="取消訂單"
+              @click="onDelete()" rounded :stack="isXsScreen" />
+            <q-btn v-else class="text-red" icon="fa-solid fa-trash" label="刪除訂單" @click="onDelete()" rounded
+              :stack="isXsScreen" />
+          </div>
         </div>
       </div>
     </base-form>
@@ -192,6 +120,7 @@
 import { defineComponent, ref, watch, computed } from 'vue-demi'
 import { getData, updateData, deleteData } from '@/api/order'
 import { initializeDates, updateDates } from '@/utils/dateHandler'
+import { useQuasar } from 'quasar'
 import useDialog from '@/hooks/useDialog'
 import useMessageDialog from '@/hooks/useMessageDialog'
 import useCRUD from '@/hooks/useCRUD'
@@ -199,25 +128,26 @@ import useCRUD from '@/hooks/useCRUD'
 export default defineComponent({
   emits: ['save'],
   setup(props, { emit }) {
-    // methods
+    const $q = useQuasar()
     const clientData = ref([])
     const currentId = ref(null)
+    const initialState = ref('')
     const columns = [
       {
         name: 'name',
         label: '商品',
         align: 'left',
-        field: (row) => row.product_title
+        field: (row) => row.title
       },
       {
         label: '數量',
         align: 'left',
-        field: 'product_quantity'
+        field: 'quantity'
       },
       {
         label: '小計',
         align: 'left',
-        field: (row) => row.product_quantity * row.product_price
+        field: (row) => row.quantity * row.price
       }
     ]
 
@@ -225,6 +155,7 @@ export default defineComponent({
       const res = await getData(id)
       clientData.value = initializeDates(res)
       currentId.value = id
+      initialState.value = res.state
     }
 
     const updateFetch = async (id, payload) => {
@@ -268,31 +199,55 @@ export default defineComponent({
       }
     }
 
-    const getStatusColor = (status) => {
+    const updatePaidStatus = async () => {
+      const res = await messageDelete({
+        title: '收款',
+        message: '確認已收款？',
+        confirmButtonText: '確認',
+        cancelButtonText: '取消'
+      })
+      if (res) {
+        clientData.value.isPaid = "已收款"
+      } else return
+    }
+
+    const updateShipStatus = async () => {
+      const res = await messageDelete({
+        title: '出貨',
+        message: '確認已出貨？',
+        confirmButtonText: '確認',
+        cancelButtonText: '取消'
+      })
+      if (res) {
+        clientData.value.isShipped = "已出貨"
+      } else return
+    }
+
+    const getStateColor = (status) => {
       const colorMap = {
-        處理中: 'warning text-black',
-        已完成: 'positive',
-        已取消: 'negative'
+        處理中: 'bg-warning text-black',
+        已完成: 'bg-positive text-white',
+        已取消: 'bg-negative text-white',
+        未收款: 'bg-warning text-black',
+        已收款: 'bg-positive text-white',
+        未出貨: 'bg-warning text-black',
+        已出貨: 'bg-positive text-white',
       }
       return colorMap[status] || colorMap.default
     }
 
-    const originalValues = {
-      isPaid: '',
-      isShipped: ''
+    const getStateIcon = (status) => {
+      const iconMap = {
+        處理中: 'hourglass_top',
+        已完成: 'done_all',
+        已取消: 'cancel',
+        未收款: 'fa-solid fa-hand-holding-dollar',
+        已收款: 'price_check',
+        未出貨: 'fa-solid fa-box-archive',
+        已出貨: 'fa-solid fa-truck-fast',
+      }
+      return iconMap[status] || iconMap.default
     }
-
-    // 狀態修改回「處理中」則付款及出貨恢復初始值
-    watch(
-      () => clientData.value,
-      (newVal) => {
-        if (newVal && !originalValues.isPaid && !originalValues.isShipped) {
-          originalValues.isPaid = newVal.isPaid
-          originalValues.isShipped = newVal.isShipped
-        }
-      },
-      { immediate: true, deep: true }
-    )
 
     // 付款及出貨改為「已完成」時，狀態自動改成「已完成」
     watch(
@@ -303,26 +258,14 @@ export default defineComponent({
       (newValues) => {
         const { isPaid, isShipped } = newValues
 
-        if (isPaid === '已完成' && isShipped === '已完成') {
+        if (isPaid === '已收款' && isShipped === '已出貨') {
           clientData.value.state = '已完成'
-        } else if (isPaid === '處理中' || isShipped === '處理中') {
+        } else if (isPaid === '未收款' || isShipped === '未出貨') {
           clientData.value.state = '處理中'
         }
       },
       { deep: true }
     )
-
-    const updateState = (newState) => {
-      clientData.value.state = newState
-
-      if (newState === '已完成' || newState === '已取消') {
-        clientData.value.isPaid = newState
-        clientData.value.isShipped = newState
-      } else if (newState === '處理中') {
-        clientData.value.isPaid = originalValues.isPaid
-        clientData.value.isShipped = originalValues.isShipped
-      }
-    }
 
     const updatePaid = (newPaid) => {
       clientData.value.isPaid = newPaid
@@ -334,8 +277,13 @@ export default defineComponent({
 
     const totalAmount = computed(() => {
       return clientData.value.contents.reduce((sum, item) => {
-        return sum + item.product_quantity * item.product_price
+        return sum + item.quantity * item.price
       }, 0)
+    })
+
+    // 是否為小型裝置
+    const isXsScreen = computed(() => {
+      return $q.screen.lt.sm
     })
 
     // use
@@ -353,18 +301,23 @@ export default defineComponent({
     return {
       clientData,
       currentId,
+      initialState,
       columns,
       totalAmount,
+      isXsScreen,
       form,
       data,
       isShowDialog,
       showDialog,
       hideDialog,
 
-      getStatusColor,
+      getStateColor,
+      getStateIcon,
+      updatePaidStatus,
+      updateShipStatus,
+
       onSave,
       onHide,
-      updateState,
       updatePaid,
       updateShipped,
       onDelete

@@ -9,53 +9,21 @@
 
     <q-card class="shadow-7">
       <card-body>
-        <!-- <order-list-search-block v-model="search" class="q-mb-sm" @changeFilter="onChangeFilter" @reset="onReset" /> -->
-        <vxe-server-table
-          ref="dataTable"
-          :data="data"
-          :total="total"
-          :current="search.page"
-          @sort-change="OnChangeSort"
-          @update:current="onChangePage"
-        >
-          <vxe-column
-            v-for="{ field, title, min_width, type } in tableFields"
-            :key="field"
-            :field="field"
-            :title="title"
-            :min-width="min_width"
-            :type="type"
-          >
-            <template v-if="type === 'html'" #default="{ row, column }">
-              <div :class="getCellClassName({ row, column })">
-                {{ row[field] }}
-              </div>
+        <toggle-input v-model="switchStyle" :label="switchStyle ? '網格式' : '條列式'" />
+        <div v-if="switchStyle">
+          <extend-grid-table :columns="columns" :rows="rows">
+            <template #action="{ row }">
+              <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
             </template>
-            <template v-if="type === 'accountLastFive'" #default="{ row }">
-              <div>
-                {{ row.payment === '現金' ? '-' : row.accountLastFive }}
-              </div>
+          </extend-grid-table>
+        </div>
+        <div v-else>
+          <data-table :columns="columns" :rows="rows" :loading="loading">
+            <template #props="{ row }">
+              <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
             </template>
-            <template v-if="type === 'orderNumber'" #default="{ row }">
-              <div>
-                {{ row.ship === '宅配' ? row.orderNumber : '-' }}
-              </div>
-            </template>
-          </vxe-column>
-          <vxe-column title="操作" fixed="right" width="60">
-            <template #default="{ row }">
-              <div class="flex-center row">
-                <edit-icon-button
-                  icon="search"
-                  class="q-mr-xs q-mb-xs"
-                  @click="
-                    showDialog({ id: row.id, mode: 'edit', callRead: true })
-                  "
-                />
-              </div>
-            </template>
-          </vxe-column>
-        </vxe-server-table>
+          </data-table>
+        </div>
       </card-body>
     </q-card>
 
@@ -64,52 +32,36 @@
 </template>
 
 <script setup>
-// import OrderListSearchBlock from './components/OrderListSearchBlock.vue'
-import { reactive, ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { getList, updateData, deleteData } from '@/api/order'
+import { initializeDates } from '@/utils/dateHandler'
 import OrderEdit from './OrderEdit.vue'
 import useCRUD from '@/hooks/useCRUD'
 import useMessageDialog from '@/hooks/useMessageDialog'
-import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
 
-const filter = reactive({
-  keyword: null,
-  publish_date_range: null,
-  closed_date_range: null,
-  start_publish_date: null,
-  end_publish_date: null,
-  start_closed_date: null,
-  end_closed_date: null
-})
-
+const loading = ref(true)
 const dialog = ref()
-const tableFields = ref([
-  { title: '訂單單號', field: 'id', min_width: '120' },
-  { title: '訂購人', field: 'client.name', min_width: '100' },
-  { title: '電話', field: 'client.tel', min_width: '120' },
-  { title: '狀態', field: 'state', min_width: '80', type: 'html' },
-  { title: '交易方式', field: 'payment', min_width: '80' },
-  {
-    title: '後五碼',
-    field: 'accountLastFive',
-    min_width: '80',
-    type: 'accountLastFive'
-  },
-  { title: '是否付款', field: 'isPaid', min_width: '80', type: 'html' },
-  { title: '出貨方式', field: 'ship', min_width: '80' },
-  {
-    title: '貨運單號',
-    field: 'orderNumber',
-    min_width: '120',
-    type: 'orderNumber'
-  },
-  { title: '是否出貨', field: 'isShipped', min_width: '80', type: 'html' },
-  { title: '人員', field: '', min_width: '80' },
-  { title: '備註', field: 'client.remark', min_width: '120' }
-])
+const rows = ref([])
+const switchStyle = ref(true)
+
+const columns = [
+  { name: 'id', label: '訂單單號', field: 'id', align: 'center' },
+  { name: 'clientName', label: '訂購人', field: 'clientName', align: 'center' },
+  { name: 'clientTel', label: '電話', field: 'clientTel', align: 'center' },
+  { name: 'state', label: '狀態', field: 'state', align: 'center' },
+  { name: 'payment', label: '交易方式', field: 'payment', align: 'center' },
+  { name: 'accountLastFive', label: '後五碼', field: 'accountLastFive', align: 'center' },
+  { name: 'isPaid', label: '是否付款', field: 'isPaid', align: 'center' },
+  { name: 'ship', label: '出貨方式', field: 'ship', align: 'center' },
+  { name: 'orderNumber', label: '貨運單號', field: 'orderNumber', align: 'center' },
+  { name: 'isShipped', label: '是否出貨', field: 'isShipped', align: 'center' },
+  // { name: '', label: '人員', field: '', align: 'center' },
+  { name: 'clientRemark', label: '備註', field: 'clientRemark', align: 'center' },
+]
 
 onMounted(() => {
-  getCellClassName()
+  readListFetch()
+  loading.value = false
 })
 
 const getCellClassName = ({ row = {}, column = {} } = {}) => {
@@ -146,8 +98,15 @@ const getCellClassName = ({ row = {}, column = {} } = {}) => {
 
 const readListFetch = async (payload) => {
   return await getList(payload).then((res) => {
-    data.value = res
-    total.value = res.length
+    rows.value = res.map((item) => {
+      return initializeDates({
+        ...item,
+        clientName: item.client.name,
+        clientTel: item.client.tel,
+        clientAddress: item.client.address,
+        clientRemark: item.client.remark
+      })
+    })
   })
 }
 
@@ -157,6 +116,10 @@ const updateFetch = async (id, payload) => {
 
 const delFetch = async (id) => {
   return await deleteData(id)
+}
+
+const refreshFetch = async () => {
+  await callReadListFetch()
 }
 
 const onDelete = async (row) => {
@@ -169,58 +132,18 @@ const onDelete = async (row) => {
   if (!res) return
   const [delRes] = await callDeleteFetch(row.id)
   if (delRes) {
-    search.page = 1
-    refreshFetch()
+    callReadListFetch()
   }
-}
-
-const refreshFetch = async () => {
-  const filter = { ...search }
-  filter.start_publish_date = filter.publish_date_range?.from
-    ? filter.publish_date_range.from
-    : null
-  filter.end_publish_date = filter.publish_date_range?.to
-    ? filter.publish_date_range.to
-    : null
-  filter.start_closed_date = filter.closed_date_range?.from
-    ? filter.closed_date_range.from
-    : null
-  filter.end_closed_date = filter.closed_date_range?.to
-    ? filter.closed_date_range.to
-    : null
-  await getDataList({ ...filter })
 }
 
 const showDialog = ({ id, mode, callRead }) => {
   dialog.value.showDialog({ id, mode, callRead })
 }
 
-const {
-  dataTable,
-  search,
-  data,
-  total,
-  onChangePage,
-  onChangeFilter,
-  OnChangeSort,
-  onReset
-} = useVxeServerDataTable({
-  searchParams: filter,
-  sortParams: [
-    {
-      field: 'sequence',
-      order: 'asc'
-    }
-  ],
-  sessionStorageKey: 'dashboardOrderServerDataTable',
-  callback: refreshFetch
-})
-
 const { messageDelete } = useMessageDialog()
 const {
-  callUpdateFetch,
   callDeleteFetch,
-  callReadListFetch: getDataList
+  callReadListFetch
 } = useCRUD({
   updateFetch: updateFetch,
   deleteFetch: delFetch,
