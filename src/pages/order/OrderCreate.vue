@@ -9,33 +9,16 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-md-6 col-sm-12 col-xs-12">
-                  <text-input
-                    v-model="client.name"
-                    label="姓名"
-                    placeholder="請輸入姓名"
-                  />
+                  <text-input v-model="rows.client.name" label="姓名" placeholder="請輸入姓名" />
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12">
-                  <text-input
-                    v-model="client.tel"
-                    label="電話"
-                    placeholder="請輸入電話"
-                    :maxLength="10"
-                  />
+                  <text-input v-model="rows.client.tel" label="電話" placeholder="請輸入電話" :maxLength="10" />
                 </div>
-                <div class="col-12">
-                  <text-input
-                    v-model="client.address"
-                    label="地址"
-                    placeholder="請輸入地址"
-                  />
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                  <text-input v-model="rows.client.address" label="地址" placeholder="請輸入地址" />
                 </div>
-                <div class="col-12">
-                  <text-input
-                    v-model="client.remark"
-                    label="備註"
-                    placeholder="請輸入備註"
-                  />
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                  <text-input v-model="rows.client.remark" label="備註" placeholder="請輸入備註" />
                 </div>
               </div>
             </card-body>
@@ -46,101 +29,65 @@
             <card-body>
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-md-6 col-sm-12 col-xs-12">
-                  <option-group
-                    v-model="payment"
-                    label="交易方式"
-                    :options="selectedPaymentMethod"
-                    type="radio"
-                    class="full-width"
-                  />
+                  <option-group v-model="rows.payment" label="交易方式" :options="selectedPaymentMethod" type="radio"
+                    class="full-width" />
                 </div>
-                <div
-                  v-if="payment === '轉帳'"
-                  class="q-mt-md col-md-6 col-sm-12 col-xs-12"
-                >
-                  <text-input
-                    v-model="accountLastFive"
-                    label="帳號後五碼"
-                    placeholder="請輸入帳號後五碼"
-                    :required="true"
-                  />
+                <div v-if="rows.payment === '轉帳'" class="q-mt-md col-md-6 col-sm-12 col-xs-12">
+                  <text-input v-model="rows.accountLastFive" label="帳號後五碼" placeholder="請輸入帳號後五碼" :required="true" />
                 </div>
               </div>
             </card-body>
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-md-6 col-12">
-                  <option-group
-                    v-model="ship"
-                    label="出貨方式"
-                    :options="selectedShippingMethod"
-                    type="radio"
-                    class="full-width"
-                  />
+                  <option-group v-model="rows.ship" label="出貨方式" :options="selectedShippingMethod" type="radio"
+                    class="full-width" />
                 </div>
-                <div
-                  v-if="ship === '宅配'"
-                  class="q-mt-md col-md-6 col-sm-12 col-xs-12"
-                >
-                  <text-input
-                    v-model="orderNumber"
-                    label="貨運單號"
-                    placeholder="請輸入貨運單號"
-                    :required="true"
-                  />
+                <div v-if="rows.ship === '宅配'" class="q-mt-md col-md-6 col-sm-12 col-xs-12">
+                  <text-input v-model="rows.orderNumber" label="貨運單號" placeholder="請輸入貨運單號" :required="true" />
                 </div>
               </div>
             </card-body>
           </q-card>
         </div>
-        <div class="col-md-4 col-sm-12 col-xs-12">
+        <div class="col-md-6 col-sm-6 col-xs-12">
           <q-card class="h-full shadow-7">
-            <card-header> 商品 </card-header>
+            <card-header> 選擇商品 </card-header>
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <base-button
-                    v-for="item in productData"
-                    :label="item.title"
-                    :outline="true"
-                    :rounded="true"
-                    @click="addNewData(item)"
-                    class="product-btn"
-                  />
+                  <base-button v-for="item in productData" :label="item.title" :outline="true" :rounded="true"
+                    @click="addNewData(item)" class="product-btn" />
                 </div>
               </div>
             </card-body>
           </q-card>
         </div>
-        <div class="col-md-8 col-sm-12 col-xs-12">
+        <div class="col-md-6 col-sm-6 col-xs-12">
           <q-card class="h-full shadow-7">
-            <card-header> 訂單明細 </card-header>
+            <card-header> 訂單明細
+              <template #action>
+                <span class="text-20px text-bold text-red outline rounded q-pa-xs">總金額: {{ totalAmount }}</span>
+              </template>
+            </card-header>
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <vxe-server-table ref="dataTable" :data="data">
-                    <vxe-column title="項目" min_width="130">
-                      <template #default="{ row }">
-                        <div>{{ row.product_title }}</div>
+                  <toggle-input v-model="switchStyle" :label="switchStyle ? '網格式' : '條列式'" />
+                  <div v-if="switchStyle">
+                    <grid-table :columns="columns" :rows="rows.contents">
+                      <template #action="{ row }">
+                        <delete-icon-button @click="onDelete(row)" />
                       </template>
-                    </vxe-column>
-                    <vxe-column title="數量" min_width="130">
-                      <template #default="{ row }">
-                        <number-input
-                          v-model="row.product_quantity"
-                          placeholder="請輸入數量"
-                        />
+                    </grid-table>
+                  </div>
+                  <div v-else>
+                    <popup-data-table :columns="columns" :rows="rows.contents">
+                      <template #props="{ row }">
+                        <delete-icon-button @click="onDelete(row)" />
                       </template>
-                    </vxe-column>
-                    <vxe-column title="操作" fixed="right" width="115">
-                      <template #default="{ row }">
-                        <delete-icon-button
-                          class="q-mr-xs q-mb-xs"
-                          @click="onDelete(row)"
-                        />
-                      </template>
-                    </vxe-column>
-                  </vxe-server-table>
+                    </popup-data-table>
+                  </div>
                 </div>
               </div>
             </card-body>
@@ -150,38 +97,74 @@
     </base-form>
   </q-page>
   <div class="row items-center">
-    <fixed-footer @save="onSubmit" />
-    <confirm-button
-      v-if="payment === '現金' && ship === '面交'"
-      @click="onCheckout"
-      label="結帳"
-      color="red"
-      class="q-px-xl"
-    />
+    <fixed-footer @save="onSubmit">
+      <template #button>
+        <confirm-button v-if="rows.payment === '現金' && rows.ship === '面交'" @click="onCheckout" label="結帳" color="red"
+          class="q-px-lg q-mr-md" />
+      </template>
+    </fixed-footer>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { addData } from '@/api/order'
 import { getList } from '@/api/product'
 import { updateDates } from '@/utils/dateHandler'
 import useCRUD from '@/hooks/useCRUD'
 import useGoBack from '@/hooks/useGoBack'
-import useVxeServerDataTable from '@/hooks/useVxeServerDataTable'
 import useMessageDialog from '@/hooks/useMessageDialog'
+import useNotify from '@/hooks/useNotify'
 
+const { notifyAPIError } = useNotify()
+const switchStyle = ref(true)
 const productData = ref([])
-const client = ref({
-  name: '',
-  tel: '',
-  address: '',
-  remark: ''
+const rows = ref({
+  client: {
+    name: '',
+    tel: '',
+    address: '',
+    remark: ''
+  },
+  contents: []
 })
-const payment = ref(null)
-const ship = ref(null)
-const accountLastFive = ref('')
-const orderNumber = ref('')
+
+watch(rows.value.contents, (newVal) => {
+  newVal.forEach((item) => {
+    item.subtotal = item.quantity * item.price
+  })
+},
+  { deep: true })
+
+const columns = [
+  {
+    name: 'title',
+    label: '項目',
+    field: 'title',
+    align: 'center'
+  },
+  {
+    name: 'quantity',
+    label: '數量',
+    field: 'quantity',
+    align: 'center',
+    isPopupEdit: true
+  },
+  {
+    name: 'price',
+    label: '售價',
+    field: 'price',
+    align: 'center',
+    isPopupEdit: true
+  },
+  {
+    name: 'subtotal',
+    label: '小計',
+    field: (row) => row.quantity * row.price,
+    align: 'center',
+    isPopupEdit: true
+  },
+]
 
 const selectedPaymentMethod = ref([
   { label: '現金', value: '現金' },
@@ -199,11 +182,17 @@ onMounted(async () => {
 })
 
 const addNewData = async (item) => {
-  data.value.push({
-    product_id: item.id,
-    product_title: item.title,
-    product_price: item.price,
-    product_quantity: 1
+  const isDuplicate = rows.value.contents.some((row) => row.title === item.title)
+
+  if (isDuplicate) {
+    notifyAPIError({ message: '已有 ' + `${item.title}` + ' 商品了' })
+    return
+  }
+  rows.value.contents.push({
+    id: item.id,
+    title: item.title,
+    price: item.price,
+    quantity: 1
   })
 }
 
@@ -221,19 +210,17 @@ const readProductFetch = async () => {
 }
 
 const onSubmit = async () => {
+  rows.value.state = '處理中'
+  rows.value.isPaid = '未付款'
+  rows.value.isShipped = '未出貨'
+
   form.value.validate().then(async (success) => {
     if (success) {
       const payload = updateDates(
         {
-          state: '處理中',
-          isPaid: '處理中',
-          isShipped: '處理中',
-          client: client.value,
-          contents: data.value,
-          payment: payment.value,
-          accountLastFive: accountLastFive.value,
-          ship: ship.value,
-          orderNumber: orderNumber.value
+          ...rows.value,
+          client: rows.value.client,
+          contents: rows.value.contents,
         },
         'create'
       )
@@ -244,19 +231,20 @@ const onSubmit = async () => {
 }
 
 const onCheckout = async () => {
+  rows.value.state = '已完成'
+  rows.value.isPaid = '已完成'
+  rows.value.isShipped = '已完成'
+
   form.value.validate().then(async (success) => {
     if (success) {
-      const payload = {
-        state: '已完成',
-        isPaid: '已完成',
-        isShipped: '已完成',
-        client: client.value,
-        contents: data.value,
-        payment: payment.value,
-        accountLastFive: accountLastFive.value,
-        ship: ship.value,
-        orderNumber: orderNumber.value
-      }
+      const payload = updateDates(
+        {
+          ...rows.value,
+          client: rows.value.client,
+          contents: rows.value.contents,
+        },
+        'create'
+      )
       const [res] = await callCreateFetch({ ...payload })
       if (res) goBack()
     }
@@ -270,22 +258,24 @@ const onDelete = async (row) => {
     confirmButtonText: '確認',
     cancelButtonText: '取消'
   })
-
-  const index = data.value.findIndex((item) => item.id === row.id)
-  if (index > -1) {
-    data.value.splice(index, 1)
-    data.value = [...data.value]
-  }
   if (!res) return
+
+  const index = rows.value.contents.indexOf(row)
+  if (index !== -1) {
+    rows.value.contents.splice(index, 1)
+  }
+  await callDeleteFetch()
 }
 
-const { dataTable, data } = useVxeServerDataTable({
-  sessionStorageKey: 'dashboardMaterialDetailServerDataTable'
+const totalAmount = computed(() => {
+  return rows.value.contents.reduce((sum, item) => {
+    return sum + item.quantity * item.price
+  }, 0)
 })
 
 const { goBack } = useGoBack()
 const { messageDelete } = useMessageDialog()
-const { form, callCreateFetch } = useCRUD({
+const { form, callCreateFetch, callDeleteFetch } = useCRUD({
   createFetch: createFetch,
   readListFetch: readProductFetch
 })
@@ -293,6 +283,6 @@ const { form, callCreateFetch } = useCRUD({
 
 <style lang="scss" scoped>
 .product-btn {
-  margin-right: 10px;
+  margin: 2px;
 }
 </style>

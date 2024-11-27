@@ -25,7 +25,6 @@ export const addData = async (data) => {
 export const getData = async (id) => {
   try {
     const docRef = await getDoc(doc(db, 'order', id))
-    console.log('666', docRef.data())
     return docRef.data()
   } catch (error) {
     console.error('Error getting documents: ', error)
