@@ -2,26 +2,14 @@
   <div class="fixed-footer">
     <div class="row items-center justify-between q-px-lg q-py-md">
       <div>
-        <confirm-button
-          v-if="showSave"
-          :color="confirmButtonColor"
-          :label="confirmButtonText"
-          @click="onSave"
-          class="q-mr-md q-px-xl q-mb-xs"
-        />
+        <confirm-button v-if="showSave" :color="confirmButtonColor" :label="confirmButtonText" @click="onSave"
+          class="q-mr-md q-px-lg q-mb-xs" />
         <slot name="button" />
-        <cancel-button
-          v-if="showCancel"
-          :color="cancelButtonColor"
-          :label="cancelButtonText"
-          @click="onCancel"
-          class="q-px-xl q-mb-xs text-black"
-        />
+        <cancel-button v-if="showCancel" :color="cancelButtonColor" :label="cancelButtonText" @click="onCancel"
+          class="q-px-lg q-mb-xs text-black" />
       </div>
     </div>
-    <div
-      class="q-layout__shadow absolute-full overflow-hidden no-pointer-events"
-    />
+    <div class="q-layout__shadow absolute-full overflow-hidden no-pointer-events" />
   </div>
 </template>
 
