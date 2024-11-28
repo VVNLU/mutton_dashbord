@@ -38,8 +38,12 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <toggle-input v-model="switchStyle" :label="switchStyle ? '網格式' : '條列式'" />
-                  <div v-if="switchStyle">
+                  <q-btn-toggle v-model="switchStyle" no-caps rounded class="q-mb-sm" toggle-color="primary"
+                    color="white" text-color="primary" :options="[
+                    { label: '條列式', value: 'columnType' },
+                    { label: '網格式', value: 'gridType' }
+                  ]" />
+                  <div v-if="switchStyle === 'gridType'">
                     <grid-table :columns="columns" :rows="rows.contents">
                       <template #action="{ row }">
                         <delete-icon-button @click="onDelete(row)" />
@@ -87,7 +91,7 @@ const rows = ref({
   contents: []
 })
 const materialCategoryData = ref([])
-const switchStyle = ref(true)
+const switchStyle = ref('gridType')
 const id = route.params.id || null
 
 const columns = [

@@ -8,8 +8,12 @@
     </page-header>
     <q-card class="shadow-7">
       <card-body>
-        <toggle-input v-model="switchStyle" :label="switchStyle ? '網格式' : '條列式'" />
-        <div v-if="switchStyle">
+        <q-btn-toggle v-model="switchStyle" no-caps rounded class="q-mb-sm" toggle-color="primary" color="white"
+          text-color="primary" :options="[
+        { label: '條列式', value: 'columnType' },
+        { label: '網格式', value: 'gridType' }
+      ]" />
+        <div v-if="switchStyle === 'gridType'">
           <grid-table :columns="columns" :rows="rows">
             <template #action="{ row }">
               <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
@@ -43,7 +47,7 @@ import useCRUD from '@/hooks/useCRUD'
 const rows = ref([])
 const loading = ref(true)
 const dialog = ref()
-const switchStyle = ref(true)
+const switchStyle = ref('gridType')
 
 const columns = [
   { name: 'title', label: '分類名稱', field: 'title', align: 'center' },
