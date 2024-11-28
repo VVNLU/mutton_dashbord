@@ -19,7 +19,7 @@
         <slot />
       </q-card-section>
       <q-separator />
-      <q-card-actions class="q-dialog-footer" align="right">
+      <q-card-actions v-if="isShowFooter" class="q-dialog-footer" align="right">
         <slot name="footer" class="text-primary">
           <confirm-button v-if="showSave" padding="sm 2.5em" class="q-mr-sm" :color="confirmButtonColor"
             :label="confirmButtonText" @click="onSave" />
@@ -28,7 +28,7 @@
         </slot>
       </q-card-actions>
     </q-card>
-    <skeleton-square v-if="isReading" />
+    <!-- <skeleton-square v-if="isReading" /> -->
   </q-dialog>
 </template>
 
@@ -49,7 +49,8 @@ const props = defineProps({
   showSave: { type: Boolean, default: true },
   headerBgColor: { type: String, default: 'bg-primary' },
   textColor: { type: String, default: 'text-white' },
-  isReading: { type: Boolean, default: true }
+  // isReading: { type: Boolean, default: true },
+  isShowFooter: { type: Boolean, default: true },
 })
 const emit = defineEmits([
   'update:modelValue',
