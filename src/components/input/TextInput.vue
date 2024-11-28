@@ -1,13 +1,6 @@
 <template>
-  <q-input
-    ref="input"
-    :label="label"
-    v-model="observeValue"
-    :clearable="clearable"
-    :outlined="outlined"
-    :placeholder="placeholder"
-    :rules="ruleList"
-  >
+  <q-input ref="input" :label="label" v-model="observeValue" :clearable="clearable" :outlined="outlined"
+    :placeholder="placeholder" :rules="ruleList">
     <template v-if="$slots.default" #default>
       <slot name="default" />
     </template>
@@ -59,11 +52,12 @@ const props = defineProps({
   outlined: { type: Boolean, default: true },
   placeholder: { type: String, default: '請輸入' },
   maxLength: { type: Number, default: 255 },
+  minLength: { type: Number, default: 255 },
   required: { type: Boolean, default: false }
 })
 const emit = defineEmits(['update:modelValue'])
 
-const { rules, maxLength, required, label } = toRefs(props)
+const { rules, maxLength, minLength, required, label } = toRefs(props)
 const input = ref()
 const observeValue = useVModel(props, 'modelValue', emit)
 
@@ -72,6 +66,9 @@ const ruleList = computed(() => {
   required.value && rule.push(vuelidate.required(`${label.value}必填`))
   rule.push(
     vuelidate.maxLength(maxLength.value, `長度不可超過${maxLength.value}字`)
+  )
+  rule.push(
+    vuelidate.minLength(minLength.value, `長度不可少於${minLength.value}字`)
   )
   return rule.concat(rules.value)
 })
