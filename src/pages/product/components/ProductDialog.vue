@@ -18,8 +18,12 @@
         <div class="col-12">
           <q-card class="shadow-7">
             <card-body>
-              <toggle-input v-model="switchStyle" :label="switchStyle ? '網格式' : '條列式'" />
-              <div v-if="switchStyle">
+              <q-btn-toggle v-model="switchStyle" no-caps rounded class="q-mb-sm" toggle-color="primary" color="white"
+                text-color="primary" :options="[
+    { label: '條列式', value: 'columnType' },
+    { label: '網格式', value: 'gridType' }
+  ]" />
+              <div v-if="switchStyle === 'gridType'">
                 <grid-table :columns="columns" :rows="rows">
                   <template #action="{ row }">
                     <delete-icon-button @click="onDelete(row)" />
@@ -62,7 +66,7 @@ export default defineComponent({
 
     const materialCategoryData = ref([])
     const rows = ref([])
-    const switchStyle = ref(true)
+    const switchStyle = ref('gridType')
     const isReading = ref(false)
 
     const columns = [

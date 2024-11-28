@@ -32,8 +32,12 @@
             <card-body>
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <toggle-input v-model="switchStyle" :label="switchStyle ? '網格式' : '條列式'" />
-                  <data-table v-if="switchStyle" grid :columns="columns" :rows="rows.contents" />
+                  <q-btn-toggle v-model="switchStyle" no-caps rounded class="q-mb-sm" toggle-color="primary"
+                    color="white" text-color="primary" :options="[
+                    { label: '條列式', value: 'columnType' },
+                    { label: '網格式', value: 'gridType' }
+                  ]" />
+                  <data-table v-if="switchStyle === 'gridType'" grid :columns="columns" :rows="rows.contents" />
                   <data-table v-else :columns="columns" :rows="rows.contents" />
                 </div>
               </div>
@@ -66,7 +70,7 @@ const route = useRoute()
 const id = route.params.id || null
 const dialog = ref()
 const rows = ref([])
-const switchStyle = ref(true)
+const switchStyle = ref('gridType')
 
 const columns = [
   {
