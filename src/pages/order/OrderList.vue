@@ -27,7 +27,7 @@
       </card-body>
     </q-card>
 
-    <order-edit ref="dialog" @save="refreshFetch" />
+    <order-edit ref="dialog" @delete="refreshFetch" />
   </q-page>
 </template>
 
