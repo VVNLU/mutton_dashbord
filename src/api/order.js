@@ -76,7 +76,6 @@ export const removeData = async (docId, docIndex) => {
 
 // 刪除整筆數據
 export const deleteData = async (docId) => {
-  console.log('docId', docId)
   try {
     const docRef = await deleteDoc(doc(db, 'order', docId))
     return docRef

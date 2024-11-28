@@ -1,64 +1,52 @@
 <template>
-  <base-dialog v-model="isShowDialog" title="訂單詳情" :confirmButtonText="'送出'" :cancelButtonText="'取消'" @save="onSave"
-    @hide="onHide">
+  <base-dialog v-model="isShowDialog" title="訂單詳情" :confirmButtonText="'送出'" :cancelButtonText="'取消'" @hide="onHide"
+    :isShowFooter="false">
     <base-form ref="form">
-      <div class="row ">
-        <div class="col-6">
-          <q-field borderless stack-label label="訂購人">
-            <template v-slot:control>
-              <div class="self-center full-width no-outline text-18px" tabindex="0">
-                {{ clientData.client.name }}
+      <div class="row q-gutter-y-sm">
+        <q-card class="col-12 row justify-center items-center" bordered>
+          <q-card-section :horizontal="isSmScreen">
+            <q-card-section class="row justify-center col-xs-12 col-sm-6 q-pa-none">
+              <div>
+                <!-- 狀態 -->
+                <div>
+                  <q-chip :class="getStateColor(clientData.state)" :icon="getStateIcon(clientData.state)">
+                    訂單狀態：{{ clientData.state }}
+                  </q-chip>
+                </div>
+                <div>
+                  <q-chip :class="getStateColor(clientData.isPaid)" :icon="getStateIcon(clientData.isPaid)">
+                    金流狀態：{{ clientData.isPaid }}
+                  </q-chip>
+                </div>
+                <div>
+                  <q-chip :class="getStateColor(clientData.isShipped)" :icon="getStateIcon(clientData.isShipped)">
+                    出貨狀態：{{ clientData.isShipped }}
+                  </q-chip>
+                </div>
               </div>
-            </template>
-          </q-field>
-        </div>
-        <div class="col-6">
-          <q-field borderless stack-label label="電話">
-            <template v-slot:control>
-              <div class="self-center full-width no-outline text-18px" tabindex="0">
-                {{ clientData.client.tel }}
+            </q-card-section>
+            <q-card-section class="row justify-center items-center col-xs-12 col-sm-8 q-pa-none">
+              <div class="q-pa-xs">
+                <!-- 收款 -->
+                <q-btn :disable="clientData.isPaid === '已收款'" icon="fa-regular fa-square-check" label="收款"
+                  @click="updatePaidStatus()" rounded color="teal" stack />
               </div>
-            </template>
-          </q-field>
-        </div>
-        <div class="col-6">
-          <q-field borderless stack-label label="地址">
-            <template v-slot:control>
-              <div class="self-center full-width no-outline text-18px" tabindex="0">
-                {{ clientData.client.address }}
+              <div class="q-pa-xs">
+                <!-- 出貨 -->
+                <q-btn :disable="clientData.isShipped === '已出貨'" icon="fa-regular fa-square-check" label="出貨"
+                  @click="updateShipStatus()" rounded color="cyan" stack />
               </div>
-            </template>
-          </q-field>
-        </div>
-        <div class="col-6">
-          <q-field borderless stack-label label="備註">
-            <template v-slot:control>
-              <div class="self-center full-width no-outline text-18px" tabindex="0">
-                {{ clientData.client.remark }}
+              <div class="q-pa-xs">
+                <!-- 取消目前和刪除相同，之後會再添加退貨或退款 -->
+                <q-btn v-if="clientData.state === '已完成'" color="red" icon="fa-solid fa-trash-can" label="取消"
+                  @click="onDelete()" rounded stack />
+                <q-btn v-else color="red" icon="fa-solid fa-trash" label="刪除" @click="onDelete()" rounded stack />
               </div>
-            </template>
-          </q-field>
-        </div>
-        <div class="row justify-center col-12 q-mb-sm">
-          <!-- 狀態 -->
-          <div class="col-md-4 col-sm-4 col-xs-12 row justify-center">
-            <q-chip :class="getStateColor(clientData.state)" :icon="getStateIcon(clientData.state)">
-              訂單狀態：{{ clientData.state }}
-            </q-chip>
-          </div>
-          <div class="col-md-4 col-sm-4 col-xs-6">
-            <q-chip :class="getStateColor(clientData.isPaid)" :icon="getStateIcon(clientData.isPaid)">
-              金流狀態：{{ clientData.isPaid }}
-            </q-chip>
-          </div>
-          <div class="col-md-4 col-sm-4 col-xs-6">
-            <q-chip :class="getStateColor(clientData.isShipped)" :icon="getStateIcon(clientData.isShipped)">
-              出貨狀態：{{ clientData.isShipped }}
-            </q-chip>
-          </div>
-        </div>
+            </q-card-section>
+          </q-card-section>
+        </q-card>
         <div class="col-12">
-          <q-table :rows="clientData.contents" :columns="columns" row-key="name" hide-bottom>
+          <q-table :rows="clientData.contents" :columns="columns" row-key=" name" hide-bottom>
             <template v-slot:top-left>
               <q-tr>
                 <q-item-label class="text-info">
@@ -86,32 +74,62 @@
               </q-tr>
             </template>
             <template v-slot:top-right>
-              <q-tr class="text-20px text-bold text-red outline rounded q-pa-xs q-mt-xs">
-                <q-td>總金額:</q-td>
-                <q-td>{{ totalAmount }}</q-td>
-              </q-tr>
+              <q-chip outline color="red" icon="fa-solid fa-sack-dollar">
+                總金額: {{ totalAmount }}
+              </q-chip>
             </template>
           </q-table>
         </div>
-        <div class="col-12 q-pt-md row justify-center">
-          <div class="col-4">
-            <!-- 收款 -->
-            <q-btn :disable="clientData.isPaid === '已收款'" icon="fa-regular fa-square-check" label="收款"
-              @click="updatePaidStatus" rounded :stack="isXsScreen" color="teal" />
-          </div>
-          <div class="col-4">
-            <!-- 收款 -->
-            <q-btn :disable="clientData.isShipped === '已出貨'" icon="fa-regular fa-square-check" label="出貨"
-              @click="updateShipStatus" rounded :stack="isXsScreen" color="cyan" />
-          </div>
-          <div class="col-4">
-            <!-- 取消目前和刪除相同，之後會再添加退貨或退款 -->
-            <q-btn v-if="initialState === '已完成'" class="text-red" icon="fa-solid fa-trash-can" label="取消訂單"
-              @click="onDelete()" rounded :stack="isXsScreen" />
-            <q-btn v-else class="text-red" icon="fa-solid fa-trash" label="刪除訂單" @click="onDelete()" rounded
-              :stack="isXsScreen" />
-          </div>
-        </div>
+        <q-card class="col-12" bordered>
+          <q-card-actions>
+            <span class="text-bold">訂購人資訊</span>
+            <q-space />
+            <q-btn color="grey" round flat dense :icon="expanded ? 'fa-solid fa-minus' : 'fa-solid fa-plus'"
+              @click="expanded = !expanded" />
+          </q-card-actions>
+          <q-slide-transition>
+            <div v-show="expanded" class="row q-pa-sm">
+              <q-separator />
+              <div class="col-6">
+                <q-field borderless stack-label label="訂購人">
+                  <template v-slot:control>
+                    <div class="self-center full-width no-outline text-18px" tabindex="0">
+                      {{ clientData.client.name }}
+                    </div>
+                  </template>
+                </q-field>
+              </div>
+              <div class="col-6">
+                <q-field borderless stack-label label="電話">
+                  <template v-slot:control>
+                    <div class="self-center full-width no-outline text-18px" tabindex="0">
+                      {{ clientData.client.tel }}
+                    </div>
+                  </template>
+                </q-field>
+              </div>
+              <div class="col-6">
+                <q-field borderless stack-label label="地址">
+                  <template v-slot:control>
+                    <div class="self-center full-width no-outline text-18px" tabindex="0">
+                      {{ clientData.client.address }}
+                    </div>
+                  </template>
+                </q-field>
+              </div>
+              <div class="col-6">
+                <q-field borderless stack-label label="備註">
+                  <template v-slot:control>
+                    <div class="self-center full-width no-outline text-18px" tabindex="0">
+                      {{ clientData.client.remark }}
+                    </div>
+                  </template>
+                </q-field>
+              </div>
+            </div>
+          </q-slide-transition>
+        </q-card>
+
       </div>
     </base-form>
   </base-dialog>
@@ -126,12 +144,12 @@ import useMessageDialog from '@/hooks/useMessageDialog'
 import useCRUD from '@/hooks/useCRUD'
 
 export default defineComponent({
-  emits: ['save'],
+  emits: ['delete'],
   setup(props, { emit }) {
     const $q = useQuasar()
     const clientData = ref([])
     const currentId = ref(null)
-    const initialState = ref('')
+    const expanded = ref(false)
     const columns = [
       {
         name: 'name',
@@ -155,7 +173,6 @@ export default defineComponent({
       const res = await getData(id)
       clientData.value = initializeDates(res)
       currentId.value = id
-      initialState.value = res.state
     }
 
     const updateFetch = async (id, payload) => {
@@ -166,21 +183,8 @@ export default defineComponent({
       return await deleteData(currentId)
     }
 
-    const onSave = async () => {
-      const payload = updateDates(
-        {
-          ...clientData.value
-        },
-        'edit'
-      )
-      const id = currentId.value
-      await callUpdateFetch(id, { ...payload })
-
-      const [res] = await save()
-      if (res) emit('save')
-    }
-
     const onHide = () => {
+      expanded.value = false
       data.reset()
     }
 
@@ -194,8 +198,8 @@ export default defineComponent({
       if (!res) return
       const [delRes] = await callDeleteFetch(currentId.value)
       if (delRes) {
-        hideDialog()
-        emit('save')
+        isShowDialog.value = false
+        emit('delete')
       }
     }
 
@@ -207,8 +211,17 @@ export default defineComponent({
         cancelButtonText: '取消'
       })
       if (res) {
-        clientData.value.isPaid = "已收款"
-      } else return
+        const payload = updateDates({
+          ...clientData.value,
+          isPaid: "已收款"
+        },
+          'edit'
+        )
+        const id = currentId.value
+        const response = await callUpdateFetch(id, { ...payload })
+
+        if (response) return await readFetch(id)
+      }
     }
 
     const updateShipStatus = async () => {
@@ -219,8 +232,17 @@ export default defineComponent({
         cancelButtonText: '取消'
       })
       if (res) {
-        clientData.value.isShipped = "已出貨"
-      } else return
+        const payload = updateDates({
+          ...clientData.value,
+          isShipped: "已出貨"
+        },
+          'edit'
+        )
+        const id = currentId.value
+        const response = await callUpdateFetch(id, { ...payload })
+
+        if (response) return await readFetch(id)
+      }
     }
 
     const getStateColor = (status) => {
@@ -267,13 +289,6 @@ export default defineComponent({
       { deep: true }
     )
 
-    const updatePaid = (newPaid) => {
-      clientData.value.isPaid = newPaid
-    }
-
-    const updateShipped = (newShipped) => {
-      clientData.value.isShipped = newShipped
-    }
 
     const totalAmount = computed(() => {
       return clientData.value.contents.reduce((sum, item) => {
@@ -282,13 +297,13 @@ export default defineComponent({
     })
 
     // 是否為小型裝置
-    const isXsScreen = computed(() => {
-      return $q.screen.lt.sm
+    const isSmScreen = computed(() => {
+      return !$q.screen.lt.sm
     })
 
     // use
     const { messageDelete } = useMessageDialog()
-    const { form, data, isShowDialog, showDialog, hideDialog, save } =
+    const { form, data, isShowDialog, showDialog, hideDialog } =
       useDialog({
         readFetch: readFetch
       })
@@ -301,10 +316,10 @@ export default defineComponent({
     return {
       clientData,
       currentId,
-      initialState,
+      expanded,
       columns,
       totalAmount,
-      isXsScreen,
+      isSmScreen,
       form,
       data,
       isShowDialog,
@@ -316,10 +331,7 @@ export default defineComponent({
       updatePaidStatus,
       updateShipStatus,
 
-      onSave,
       onHide,
-      updatePaid,
-      updateShipped,
       onDelete
     }
   }

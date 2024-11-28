@@ -9,13 +9,16 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-md-6 col-sm-12 col-xs-12">
-                  <text-input v-model="rows.client.name" label="姓名" placeholder="請輸入姓名" />
+                  <text-input v-model="rows.client.name" label="姓名" placeholder="請輸入姓名"
+                    :required="isShippingRequired" />
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12">
-                  <text-input v-model="rows.client.tel" label="電話" placeholder="請輸入電話" :maxLength="10" />
+                  <text-input v-model="rows.client.tel" label="電話" placeholder="請輸入電話" :maxLength="10"
+                    :required="isShippingRequired" />
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12">
-                  <text-input v-model="rows.client.address" label="地址" placeholder="請輸入地址" />
+                  <text-input v-model="rows.client.address" label="地址" placeholder="請輸入地址"
+                    :required="isShippingRequired" />
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12">
                   <text-input v-model="rows.client.remark" label="備註" placeholder="請輸入備註" />
@@ -33,7 +36,8 @@
                     class="full-width" />
                 </div>
                 <div v-if="rows.payment === '轉帳'" class="q-mt-md col-md-6 col-sm-12 col-xs-12">
-                  <text-input v-model="rows.accountLastFive" label="帳號後五碼" placeholder="請輸入帳號後五碼" :required="true" />
+                  <text-input v-model="rows.accountLastFive" label="帳號後五碼" placeholder="請輸入帳號後五碼" :required="true"
+                    :maxLength="5" :minLength="5" />
                 </div>
               </div>
             </card-body>
@@ -67,7 +71,9 @@
           <q-card class="h-full shadow-7">
             <card-header> 訂單明細
               <template #action>
-                <span class="text-20px text-bold text-red outline rounded q-pa-xs">總金額: {{ totalAmount }}</span>
+                <q-chip outline color="red" icon="fa-solid fa-sack-dollar">
+                  總金額: {{ totalAmount }}
+                </q-chip>
               </template>
             </card-header>
             <card-body class="q-pt-none">
@@ -211,7 +217,7 @@ const readProductFetch = async () => {
 
 const onSubmit = async () => {
   rows.value.state = '處理中'
-  rows.value.isPaid = '未付款'
+  rows.value.isPaid = '未收款'
   rows.value.isShipped = '未出貨'
 
   form.value.validate().then(async (success) => {
@@ -271,6 +277,11 @@ const totalAmount = computed(() => {
   return rows.value.contents.reduce((sum, item) => {
     return sum + item.quantity * item.price
   }, 0)
+})
+
+// 選外送和宅配時姓名、電話和地址必填
+const isShippingRequired = computed(() => {
+  return rows.value.ship === '外送' || rows.value.ship === '宅配'
 })
 
 const { goBack } = useGoBack()
