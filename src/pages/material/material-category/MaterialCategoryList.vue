@@ -12,7 +12,7 @@
         <div v-if="switchStyle">
           <grid-table :columns="columns" :rows="rows">
             <template #action="{ row }">
-              <edit-icon-button :to="'/product/edit/' + row.id" />
+              <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
               <delete-icon-button @click="onDelete(row)" />
             </template>
           </grid-table>
