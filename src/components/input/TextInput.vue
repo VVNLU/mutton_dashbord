@@ -52,7 +52,7 @@ const props = defineProps({
   outlined: { type: Boolean, default: true },
   placeholder: { type: String, default: '請輸入' },
   maxLength: { type: Number, default: 255 },
-  minLength: { type: Number, default: 255 },
+  minLength: { type: Number },
   required: { type: Boolean, default: false }
 })
 const emit = defineEmits(['update:modelValue'])
