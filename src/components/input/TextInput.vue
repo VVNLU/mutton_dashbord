@@ -67,9 +67,11 @@ const ruleList = computed(() => {
   rule.push(
     vuelidate.maxLength(maxLength.value, `長度不可超過${maxLength.value}字`)
   )
-  rule.push(
-    vuelidate.minLength(minLength.value, `長度不可少於${minLength.value}字`)
-  )
+  if (minLength.value !== undefined) {
+    rule.push(
+      vuelidate.minLength(minLength.value, `長度不可少於${minLength.value}字`)
+    )
+  }
   return rule.concat(rules.value)
 })
 </script>
