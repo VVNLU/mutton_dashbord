@@ -6,13 +6,30 @@ import {
   getDoc,
   getDocs,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  Timestamp,
+  where
 } from 'firebase/firestore'
+
+// 時間戳
+export const addDataWithTimestamp = async (data) => {
+  try {
+    const docRef = await addDoc(collection(db, 'material-category'), {
+      ...data,
+      createdAt: Timestamp.now(),
+      updateAt: Timestamp.now()
+    })
+    return docRef
+  } catch (error) {
+    console.error('Error written document: ', error)
+    throw error
+  }
+}
 
 // 新增
 export const addData = async (data) => {
   try {
-    const docRef = await addDoc(collection(db, 'material-category'), data)
+    const docRef = await addDataWithTimestamp(data)
     return docRef
   } catch (error) {
     console.error('Error written document: ', error)
@@ -48,8 +65,10 @@ export const updateData = async (docId, newData) => {
   try {
     const newDocRef = await updateDoc(
       doc(db, 'material-category', docId),
-      newData
-    )
+      {
+        ...newData,
+        updateAt: Timestamp.now() // 更新時間為當前時間
+      })
     return newDocRef
   } catch (error) {
     console.error('Error updating document:', error)
@@ -64,6 +83,28 @@ export const deleteData = async (docId) => {
     return docRef
   } catch (error) {
     console.error('Error deleting document: ', error)
+    throw error
+  }
+}
+
+// 關聯供應商
+// 讀取多筆數據（根據多個ID）
+export const getDataByIds = async (ids) => {
+  try {
+    console.log('ids', ids)
+    const querySnapshot = await getDocs(
+      collection(db, 'vendor'),
+      where('__name__', 'in', ids)
+    )
+
+    const data = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data()
+    }))
+
+    return data
+  } catch (error) {
+    console.error('Error getting documents by IDs:', error)
     throw error
   }
 }
