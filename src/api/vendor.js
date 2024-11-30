@@ -6,13 +6,29 @@ import {
   getDoc,
   getDocs,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  Timestamp
 } from 'firebase/firestore'
+
+// 時間戳
+export const addDataWithTimestamp = async (data) => {
+  try {
+    const docRef = await addDoc(collection(db, 'vendor'), {
+      ...data,
+      createdAt: Timestamp.now(),
+      updateAt: Timestamp.now()
+    })
+    return docRef
+  } catch (error) {
+    console.error('Error written document: ', error)
+    throw error
+  }
+}
 
 // 新增
 export const addData = async (data) => {
   try {
-    const docRef = await addDoc(collection(db, 'vendor'), data)
+    const docRef = await await addDataWithTimestamp(data)
     return docRef
   } catch (error) {
     console.error('Error written document: ', error)
