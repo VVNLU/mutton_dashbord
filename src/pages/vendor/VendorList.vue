@@ -39,7 +39,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { getList, updateData, deleteData } from '@/api/vendor'
-import { initializeDates } from '@/utils/dateHandler'
 import VendorDialog from './components/VendorDialog.vue'
 import useMessageDialog from '@/hooks/useMessageDialog'
 import useCRUD from '@/hooks/useCRUD'
@@ -51,10 +50,10 @@ const switchStyle = ref('gridType')
 
 const columns = [
   { name: 'title', label: '公司名稱', field: 'title', align: 'center' },
+  { name: 'supplies', label: '供應品項', field: 'supplies', align: 'center' },
   { name: 'contact', label: '聯絡人', field: 'contact', align: 'center' },
   { name: 'tel', label: '聯絡電話', field: 'tel', align: 'center' },
   { name: 'address', label: '公司地址', field: 'address', align: 'center' },
-  { name: 'supplies', label: '供應品項', field: 'supplies', align: 'center' },
   { name: 'remark', label: '備註', field: 'remark', align: 'center' }
 ]
 
@@ -65,7 +64,7 @@ onMounted(async () => {
 
 const readListFetch = async (payload) => {
   return await getList(payload).then((res) => {
-    rows.value = res.map((item) => initializeDates(item))
+    rows.value = res
   })
 }
 
