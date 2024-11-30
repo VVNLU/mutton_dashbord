@@ -10,8 +10,8 @@
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
                   <q-btn v-for="item in vendorData" :key="item.vendor_id" :label="item.title" outline rounded
-                    :text-color="selectedVendorId.includes(item.vendor_id) ? 'white' : 'primary'"
-                    :class="[selectedVendorId.includes(item.vendor_id) ? 'bg-primary' : '', 'q-ma-xs']"
+                    :text-color="data.state.vendorIds.includes(item.vendor_id) ? 'white' : 'primary'"
+                    :class="[data.state.vendorIds.includes(item.vendor_id) ? 'bg-primary' : '', 'q-ma-xs']"
                     @click="toggleVendorSelection(item.vendor_id)" />
                 </div>
               </div>
@@ -20,16 +20,40 @@
         </div>
         <div class="col-12">
           <q-card class="shadow-7">
+            <card-header>原物料資訊 </card-header>
             <card-body>
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-xs-12 col-sm-6 col-md-6">
-                  <text-input v-model="data.state.title" class="full-width" label="分類名稱" placeholder="請輸入分類名稱"
-                    :rules="[$rules.required('分類名稱必填')]" />
+                  <text-input v-model="data.state.title" class="full-width" label="原料名稱" placeholder="請輸入原料名稱"
+                    :rules="[$rules.required('原料名稱必填')]" />
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6">
-                  <text-input v-model="data.state.unit" class="full-width" label="單位" placeholder="請輸入分類單位(ex: 克、斤、箱)"
-                    :rules="[$rules.required('分類單位必填')]" />
+                  <text-input v-model="data.state.unit" class="full-width" label="最小單位" placeholder="請輸入最小單位(ex: 克、斤、箱)"
+                    :rules="[$rules.required('最小單位必填')]" />
                 </div>
+              </div>
+            </card-body>
+          </q-card>
+        </div>
+        <div class="col-12">
+          <q-card class="shadow-7">
+            <card-header>單位設定
+              <template #action>
+                <add-button @click="addNewData()" />
+              </template>
+            </card-header>
+            <card-body>
+              <q-card flat bordered v-for="(item, index) in data.state.packages" :key="index"
+                class="q-mb-xs full-width">
+                <div class="q-pa-xs row items-center full-width">
+                  <q-input dense label="單位名稱" v-model="item.unit" class="col-sm-4 col-xs-3" />
+                  <span class="q-ma-xs col-1">＝</span>
+                  <q-input dense type="number" label="比例" v-model="item.size" class="col-sm-4 col-xs-3" />
+                  <q-chip>{{ data.state.unit }}</q-chip>
+                  <delete-icon-button class="col-1" @click="onDelete(row)" />
+                </div>
+              </q-card>
+              <div>
               </div>
             </card-body>
           </q-card>
@@ -41,18 +65,21 @@
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue-demi'
-import Material from '@/class/MaterialCategory'
-import useDialog from '@/hooks/useDialog'
-import { getData, addData, updateData } from '@/api/materialCategory'
+import { getData, addData, updateData, getDataByIds } from '@/api/materialCategory'
 import { getList } from '@/api/vendor'
-import { initializeDates, updateDates } from '@/utils/dateHandler'
+import MaterialCategory from '@/class/MaterialCategory'
+import useDialog from '@/hooks/useDialog'
+import useNotify from '@/hooks/useNotify'
+import useMessageDialog from '@/hooks/useMessageDialog'
+import useCRUD from '@/hooks/useCRUD'
 
 export default defineComponent({
   emits: ['save'],
   setup(props, { emit }) {
+    const { notifyAPIError } = useNotify()
+
     const isReading = ref(false)
     const vendorData = ref([])
-    const selectedVendorId = ref([])
 
     onMounted(async () => {
       isReading.value = true
@@ -60,11 +87,8 @@ export default defineComponent({
       isReading.value = false
     })
 
-    // methods
     const readFetch = async (id) => {
-      const res = await getData(id)
-      data.state = initializeDates(res)
-      selectedVendorId.value = res.vendorIds
+      return await getData(id)
     }
 
     const createFetch = async (payload) => {
@@ -83,28 +107,54 @@ export default defineComponent({
       }))
     }
 
+    const addNewData = async () => {
+      if (!data.state.unit) {
+        return notifyAPIError({ message: '單位未設置，請先填寫最小單位' })
+      }
+      data.state.packages.push({
+        unit: '',
+        size: null,
+      })
+    }
+
     const toggleVendorSelection = (vendorId) => {
-      const index = selectedVendorId.value.indexOf(vendorId)
+      const index = data.state.vendorIds.indexOf(vendorId)
       if (index === -1) {
         // 新增
-        selectedVendorId.value.push(vendorId)
+        data.state.vendorIds.push(vendorId)
       } else {
         // 移除
-        selectedVendorId.value.splice(index, 1)
+        data.state.vendorIds.splice(index, 1)
       }
     }
 
     const onSave = async () => {
-      data.state = updateDates(
-        { ...data.state, vendorIds: selectedVendorId.value },
-        mode.value === 'create' ? 'create' : 'edit'
-      )
+      data.state =
+      {
+        ...data.state,
+      }
       const [res] = await save()
       if (res) {
         emit('save')
-        selectedVendorId.value = []
-        data.state = initializeDates(new Material()) // 重置資料
+        data.state.vendorIds.value = []
+        data.state = new MaterialCategory() // 重置資料
       }
+    }
+
+    const onDelete = async (row) => {
+      const res = await messageDelete({
+        title: '刪除',
+        message: '確認刪除單位設定？',
+        confirmButtonText: '確認',
+        cancelButtonText: '取消'
+      })
+      if (!res) return
+
+      const index = data.state.packages.indexOf(row)
+      if (index !== -1) {
+        data.state.packages.splice(index, 1)
+      }
+      await callDeleteFetch()
     }
 
     const onHide = () => {
@@ -112,15 +162,16 @@ export default defineComponent({
     }
 
     // use
+    const { messageDelete } = useMessageDialog()
+    const { callDeleteFetch } = useCRUD({})
     const {
       form,
       data,
       isShowDialog,
       showDialog,
       save,
-      mode
     } = useDialog({
-      formData: initializeDates(new Material()), // 初始化日期
+      formData: new MaterialCategory(),
       readFetch: readFetch,
       createFetch: createFetch,
       updateFetch: updateFetch,
@@ -135,10 +186,11 @@ export default defineComponent({
 
       isReading,
       vendorData,
-      selectedVendorId,
 
+      addNewData,
       toggleVendorSelection,
       onSave,
+      onDelete,
       onHide
     }
   }
