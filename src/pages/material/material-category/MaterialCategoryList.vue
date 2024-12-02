@@ -56,14 +56,16 @@ const columns = [
 
 onMounted(async () => {
   await readListFetch()
-  loading.value = false
 })
 
 const readListFetch = async (payload) => {
-  return await getList(payload).then((res) => {
+  loading.value = true
+  try {
+    const res = await getList(payload)
     rows.value = res
-    // rows.value = res.map((item) => initializeDates(item))
-  })
+  } finally {
+    loading.value = false
+  }
 }
 
 const delFetch = async (id) => {
@@ -92,10 +94,10 @@ const showDialog = ({ id, mode, callRead }) => {
   dialog.value.showDialog({ id, mode, callRead })
 }
 
+const { messageDelete } = useMessageDialog()
 const { callReadListFetch, callDeleteFetch } = useCRUD({
   readListFetch,
   deleteFetch: delFetch
 })
 
-const { messageDelete } = useMessageDialog()
 </script>

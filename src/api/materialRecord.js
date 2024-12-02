@@ -7,13 +7,29 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
-  arrayRemove
+  arrayRemove,
+  Timestamp
 } from 'firebase/firestore'
+
+// 時間戳
+export const addDataWithTimestamp = async (data) => {
+  try {
+    const docRef = await addDoc(collection(db, 'material_record'), {
+      ...data,
+      createdAt: Timestamp.now(),
+      updateAt: Timestamp.now()
+    })
+    return docRef
+  } catch (error) {
+    console.error('Error written document: ', error)
+    throw error
+  }
+}
 
 // 新增
 export const addData = async (data) => {
   try {
-    const docRef = await addDoc(collection(db, 'material_record'), data)
+    const docRef = await addDataWithTimestamp(data)
     return docRef
   } catch (error) {
     console.error('Error written document: ', error)
