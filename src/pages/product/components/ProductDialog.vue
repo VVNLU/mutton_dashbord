@@ -19,10 +19,8 @@
           <q-card class="shadow-7">
             <card-body>
               <q-btn-toggle v-model="switchStyle" no-caps rounded class="q-mb-sm" toggle-color="primary" color="white"
-                text-color="primary" :options="[
-    { label: '條列式', value: 'columnType' },
-    { label: '網格式', value: 'gridType' }
-  ]" />
+                text-color="primary"
+                :options="[{ label: '條列式', value: 'columnType' }, { label: '網格式', value: 'gridType' }]" />
               <div v-if="switchStyle === 'gridType'">
                 <grid-table :columns="columns" :rows="rows">
                   <template #action="{ row }">
@@ -71,15 +69,15 @@ export default defineComponent({
 
     const columns = [
       {
-        name: 'title',
+        name: 'material_title',
         label: '項目',
-        field: 'title',
+        field: 'material_title',
         align: 'center'
       },
       {
-        name: 'quantity',
+        name: 'material_quantity',
         label: '數量',
-        field: 'quantity',
+        field: 'material_quantity',
         align: 'center',
         isPopupEdit: true
       },
@@ -110,8 +108,8 @@ export default defineComponent({
 
       rows.value = [...rows.value, {
         material_id: item.id,
-        title: item.title,
-        quantity: 0,
+        material_title: item.title,
+        material_quantity: 0,
       }]
     }
 
