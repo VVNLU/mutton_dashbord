@@ -7,13 +7,29 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
-  arrayRemove
+  arrayRemove,
+  Timestamp
 } from 'firebase/firestore'
+
+// 時間戳
+export const addDataWithTimestamp = async (data) => {
+  try {
+    const docRef = await addDoc(collection(db, 'order'), {
+      ...data,
+      createdAt: Timestamp.now(),
+      updateAt: Timestamp.now()
+    })
+    return docRef
+  } catch (error) {
+    console.error('Error written document: ', error)
+    throw error
+  }
+}
 
 // 新增
 export const addData = async (data) => {
   try {
-    const docRef = await addDoc(collection(db, 'order'), data)
+    const docRef = await addDataWithTimestamp(data)
     return docRef
   } catch (error) {
     console.error('Error written document: ', error)
@@ -47,7 +63,11 @@ export const getList = async () => {
 // 更新數據
 export const updateData = async (docId, newData) => {
   try {
-    const newDocRef = await updateDoc(doc(db, 'order', docId), newData)
+    const newDocRef = await updateDoc(doc(db, 'order', docId),
+      {
+        ...newData,
+        updateAt: Timestamp.now() // 更新時間為當前時間
+      })
     return newDocRef
   } catch (error) {
     console.error('Error updating document:', error)

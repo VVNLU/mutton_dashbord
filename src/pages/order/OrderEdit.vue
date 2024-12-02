@@ -137,7 +137,6 @@
 <script>
 import { defineComponent, ref, watch, computed } from 'vue-demi'
 import { getData, updateData, deleteData } from '@/api/order'
-import { initializeDates, updateDates } from '@/utils/dateHandler'
 import { useQuasar } from 'quasar'
 import useDialog from '@/hooks/useDialog'
 import useMessageDialog from '@/hooks/useMessageDialog'
@@ -171,7 +170,7 @@ export default defineComponent({
 
     const readFetch = async (id) => {
       const res = await getData(id)
-      clientData.value = initializeDates(res)
+      clientData.value = res
       currentId.value = id
     }
 
@@ -211,12 +210,10 @@ export default defineComponent({
         cancelButtonText: '取消'
       })
       if (res) {
-        const payload = updateDates({
+        const payload = {
           ...clientData.value,
           isPaid: "已收款"
-        },
-          'edit'
-        )
+        }
         const id = currentId.value
         const response = await callUpdateFetch(id, { ...payload })
 
@@ -232,12 +229,10 @@ export default defineComponent({
         cancelButtonText: '取消'
       })
       if (res) {
-        const payload = updateDates({
+        const payload = {
           ...clientData.value,
           isShipped: "已出貨"
-        },
-          'edit'
-        )
+        }
         const id = currentId.value
         const response = await callUpdateFetch(id, { ...payload })
 

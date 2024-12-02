@@ -120,7 +120,6 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { addData } from '@/api/order'
 import { getList } from '@/api/product'
-import { updateDates } from '@/utils/dateHandler'
 import useCRUD from '@/hooks/useCRUD'
 import useGoBack from '@/hooks/useGoBack'
 import useMessageDialog from '@/hooks/useMessageDialog'
@@ -226,14 +225,12 @@ const onSubmit = async () => {
 
   form.value.validate().then(async (success) => {
     if (success) {
-      const payload = updateDates(
-        {
-          ...rows.value,
-          client: rows.value.client,
-          contents: rows.value.contents,
-        },
-        'create'
-      )
+      const payload =
+      {
+        ...rows.value,
+        client: rows.value.client,
+        contents: rows.value.contents,
+      }
       const [res] = await callCreateFetch({ ...payload })
       if (res) goBack()
     }
@@ -247,14 +244,12 @@ const onCheckout = async () => {
 
   form.value.validate().then(async (success) => {
     if (success) {
-      const payload = updateDates(
-        {
-          ...rows.value,
-          client: rows.value.client,
-          contents: rows.value.contents,
-        },
-        'create'
-      )
+      const payload =
+      {
+        ...rows.value,
+        client: rows.value.client,
+        contents: rows.value.contents,
+      }
       const [res] = await callCreateFetch({ ...payload })
       if (res) goBack()
     }
