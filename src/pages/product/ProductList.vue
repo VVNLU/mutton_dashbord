@@ -86,7 +86,7 @@ const multipleColumns = [
   },
   {
     name: 'material_title',
-    label: '原物料標題',
+    label: '原物料名稱',
     field: 'material_title',
     align: 'center'
   },
