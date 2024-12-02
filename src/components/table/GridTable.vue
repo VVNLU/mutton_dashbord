@@ -21,41 +21,71 @@
         很抱歉，沒有符合搜尋條件的結果。
       </span>
     </div>
+    <!-- 資料清單 -->
     <div class="col-12">
       <q-virtual-scroll :items="paginatedRows" :item-size="72">
         <template #default="props">
-          <q-card flat bordered class="row q-mb-sm">
+          <q-card flat bordered class="q-mb-sm">
             <!-- 前兩筆欄位 -->
-            <q-card-section v-for="column in columns.slice(0, 2)" :key="column.name"
-              :class="column.label === '公司地址' || column.label === '備註' ? 'col-12' : 'col-6'">
-              <q-field :label="column.label" stack-label>
-                <template v-slot:control>
-                  <div class="self-center full-width no-outline" tabindex="0">{{ props.item[column.name] }}</div>
-                </template>
-              </q-field>
-            </q-card-section>
-            <!-- 欄位數量 <= 2，顯示下拉按鈕 -->
-            <div v-if="columns.length <= 2" class="row justify-center full-width">
-              <slot name="action" :row="props.item" />
+            <div v-if="activeColumns.length > 0" class="row">
+              <q-card-section v-for="column in activeColumns.slice(0, 2)" :key="column.name" class="col-6">
+                <q-field :label="column.label" stack-label>
+                  <template v-slot:control>
+                    <div class="self-center full-width no-outline" tabindex="0">
+                      {{ props.item[column.name] }}
+                    </div>
+                  </template>
+                </q-field>
+              </q-card-section>
             </div>
-            <!-- 顯示更多按鈕和隱藏欄位 -->
-            <div v-if="columns.length > 2" class="row col-12">
+
+            <!-- 顯示更多內容  -->
+            <div v-if="activeColumns.length > 2" class="row">
+              <!-- 下拉按鈕 -->
               <q-btn @click="toggleShowMore(props.index)" :label="expandedRows[props.index] ? '收回' : '詳情'"
                 :icon="expandedRows[props.index] ? 'keyboard_arrow_up ' : 'keyboard_arrow_down'" color="grey" flat dense
                 class="col-12" />
-              <div v-show="expandedRows[props.index]" class="row col-12">
-                <q-card-section v-for="column in columns.slice(2)" :key="column.name"
-                  :class="column.label === '公司地址' || column.label === '備註' ? 'col-sm-6 col-xs-12' : 'col-6'">
-                  <q-field :label="column.label" stack-label>
-                    <template v-slot:control>
-                      <div class="self-center full-width no-outline" tabindex="0">{{ props.item[column.name] }}</div>
-                    </template>
-                  </q-field>
-                </q-card-section>
-                <div class="row justify-center full-width">
-                  <slot name="action" :row="props.item" />
+              <!-- 詳情 -->
+              <div v-show="expandedRows[props.index]" class="full-width">
+                <div v-if="multipleColumns && multipleColumns.length > 0">
+                  <q-card-section v-for="column in activeColumns.slice(2, 3)" :key="column.name" class="col-6">
+                    <q-field :label="column.label" stack-label>
+                      <template v-slot:control>
+                        <div class="self-center full-width no-outline" tabindex="0">
+                          {{ props.item[column.name] }}
+                        </div>
+                      </template>
+                    </q-field>
+                  </q-card-section>
+                  <q-card-section v-for="(content, index) in props.item.contents" :key="index">
+                    <q-card flat bordered>
+                      <div class="row">
+                        <q-field v-for="(column, colIndex) in multipleColumns.slice(2)" :key="colIndex"
+                          :label="column.label" stack-label class="col-6 q-pa-sm">
+                          <template v-slot:control>
+                            <div class="self-center full-width no-outline" tabindex="0">
+                              {{ content[column.name] }}
+                            </div>
+                          </template>
+                        </q-field>
+                      </div>
+                    </q-card>
+                  </q-card-section>
+                </div>
+                <div v-else-if="columns && columns.length > 0" class="row">
+                  <q-card-section v-for="column in columns.slice(2)" :key="column.name" class="col-6">
+                    <q-field :label="column.label" stack-label>
+                      <template v-slot:control>
+                        <div class="self-center full-width no-outline" tabindex="0">{{ props.item[column.name] }}
+                        </div>
+                      </template>
+                    </q-field>
+                  </q-card-section>
                 </div>
               </div>
+            </div>
+            <div class="row justify-center full-width">
+              <slot name="action" :row="props.item" />
             </div>
           </q-card>
         </template>
@@ -75,6 +105,7 @@ import { computed, defineProps, reactive, ref, watch } from 'vue'
 
 const props = defineProps({
   columns: { type: Array, default: () => [] },
+  multipleColumns: { type: Array, default: () => [] },
   rows: { type: Array, default: () => [] },
 })
 
@@ -105,8 +136,17 @@ const paginatedRows = computed(() => {
   return filteredRows.value.slice(start, end)
 })
 
+const activeColumns = computed(() => props.multipleColumns.length > 0 ? props.multipleColumns : props.columns)
+
 const toggleShowMore = (index) => {
   expandedRows[index] = !expandedRows[index]
 }
 
+// 監控 props.rows 的變化
+watch(() => props.rows, () => {
+  // 重置 expandedRows 狀態
+  Object.keys(expandedRows).forEach(key => {
+    expandedRows[key] = false
+  })
+})
 </script>
