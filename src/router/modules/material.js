@@ -1,8 +1,8 @@
 import MainLayout from '@/layouts/MainLayout.vue'
 
 const materialRecordRouter = {
-  path: '/material',
-  group: ['/material-category', '/material'],
+  path: '/material-record',
+  group: ['/material-category', '/material-record'],
   groupName: 'first',
   component: MainLayout,
   meta: {
@@ -38,7 +38,7 @@ const materialRecordRouter = {
     },
     // 原物料紀錄
     {
-      path: '/material',
+      path: '/material-record',
       meta: {
         title: '原物料紀錄',
         slug: 'link',

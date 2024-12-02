@@ -73,8 +73,6 @@ import { defineProps, ref, toRefs, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getData, addData, updateData } from '@/api/materialRecord'
 import { getList } from '@/api/materialCategory'
-import { updateDates } from '@/utils/dateHandler'
-import { initializeDates } from '@/utils/dateHandler'
 import useCRUD from '@/hooks/useCRUD'
 import useGoBack from '@/hooks/useGoBack'
 import useMessageDialog from '@/hooks/useMessageDialog'
@@ -172,7 +170,7 @@ const readListMaterialCategoryFetch = async () => {
 const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
   if (res) {
-    rows.value = initializeDates(res)
+    rows.value = res
     if (!rows.value.contents) {
       rows.value.contents = []
     }
@@ -184,13 +182,10 @@ const onSubmit = async () => {
 
   form.value.validate().then(async (success) => {
     if (success) {
-      const payload = updateDates(
-        {
-          ...rows.value,
-          contents: rows.value.contents
-        },
-        mode.value
-      )
+      const payload = {
+        ...rows.value,
+        contents: rows.value.contents
+      }
       const urlObj = {
         create: () => {
           return callCreateFetch({ ...payload })

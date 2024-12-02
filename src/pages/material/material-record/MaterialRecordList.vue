@@ -3,7 +3,7 @@
     <page-header>
       {{ $route.meta.title }}
       <template #action>
-        <add-button to="/material/create" />
+        <add-button to="/material-record/create" />
       </template>
     </page-header>
     <q-card class="shadow-7">
@@ -14,12 +14,12 @@
         { label: '網格式', value: 'gridType' }
       ]" />
         <div v-if="switchStyle === 'gridType'">
-          <extend-grid-table :columns="columns" :rows="rows">
+          <grid-table :rows="rows" :multipleColumns="multipleColumns">
             <template #action="{ row }">
-              <edit-icon-button :to="'/material/edit/' + row.id" />
+              <edit-icon-button :to="'/material-record/edit/' + row.id" />
               <delete-icon-button @click="onDelete(row)" />
             </template>
-          </extend-grid-table>
+          </grid-table>
         </div>
         <div v-else>
           <data-table :columns="columns" :rows="rows" :loading="loading">
@@ -27,7 +27,7 @@
               <div v-html="row.materialTitle"></div>
             </template>
             <template #props="{ row }">
-              <edit-icon-button :to="'/material/edit/' + row.id" />
+              <edit-icon-button :to="'/material-record/edit/' + row.id" />
               <delete-icon-button @click="onDelete(row)" />
             </template>
           </data-table>
@@ -54,6 +54,13 @@ const columns = [
     field: 'date',
     align: 'center',
     sortable: true
+  },
+  {
+    name: 'orderId',
+    label: '訂單單號',
+    field: 'orderId',
+    align: 'center',
+    isMultiline: true
   },
   {
     name: 'materialTitle',
@@ -97,6 +104,65 @@ const columns = [
     align: 'center',
     isMultiline: true
   }
+]
+
+const multipleColumns = [
+  {
+    name: 'date',
+    label: '日期',
+    field: 'date',
+    align: 'center',
+    sortable: true
+  },
+  {
+    name: 'orderId',
+    label: '訂單單號',
+    field: 'orderId',
+    align: 'center',
+    isMultiline: true
+  },
+  {
+    name: 'remark',
+    label: '備註',
+    field: 'remark',
+    align: 'center',
+    isMultiline: true
+  },
+  {
+    name: 'title',
+    label: '原物料',
+    field: 'title',
+    align: 'center',
+    isMultiline: true
+  },
+  {
+    name: 'quantity',
+    label: '數量',
+    field: 'quantity',
+    align: 'center',
+    isMultiline: true
+  },
+  {
+    name: 'unit',
+    label: '單位',
+    field: 'unit',
+    align: 'center',
+    isMultiline: true
+  },
+  // {
+  //   name: 'price',
+  //   label: '單價',
+  //   field: 'price',
+  //   align: 'center',
+  //   isMultiline: true
+  // },
+  {
+    name: 'total',
+    label: '總價',
+    field: 'total',
+    align: 'center',
+    isMultiline: true
+  },
 ]
 
 onMounted(async () => {
