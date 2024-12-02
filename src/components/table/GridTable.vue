@@ -31,7 +31,11 @@
               <q-card-section v-for="column in activeColumns.slice(0, 2)" :key="column.name" class="col-6">
                 <q-field :label="column.label" stack-label>
                   <template v-slot:control>
-                    <div class="self-center full-width no-outline" tabindex="0">
+                    <div v-if="props.item.styleColor" class="self-center full-width no-outline" tabindex="0"
+                      :class="props.item.styleColor[column.name]">
+                      {{ props.item[column.name] }}
+                    </div>
+                    <div v-else class="self-center full-width no-outline" tabindex="0">
                       {{ props.item[column.name] }}
                     </div>
                   </template>
@@ -47,8 +51,9 @@
                 class="col-12" />
               <!-- 詳情 -->
               <div v-show="expandedRows[props.index]" class="full-width">
-                <div v-if="multipleColumns && multipleColumns.length > 0">
-                  <q-card-section v-for="column in activeColumns.slice(2, 3)" :key="column.name" class="col-6">
+                <div v-if="multipleColumns && multipleColumns.length > 0" class="row">
+                  <q-card-section v-for="column in activeColumns.slice(2, sliceNumber)" :key="column.name"
+                    class="col-6">
                     <q-field :label="column.label" stack-label>
                       <template v-slot:control>
                         <div class="self-center full-width no-outline" tabindex="0">
@@ -57,10 +62,10 @@
                       </template>
                     </q-field>
                   </q-card-section>
-                  <q-card-section v-for="(content, index) in props.item.contents" :key="index">
+                  <q-card-section v-for="(content, index) in props.item.contents" :key="index" class="col-12">
                     <q-card flat bordered>
-                      <div class="row">
-                        <q-field v-for="(column, colIndex) in multipleColumns.slice(3)" :key="colIndex"
+                      <div class="row col-6">
+                        <q-field v-for="(column, colIndex) in multipleColumns.slice(sliceNumber)" :key="colIndex"
                           :label="column.label" stack-label class="col-6 q-pa-sm">
                           <template v-slot:control>
                             <div class="self-center full-width no-outline" tabindex="0">
@@ -73,10 +78,16 @@
                   </q-card-section>
                 </div>
                 <div v-else-if="columns && columns.length > 0" class="row">
-                  <q-card-section v-for="column in columns.slice(2)" :key="column.name" class="col-6">
+                  <q-card-section v-for="column in  columns.slice(2) " :key="column.name" class="col-6">
                     <q-field :label="column.label" stack-label>
                       <template v-slot:control>
-                        <div class="self-center full-width no-outline" tabindex="0">{{ props.item[column.name] }}
+                        <div v-if="props.item.styleColor"
+                          :class="[props.item.styleColor[column.name], 'self-center', 'full-width', 'no-outline']"
+                          tabindex="0">
+                          {{ props.item[column.name] || '-' }}
+                        </div>
+                        <div v-else class="self-center full-width no-outline" tabindex="0">
+                          {{ props.item[column.name] || '-' }}
                         </div>
                       </template>
                     </q-field>
@@ -107,6 +118,7 @@ const props = defineProps({
   columns: { type: Array, default: () => [] },
   multipleColumns: { type: Array, default: () => [] },
   rows: { type: Array, default: () => [] },
+  sliceNumber: { type: Number, default: 3 },
 })
 
 const expandedRows = reactive({})
