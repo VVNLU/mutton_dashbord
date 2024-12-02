@@ -56,7 +56,6 @@
 import { defineProps, ref, toRefs, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { getData, addData, updateData } from '@/api/product'
-import { initializeDates, updateDates } from '@/utils/dateHandler'
 import useCRUD from '@/hooks/useCRUD'
 import useGoBack from '@/hooks/useGoBack'
 import ProductDialog from './ProductDialog.vue'
@@ -74,15 +73,15 @@ const switchStyle = ref('gridType')
 
 const columns = [
   {
-    name: 'title',
+    name: 'material_title',
     label: '項目',
-    field: 'title',
+    field: 'material_title',
     align: 'left'
   },
   {
-    name: 'quantity',
+    name: 'material_quantity',
     label: '數量',
-    field: 'quantity',
+    field: 'material_quantity',
     align: 'left',
     isPopupEdit: true
   },
@@ -113,7 +112,7 @@ const updateFetch = async (id, payload) => {
 const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
   console.log('res', res)
-  rows.value = initializeDates(res)
+  rows.value = res
   rows.value.contents = Array.isArray(rows.value.contents)
     ? rows.value.contents
     : [rows.value.contents]
@@ -124,10 +123,11 @@ const onSubmit = async () => {
 
   form.value.validate().then(async (success) => {
     if (success) {
-      const payload = updateDates(
-        { ...rows.value, contents: rows.value.contents },
-        mode.value
-      )
+      const payload =
+      {
+        ...rows.value,
+        contents: rows.value.contents
+      }
       const urlObj = {
         create: () => {
           return callCreateFetch({ ...payload })

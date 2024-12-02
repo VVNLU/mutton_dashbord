@@ -14,7 +14,7 @@
         { label: '網格式', value: 'gridType' }
       ]" />
         <div v-if="switchStyle === 'gridType'">
-          <grid-table :columns="columns" :rows="rows">
+          <grid-table :multipleColumns="multipleColumns" :rows="rows">
             <template #action="{ row }">
               <edit-icon-button :to="'/product/edit/' + row.id" />
               <delete-icon-button @click="onDelete(row)" />
@@ -37,7 +37,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { getList, updateData, deleteData } from '@/api/product'
-import { initializeDates } from '@/utils/dateHandler'
 import useMessageDialog from '@/hooks/useMessageDialog'
 import useCRUD from '@/hooks/useCRUD'
 
@@ -46,9 +45,57 @@ const loading = ref(true)
 const switchStyle = ref('gridType')
 
 const columns = [
-  { name: 'title', label: '商品名稱', field: 'title', align: 'center' },
-  { name: 'depiction', label: '商品敘述', field: 'depiction', align: 'center' },
-  { name: 'price', label: '定價', field: 'price', align: 'center' },
+  {
+    name: 'title',
+    label: '商品名稱',
+    field: 'title',
+    align: 'center'
+  },
+  {
+    name: 'price',
+    label: '定價',
+    field: 'price',
+    align: 'center'
+  },
+  {
+    name: 'depiction',
+    label: '商品敘述',
+    field: 'depiction',
+    align: 'center'
+  },
+]
+
+const multipleColumns = [
+  {
+    name: 'title',
+    label: '商品名稱',
+    field: 'title',
+    align: 'center'
+  },
+  {
+    name: 'price',
+    label: '定價',
+    field: 'price',
+    align: 'center'
+  },
+  {
+    name: 'depiction',
+    label: '商品敘述',
+    field: 'depiction',
+    align: 'center'
+  },
+  {
+    name: 'material_title',
+    label: '原物料標題',
+    field: 'material_title',
+    align: 'center'
+  },
+  {
+    name: 'material_quantity',
+    label: '原物料數量',
+    field: 'material_quantity',
+    align: 'center'
+  }
 ]
 
 onMounted(async () => {
@@ -58,7 +105,7 @@ onMounted(async () => {
 
 const readListFetch = async (payload) => {
   return await getList(payload).then((res) => {
-    rows.value = res.map((item) => initializeDates(item))
+    rows.value = res.map((item) => item)
   })
 }
 
