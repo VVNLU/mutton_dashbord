@@ -60,7 +60,7 @@
                   <q-card-section v-for="(content, index) in props.item.contents" :key="index">
                     <q-card flat bordered>
                       <div class="row">
-                        <q-field v-for="(column, colIndex) in multipleColumns.slice(2)" :key="colIndex"
+                        <q-field v-for="(column, colIndex) in multipleColumns.slice(3)" :key="colIndex"
                           :label="column.label" stack-label class="col-6 q-pa-sm">
                           <template v-slot:control>
                             <div class="self-center full-width no-outline" tabindex="0">
