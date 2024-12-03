@@ -111,7 +111,7 @@ const updateFetch = async (id, payload) => {
 
 const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
-  console.log('res', res)
+
   rows.value = res
   rows.value.contents = Array.isArray(rows.value.contents)
     ? rows.value.contents
@@ -119,8 +119,6 @@ const refreshReadData = async (id) => {
 }
 
 const onSubmit = async () => {
-  rows.value.depiction = rows.value.depiction?.trim() || '無'
-
   form.value.validate().then(async (success) => {
     if (success) {
       const payload =

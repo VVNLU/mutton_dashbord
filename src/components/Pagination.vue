@@ -31,19 +31,12 @@ const computePaginatedRows = () => {
   const end = start + props.limit
   paginatedRows.value = props.rows.slice(start, end)
 
-  console.log('當前頁碼:', observeCurrent.value)
-  console.log('每頁顯示資料筆數:', props.limit)
-  console.log('起始索引:', start, '結束索引:', end)
-  console.log('分頁後的資料:', paginatedRows.value)
-
   emit('update:paginatedRows', paginatedRows.value) // 傳遞分頁後的資料
 }
 
 // 監聽當前頁碼或資料變化時重新計算
 watch([() => props.rows, () => observeCurrent.value], computePaginatedRows, { immediate: true })
 watch([() => props.rows, () => observeCurrent.value], () => {
-  console.log('rows 發生變化:', props.rows)
-  console.log('observeCurrent 發生變化:', observeCurrent.value)
   computePaginatedRows()
 }, { immediate: true })
 
