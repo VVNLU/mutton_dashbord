@@ -46,16 +46,16 @@ const rows = ref([])
 const switchStyle = ref('gridType')
 
 const columns = ref([
-  { name: 'id', label: '訂單單號', field: 'id', align: 'center' },
+  { name: 'orderNumber', label: '訂單單號', field: 'orderNumber', align: 'center' },
   { name: 'state', label: '訂單狀態', field: 'state', align: 'center' },
   { name: 'clientName', label: '訂購人', field: 'clientName', align: 'center' },
   { name: 'clientTel', label: '電話', field: 'clientTel', align: 'center' },
   { name: 'isPaid', label: '收款狀態', field: 'isPaid', align: 'center' },
   { name: 'payment', label: '交易方式', field: 'payment', align: 'center' },
   { name: 'accountLastFive', label: '後五碼', field: 'accountLastFive', align: 'center' },
-  { name: 'isShipped', label: '出貨狀態', field: 'isShipped', align: 'center' },
-  { name: 'ship', label: '出貨方式', field: 'ship', align: 'center' },
-  { name: 'orderNumber', label: '貨運單號', field: 'orderNumber', align: 'center' },
+  { name: 'isDelivered', label: '出貨狀態', field: 'isDelivered', align: 'center' },
+  { name: 'delivery', label: '出貨方式', field: 'delivery', align: 'center' },
+  { name: 'deliveryNumber', label: '貨運單號', field: 'deliveryNumber', align: 'center' },
   // { name: '', label: '人員', field: '', align: 'center' },
   { name: 'clientRemark', label: '備註', field: 'clientRemark', align: 'center' },
 ])
@@ -71,7 +71,7 @@ const rowsWithStyleColor = computed(() => {
     const styleColor = {
       state: getStyleColor(row.state, 'state'),
       isPaid: getStyleColor(row.isPaid, 'isPaid'),
-      isShipped: getStyleColor(row.isShipped, 'isShipped'),
+      isDelivered: getStyleColor(row.isDelivered, 'isDelivered'),
     }
     return { ...row, styleColor }
   })
@@ -93,7 +93,7 @@ const getStyleColor = (value, field) => {
         : value === '未收款'
           ? 'processing'
           : ''
-    case 'isShipped':
+    case 'isDelivered':
       return value === '已出貨'
         ? 'completed'
         : value === '未出貨'

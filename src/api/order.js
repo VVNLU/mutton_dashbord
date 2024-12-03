@@ -14,11 +14,26 @@ import {
 // 時間戳
 export const addDataWithTimestamp = async (data) => {
   try {
+    const timestamp = Timestamp.now()
+    const date = timestamp.toDate() // 轉為 JavaScript Date 對象
+
+    const orderNumber = `${date.getFullYear()}${(date.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}${date
+        .getHours()
+        .toString()
+        .padStart(2, '0')}${date
+          .getMinutes()
+          .toString()
+          .padStart(2, '0')}${date.getSeconds().toString().padStart(2, '0')}`
+
     const docRef = await addDoc(collection(db, 'order'), {
       ...data,
-      createdAt: Timestamp.now(),
-      updateAt: Timestamp.now()
+      orderNumber: orderNumber,
+      createdAt: timestamp,
+      updateAt: timestamp,
     })
+
     return docRef
   } catch (error) {
     console.error('Error written document: ', error)

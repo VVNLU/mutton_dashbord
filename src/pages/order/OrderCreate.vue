@@ -10,15 +10,15 @@
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-md-6 col-sm-12 col-xs-12">
                   <text-input v-model="rows.client.name" label="姓名" placeholder="請輸入姓名"
-                    :required="isShippingRequired" />
+                    :required="isDeliveryRequired" />
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12">
                   <text-input v-model="rows.client.tel" label="電話" placeholder="請輸入電話" :maxLength="10"
-                    :required="isShippingRequired" />
+                    :required="isDeliveryRequired" />
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12">
                   <text-input v-model="rows.client.address" label="地址" placeholder="請輸入地址"
-                    :required="isShippingRequired" />
+                    :required="isDeliveryRequired" />
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12">
                   <text-input v-model="rows.client.remark" label="備註" placeholder="請輸入備註" />
@@ -44,11 +44,11 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-md-6 col-12">
-                  <option-group v-model="rows.ship" label="出貨方式" :options="selectedShippingMethod" type="radio"
+                  <option-group v-model="rows.delivery" label="出貨方式" :options="selectedDeliveryMethod" type="radio"
                     class="full-width" />
                 </div>
-                <div v-if="rows.ship === '宅配'" class="q-mt-md col-md-6 col-sm-12 col-xs-12">
-                  <text-input v-model="rows.orderNumber" label="貨運單號" placeholder="請輸入貨運單號" :required="true" />
+                <div v-if="rows.delivery === '宅配'" class="q-mt-md col-md-6 col-sm-12 col-xs-12">
+                  <text-input v-model="rows.deliveryNumber" label="貨運單號" placeholder="請輸入貨運單號" :required="true" />
                 </div>
               </div>
             </card-body>
@@ -85,14 +85,14 @@
                     { label: '網格式', value: 'gridType' }
                   ]" />
                   <div v-if="switchStyle === 'gridType'">
-                    <grid-table :columns="columns" :rows="rows.contents">
+                    <grid-table :columns="columns" :rows="rows.items">
                       <template #action="{ row }">
                         <delete-icon-button @click="onDelete(row)" />
                       </template>
                     </grid-table>
                   </div>
                   <div v-else>
-                    <popup-data-table :columns="columns" :rows="rows.contents">
+                    <popup-data-table :columns="columns" :rows="rows.items">
                       <template #props="{ row }">
                         <delete-icon-button @click="onDelete(row)" />
                       </template>
@@ -109,8 +109,8 @@
   <div class="row items-center">
     <fixed-footer @save="onSubmit">
       <template #button>
-        <confirm-button v-if="rows.payment === '現金' && rows.ship === '面交'" @click="onCheckout" label="結帳" color="red"
-          class="q-px-lg q-mr-md" />
+        <confirm-button v-if="rows.payment === '現金' && rows.delivery === '面交'" @click="onCheckout" label="結帳"
+          color="red" class="q-px-lg q-mr-md" />
       </template>
     </fixed-footer>
   </div>
@@ -135,10 +135,10 @@ const rows = ref({
     address: '',
     remark: ''
   },
-  contents: []
+  items: []
 })
 
-watch(rows.value.contents, (newVal) => {
+watch(rows.value.items, (newVal) => {
   newVal.forEach((item) => {
     item.subtotal = item.quantity * item.price
   })
@@ -180,7 +180,7 @@ const selectedPaymentMethod = ref([
   { label: '轉帳', value: '轉帳' }
 ])
 
-const selectedShippingMethod = ref([
+const selectedDeliveryMethod = ref([
   { label: '面交', value: '面交' },
   { label: '外送', value: '外送' },
   { label: '宅配', value: '宅配' }
@@ -191,13 +191,13 @@ onMounted(async () => {
 })
 
 const addNewData = async (item) => {
-  const isDuplicate = rows.value.contents.some((row) => row.title === item.title)
+  const isDuplicate = rows.value.items.some((row) => row.title === item.title)
 
   if (isDuplicate) {
     notifyAPIError({ message: '已有 ' + `${item.title}` + ' 商品了' })
     return
   }
-  rows.value.contents.push({
+  rows.value.items.push({
     id: item.id,
     title: item.title,
     price: item.price,
@@ -221,7 +221,7 @@ const readProductFetch = async () => {
 const onSubmit = async () => {
   rows.value.state = '處理中'
   rows.value.isPaid = '未收款'
-  rows.value.isShipped = '未出貨'
+  rows.value.isDelivered = '未出貨'
 
   form.value.validate().then(async (success) => {
     if (success) {
@@ -229,7 +229,7 @@ const onSubmit = async () => {
       {
         ...rows.value,
         client: rows.value.client,
-        contents: rows.value.contents,
+        items: rows.value.items,
       }
       const [res] = await callCreateFetch({ ...payload })
       if (res) goBack()
@@ -240,7 +240,7 @@ const onSubmit = async () => {
 const onCheckout = async () => {
   rows.value.state = '已完成'
   rows.value.isPaid = '已收款'
-  rows.value.isShipped = '已出貨'
+  rows.value.isDelivered = '已出貨'
 
   form.value.validate().then(async (success) => {
     if (success) {
@@ -248,7 +248,7 @@ const onCheckout = async () => {
       {
         ...rows.value,
         client: rows.value.client,
-        contents: rows.value.contents,
+        items: rows.value.items,
       }
       const [res] = await callCreateFetch({ ...payload })
       if (res) goBack()
@@ -265,22 +265,22 @@ const onDelete = async (row) => {
   })
   if (!res) return
 
-  const index = rows.value.contents.indexOf(row)
+  const index = rows.value.items.indexOf(row)
   if (index !== -1) {
-    rows.value.contents.splice(index, 1)
+    rows.value.items.splice(index, 1)
   }
   await callDeleteFetch()
 }
 
 const totalAmount = computed(() => {
-  return rows.value.contents.reduce((sum, item) => {
+  return rows.value.items.reduce((sum, item) => {
     return sum + item.quantity * item.price
   }, 0)
 })
 
 // 選外送和宅配時姓名、電話和地址必填
-const isShippingRequired = computed(() => {
-  return rows.value.ship === '外送' || rows.value.ship === '宅配'
+const isDeliveryRequired = computed(() => {
+  return rows.value.delivery === '外送' || rows.value.delivery === '宅配'
 })
 
 const { goBack } = useGoBack()
