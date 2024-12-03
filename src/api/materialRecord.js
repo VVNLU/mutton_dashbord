@@ -63,7 +63,11 @@ export const getList = async () => {
 // 更新數據
 export const updateData = async (docId, newData) => {
   try {
-    const newDocRef = await updateDoc(doc(db, 'material_record', docId), newData)
+    const newDocRef = await updateDoc(doc(db, 'material_record', docId),
+      {
+        ...newData,
+        updateAt: Timestamp.now() // 更新時間為當前時間
+      })
     return newDocRef
   } catch (error) {
     console.error('Error updating document:', error)
