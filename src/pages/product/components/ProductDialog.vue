@@ -69,15 +69,15 @@ export default defineComponent({
 
     const columns = [
       {
-        name: 'material_title',
+        name: 'materialTitle',
         label: '項目',
-        field: 'material_title',
+        field: 'materialTitle',
         align: 'center'
       },
       {
-        name: 'material_quantity',
+        name: 'materialQuantity',
         label: '數量',
-        field: 'material_quantity',
+        field: 'materialQuantity',
         align: 'center',
         isPopupEdit: true
       },
@@ -99,7 +99,7 @@ export default defineComponent({
     )
 
     const addNewData = async (item) => {
-      const isDuplicate = rows.value.some((row) => row.material_id === item.id)
+      const isDuplicate = rows.value.some((row) => row.id === item.id)
 
       if (isDuplicate) {
         notifyAPIError({ message: '已有 ' + `${item.title}` + ' 原物料了' })
@@ -107,35 +107,35 @@ export default defineComponent({
       }
 
       rows.value = [...rows.value, {
-        material_id: item.id,
-        material_title: item.title,
-        material_quantity: 0,
+        id: item.id,
+        materialTitle: item.title,
+        materialQuantity: 0,
       }]
     }
 
     const readListMaterialCategoryFetch = async () => {
-      const res = await getList()
-      materialCategoryData.value = res.map((item) => ({
-        id: item.id,
-        title: item.title
+      const result = await getList()
+      materialCategoryData.value = result.map((res) => ({
+        id: res.id,
+        title: res.title
       }))
     }
 
     const onSave = async () => {
-      const [res] = await save()
-      if (res) {
+      const [result] = await save()
+      if (result) {
         emit('save', rows.value)
       }
     }
 
     const onDelete = async (row) => {
-      const res = await messageDelete({
+      const result = await messageDelete({
         title: '刪除',
         message: '確認刪除原物料？',
         confirmButtonText: '確認',
         cancelButtonText: '取消'
       })
-      if (!res) return
+      if (!result) return
 
       const index = rows.value.indexOf(row)
       if (index !== -1) {

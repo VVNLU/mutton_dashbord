@@ -171,10 +171,10 @@ onMounted(async () => {
 })
 
 const readListFetch = async (payload) => {
-  return await getList(payload).then((res) => {
-    rows.value = res.map((item) => {
-      const materialQuantities = item.contents.map((item) => item.quantity)
-      const materialTotals = item.contents.map((item) => item.total)
+  return await getList(payload).then((result) => {
+    rows.value = result.map((res) => {
+      const materialQuantities = res.items.map((res) => res.quantity)
+      const materialTotals = res.items.map((res) => res.total)
 
       // 計算 materialPrice，並設為 materialTotal / materialQuantity
       const materialPrices = materialTotals.map((total, index) => {
@@ -183,11 +183,12 @@ const readListFetch = async (payload) => {
       })
 
       return {
-        ...item,
-        materialTitle: item.contents.map((item) => item.title).join('<br>'),
+        ...res,
+        contents: res.items,
+        materialTitle: res.items.map((res) => res.title).join('<br>'),
         materialQuantity: materialQuantities.join('<br>'),
         materialTotal: materialTotals.join('<br>'),
-        materialUnit: item.contents.map((item) => item.unit).join('<br>'),
+        materialUnit: res.items.map((res) => res.unit).join('<br>'),
         materialPrice: materialPrices.join('<br>')
       }
     })
@@ -203,13 +204,13 @@ const delFetch = async (id) => {
 }
 
 const onDelete = async (row) => {
-  const res = await messageDelete({
+  const result = await messageDelete({
     title: '刪除',
     message: '確認刪除原物料紀錄？',
     confirmButtonText: '確認',
     cancelButtonText: '取消'
   })
-  if (!res) return
+  if (!result) return
   const [delRes] = await callDeleteFetch(row.id)
   if (delRes) {
     callReadListFetch()

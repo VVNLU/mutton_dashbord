@@ -60,7 +60,7 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <base-button v-for="item in productData" :label="item.title" :outline="true" :rounded="true"
+                  <base-button v-for="item in productData" :label="item.productTitle" :outline="true" :rounded="true"
                     @click="addNewData(item)" class="product-btn" />
                 </div>
               </div>
@@ -140,36 +140,36 @@ const rows = ref({
 
 watch(rows.value.items, (newVal) => {
   newVal.forEach((item) => {
-    item.subtotal = item.quantity * item.price
+    item.subtotal = item.productQuantity * item.productPrice
   })
 },
   { deep: true })
 
 const columns = [
   {
-    name: 'title',
+    name: 'productTitle',
     label: '項目',
-    field: 'title',
+    field: 'productTitle',
     align: 'center'
   },
   {
-    name: 'quantity',
+    name: 'productQuantity',
     label: '數量',
-    field: 'quantity',
+    field: 'productQuantity',
     align: 'center',
     isPopupEdit: true
   },
   {
-    name: 'price',
+    name: 'productPrice',
     label: '售價',
-    field: 'price',
+    field: 'productPrice',
     align: 'center',
     isPopupEdit: true
   },
   {
     name: 'subtotal',
     label: '小計',
-    field: (row) => row.quantity * row.price,
+    field: (row) => row.productQuantity * row.productPrice,
     align: 'center',
     isPopupEdit: true
   },
@@ -191,17 +191,17 @@ onMounted(async () => {
 })
 
 const addNewData = async (item) => {
-  const isDuplicate = rows.value.items.some((row) => row.title === item.title)
+  const isDuplicate = rows.value.items.some((row) => row.productTitle === item.title)
 
   if (isDuplicate) {
-    notifyAPIError({ message: '已有 ' + `${item.title}` + ' 商品了' })
+    notifyAPIError({ message: '已有 ' + `${item.productTitle}` + ' 商品了' })
     return
   }
   rows.value.items.push({
     id: item.id,
-    title: item.title,
-    price: item.price,
-    quantity: 1
+    productTitle: item.productTitle,
+    productPrice: item.productPrice,
+    productQuantity: 1
   })
 }
 
@@ -213,8 +213,8 @@ const readProductFetch = async () => {
   const res = await getList()
   productData.value = res.map((item) => ({
     id: item.id,
-    title: item.title,
-    price: item.price
+    productTitle: item.title,
+    productPrice: item.price
   }))
 }
 
@@ -274,7 +274,7 @@ const onDelete = async (row) => {
 
 const totalAmount = computed(() => {
   return rows.value.items.reduce((sum, item) => {
-    return sum + item.quantity * item.price
+    return sum + item.productQuantity * item.productPrice
   }, 0)
 })
 

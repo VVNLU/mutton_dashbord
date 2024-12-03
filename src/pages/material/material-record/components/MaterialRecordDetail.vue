@@ -44,14 +44,14 @@
                     { label: '網格式', value: 'gridType' }
                   ]" />
                   <div v-if="switchStyle === 'gridType'">
-                    <grid-table :columns="columns" :rows="rows.contents">
+                    <grid-table :columns="columns" :rows="rows.items">
                       <template #action="{ row }">
                         <delete-icon-button @click="onDelete(row)" />
                       </template>
                     </grid-table>
                   </div>
                   <div v-else>
-                    <popup-data-table :columns="columns" :rows="rows.contents">
+                    <popup-data-table :columns="columns" :rows="rows.items">
                       <template #props="{ row }">
                         <delete-icon-button @click="onDelete(row)" />
                       </template>
@@ -86,7 +86,7 @@ const { mode } = toRefs(props)
 const { notifyAPIError } = useNotify()
 const route = useRoute()
 const rows = ref({
-  contents: []
+  items: []
 })
 const materialCategoryData = ref([])
 const switchStyle = ref('gridType')
@@ -130,14 +130,14 @@ onMounted(async () => {
 })
 
 const addNewData = async (item) => {
-  const isDuplicate = rows.value.contents.some((row) => row.id === item.id)
+  const isDuplicate = rows.value.items.some((row) => row.id === item.id)
 
   if (isDuplicate) {
     notifyAPIError({ message: '已有 ' + `${item.title}` + ' 原物料了' })
     return
   }
 
-  rows.value.contents.push({
+  rows.value.items.push({
     id: item.id,
     title: item.title,
     quantity: 0,
@@ -171,8 +171,8 @@ const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
   if (res) {
     rows.value = res
-    if (!rows.value.contents) {
-      rows.value.contents = []
+    if (!rows.value.items) {
+      rows.value.items = []
     }
   }
 }
@@ -182,7 +182,7 @@ const onSubmit = async () => {
     if (success) {
       const payload = {
         ...rows.value,
-        contents: rows.value.contents
+        items: rows.value.items
       }
       const urlObj = {
         create: () => {

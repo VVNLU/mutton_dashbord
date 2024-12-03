@@ -85,15 +85,15 @@ const multipleColumns = [
     align: 'center'
   },
   {
-    name: 'material_title',
+    name: 'materialTitle',
     label: '原物料名稱',
-    field: 'material_title',
+    field: 'materialTitle',
     align: 'center'
   },
   {
-    name: 'material_quantity',
+    name: 'materialQuantity',
     label: '原物料數量',
-    field: 'material_quantity',
+    field: 'materialQuantity',
     align: 'center'
   }
 ]
@@ -104,8 +104,11 @@ onMounted(async () => {
 })
 
 const readListFetch = async (payload) => {
-  return await getList(payload).then((res) => {
-    rows.value = res.map((item) => item)
+  return await getList(payload).then((result) => {
+    rows.value = result.map((res) => ({
+      ...res,
+      contents: res.items
+    }))
   })
 }
 
@@ -118,13 +121,13 @@ const delFetch = async (id) => {
 }
 
 const onDelete = async (row) => {
-  const res = await messageDelete({
+  const result = await messageDelete({
     title: '刪除',
     message: '確認刪除商品？',
     confirmButtonText: '確認',
     cancelButtonText: '取消'
   })
-  if (!res) return
+  if (!result) return
   const [delRes] = await callDeleteFetch(row.id)
   if (delRes) {
     await callReadListFetch()
