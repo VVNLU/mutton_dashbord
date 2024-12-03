@@ -25,7 +25,7 @@
     <div class="col-12">
       <q-virtual-scroll :items="paginatedRows" :item-size="72">
         <template #default="props">
-          <q-card flat bordered class="q-mb-sm">
+          <q-card flat bordered class="q-mb-sm bg-grey-1">
             <!-- 前兩筆欄位 -->
             <div v-if="activeColumns.length > 0" class="row">
               <q-card-section v-for="column in activeColumns.slice(0, 2)" :key="column.name" class="col-6">
