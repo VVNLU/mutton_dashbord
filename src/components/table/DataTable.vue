@@ -35,10 +35,16 @@
             <slot name="props" :row="props.row" />
           </q-td>
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
-            <!-- 多行 -->
+            <!-- 多行資料 -->
             <div v-if="col.isMultiline" v-html="props.row[col.name]"></div>
+            <!-- 單一資料 -->
             <div v-else>
-              {{ props.row[col.name] }}
+              <div v-if="props.row.styleColor" :class="props.row.styleColor[col.name]">
+                {{ props.row[col.name] }}
+              </div>
+              <div v-else class="bg-positive">
+                {{ props.row[col.name] }}
+              </div>
             </div>
           </q-td>
         </q-tr>
@@ -73,8 +79,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 const filter = ref('')
-const hasInsertSlot = ref(false);
-
+console.log('123', props.rows)
 const initialPagination = {
   sortBy: 'desc',
   descending: false
