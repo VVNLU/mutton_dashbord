@@ -19,8 +19,8 @@
                   </q-chip>
                 </div>
                 <div>
-                  <q-chip :class="getStateColor(clientData.isShipped)" :icon="getStateIcon(clientData.isShipped)">
-                    出貨狀態：{{ clientData.isShipped }}
+                  <q-chip :class="getStateColor(clientData.isDelivered)" :icon="getStateIcon(clientData.isDelivered)">
+                    出貨狀態：{{ clientData.isDelivered }}
                   </q-chip>
                 </div>
               </div>
@@ -33,8 +33,8 @@
               </div>
               <div class="q-pa-xs">
                 <!-- 出貨 -->
-                <q-btn :disable="clientData.isShipped === '已出貨'" icon="fa-regular fa-square-check" label="出貨"
-                  @click="updateShipStatus()" rounded color="cyan" stack />
+                <q-btn :disable="clientData.isDelivered === '已出貨'" icon="fa-regular fa-square-check" label="出貨"
+                  @click="updateDeliveryStatus()" rounded color="cyan" stack />
               </div>
               <div class="q-pa-xs">
                 <!-- 取消目前和刪除相同，之後會再添加退貨或退款 -->
@@ -46,7 +46,7 @@
           </q-card-section>
         </q-card>
         <div class="col-12">
-          <q-table :rows="clientData.contents" :columns="columns" row-key=" name" hide-bottom>
+          <q-table :rows="clientData.items" :columns="columns" row-key=" name" hide-bottom>
             <template v-slot:top-left>
               <q-tr>
                 <q-item-label class="text-info">
@@ -62,12 +62,12 @@
                     </span>
                   </template>
                 </q-item-label>
-                <q-item-label class="text-secondary text-shadow" v-if="clientData.ship">
+                <q-item-label class="text-secondary text-shadow" v-if="clientData.delivery">
                   <q-icon name="local_shipping" class="q-pr-xs" size="1.5em" />
-                  {{ clientData.ship }}出貨
-                  <template v-if="clientData.ship === '宅配'">: 貨運單號
+                  {{ clientData.delivery }}出貨
+                  <template v-if="clientData.delivery === '宅配'">: 貨運單號
                     <span class="text-bold">
-                      {{ clientData.orderNumber }}
+                      {{ clientData.deliveryNumber }}
                     </span>
                   </template>
                 </q-item-label>
@@ -224,7 +224,7 @@ export default defineComponent({
       }
     }
 
-    const updateShipStatus = async () => {
+    const updateDeliveryStatus = async () => {
       const res = await messageDelete({
         title: '出貨',
         message: '確認已出貨？',
@@ -234,7 +234,7 @@ export default defineComponent({
       if (res) {
         const payload = {
           ...clientData.value,
-          isShipped: "已出貨"
+          isDelivered: "已出貨"
         }
         const id = currentId.value
         const response = await callUpdateFetch(id, { ...payload })
@@ -276,14 +276,14 @@ export default defineComponent({
     watch(
       () => ({
         isPaid: clientData.value.isPaid,
-        isShipped: clientData.value.isShipped
+        isDelivered: clientData.value.isDelivered
       }),
       async (newValues) => {
-        const { isPaid, isShipped } = newValues;
+        const { isPaid, isDelivered } = newValues;
 
-        if (isPaid === '已收款' && isShipped === '已出貨') {
+        if (isPaid === '已收款' && isDelivered === '已出貨') {
           clientData.value.state = '已完成';
-        } else if (isPaid === '未收款' || isShipped === '未出貨') {
+        } else if (isPaid === '未收款' || isDelivered === '未出貨') {
           clientData.value.state = '處理中';
         }
 
@@ -302,7 +302,7 @@ export default defineComponent({
     )
 
     const totalAmount = computed(() => {
-      return clientData.value.contents.reduce((sum, item) => {
+      return clientData.value.items.reduce((sum, item) => {
         return sum + item.quantity * item.price
       }, 0)
     })
@@ -340,7 +340,7 @@ export default defineComponent({
       getStateColor,
       getStateIcon,
       updatePaidStatus,
-      updateShipStatus,
+      updateDeliveryStatus,
 
       onHide,
       onDelete
