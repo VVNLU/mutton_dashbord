@@ -14,7 +14,7 @@ import {
 // 時間戳
 export const addDataWithTimestamp = async (data) => {
   try {
-    const docRef = await addDoc(collection(db, 'material-category'), {
+    const docRef = await addDoc(collection(db, 'material_category'), {
       ...data,
       createdAt: Timestamp.now(),
       updateAt: Timestamp.now()
@@ -40,7 +40,7 @@ export const addData = async (data) => {
 // 讀取單筆數據
 export const getData = async (id) => {
   try {
-    const docRef = await getDoc(doc(db, 'material-category', id))
+    const docRef = await getDoc(doc(db, 'material_category', id))
     return docRef.data()
   } catch (error) {
     console.error('Error getting documents: ', error)
@@ -51,7 +51,7 @@ export const getData = async (id) => {
 // 讀取列表數據
 export const getList = async () => {
   try {
-    const docRef = await getDocs(collection(db, 'material-category'))
+    const docRef = await getDocs(collection(db, 'material_category'))
     const data = docRef.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
     return data
   } catch (error) {
@@ -64,7 +64,7 @@ export const getList = async () => {
 export const updateData = async (docId, newData) => {
   try {
     const newDocRef = await updateDoc(
-      doc(db, 'material-category', docId),
+      doc(db, 'material_category', docId),
       {
         ...newData,
         updateAt: Timestamp.now() // 更新時間為當前時間
@@ -79,7 +79,7 @@ export const updateData = async (docId, newData) => {
 // 刪除數據
 export const deleteData = async (docId) => {
   try {
-    const docRef = await deleteDoc(doc(db, 'material-category', docId))
+    const docRef = await deleteDoc(doc(db, 'material_category', docId))
     return docRef
   } catch (error) {
     console.error('Error deleting document: ', error)
