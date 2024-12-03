@@ -33,10 +33,10 @@
                   <template v-slot:control>
                     <div v-if="props.item.styleColor" class="self-center full-width no-outline" tabindex="0"
                       :class="props.item.styleColor[column.name]">
-                      {{ props.item[column.name] }}
+                      {{ props.item[column.name] || '-' }}
                     </div>
                     <div v-else class="self-center full-width no-outline" tabindex="0">
-                      {{ props.item[column.name] }}
+                      {{ props.item[column.name] || '-' }}
                     </div>
                   </template>
                 </q-field>
@@ -57,7 +57,7 @@
                     <q-field :label="column.label" stack-label>
                       <template v-slot:control>
                         <div class="self-center full-width no-outline" tabindex="0">
-                          {{ props.item[column.name] }}
+                          {{ props.item[column.name] || '-' }}
                         </div>
                       </template>
                     </q-field>
