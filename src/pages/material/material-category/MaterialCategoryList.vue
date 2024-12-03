@@ -39,7 +39,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { getList, deleteData } from '@/api/materialCategory'
-import { initializeDates } from '@/utils/dateHandler'
 import MaterialDialog from './components/MaterialCategoryDialog.vue'
 import useMessageDialog from '@/hooks/useMessageDialog'
 import useCRUD from '@/hooks/useCRUD'

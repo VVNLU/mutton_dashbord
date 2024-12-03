@@ -178,8 +178,6 @@ const refreshReadData = async (id) => {
 }
 
 const onSubmit = async () => {
-  rows.value.remark = rows.value.remark?.trim() || '無'
-
   form.value.validate().then(async (success) => {
     if (success) {
       const payload = {
