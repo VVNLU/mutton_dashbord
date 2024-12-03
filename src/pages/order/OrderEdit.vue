@@ -159,12 +159,12 @@ export default defineComponent({
       {
         label: '數量',
         align: 'left',
-        field: 'quantity'
+        field: 'productQuantity'
       },
       {
         label: '小計',
         align: 'left',
-        field: (row) => row.quantity * row.price
+        field: (row) => row.productQuantity * row.productPrice
       }
     ]
 
@@ -303,7 +303,7 @@ export default defineComponent({
 
     const totalAmount = computed(() => {
       return clientData.value.items.reduce((sum, item) => {
-        return sum + item.quantity * item.price
+        return sum + item.productQuantity * item.productPrice
       }, 0)
     })
 

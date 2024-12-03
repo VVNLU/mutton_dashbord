@@ -37,8 +37,8 @@
                     { label: '條列式', value: 'columnType' },
                     { label: '網格式', value: 'gridType' }
                   ]" />
-                  <data-table v-if="switchStyle === 'gridType'" grid :columns="columns" :rows="rows.contents" />
-                  <data-table v-else :columns="columns" :rows="rows.contents" />
+                  <data-table v-if="switchStyle === 'gridType'" grid :columns="columns" :rows="rows.items" />
+                  <data-table v-else :columns="columns" :rows="rows.items" />
                 </div>
               </div>
             </card-body>
@@ -47,7 +47,7 @@
       </div>
     </base-form>
 
-    <product-dialog ref="dialog" v-model:detailData="rows.contents" @save="handleSave" />
+    <product-dialog ref="dialog" v-model:detailData="rows.items" @save="handleSave" />
   </q-page>
   <fixed-footer @save="onSubmit" />
 </template>
@@ -73,15 +73,15 @@ const switchStyle = ref('gridType')
 
 const columns = [
   {
-    name: 'material_title',
+    name: 'materialTitle',
     label: '項目',
-    field: 'material_title',
+    field: 'materialTitle',
     align: 'left'
   },
   {
-    name: 'material_quantity',
+    name: 'materialQuantity',
     label: '數量',
-    field: 'material_quantity',
+    field: 'materialQuantity',
     align: 'left',
     isPopupEdit: true
   },
@@ -94,7 +94,7 @@ onMounted(async () => {
 })
 
 const handleSave = (addData) => {
-  rows.value.contents = addData
+  rows.value.items = addData
 }
 
 const readFetch = async (id) => {
@@ -113,9 +113,9 @@ const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
 
   rows.value = res
-  rows.value.contents = Array.isArray(rows.value.contents)
-    ? rows.value.contents
-    : [rows.value.contents]
+  rows.value.items = Array.isArray(rows.value.items)
+    ? rows.value.items
+    : [rows.value.items]
 }
 
 const onSubmit = async () => {
@@ -124,7 +124,7 @@ const onSubmit = async () => {
       const payload =
       {
         ...rows.value,
-        contents: rows.value.contents
+        items: rows.value.items
       }
       const urlObj = {
         create: () => {
@@ -142,7 +142,7 @@ const onSubmit = async () => {
 }
 
 const showDialog = () => {
-  dialog.value.showDialog({ rows: rows.value.contents })
+  dialog.value.showDialog({ rows: rows.value.items })
 }
 
 const { goBack } = useGoBack()
@@ -153,7 +153,7 @@ const { form, callReadFetch, callCreateFetch, callUpdateFetch } = useCRUD({
 })
 
 watch(
-  () => rows.value.contents,
+  () => rows.value.items,
   (newContents) => {
     if (dialog.value) {
       dialog.value.$emit('update:detailData', newContents)
