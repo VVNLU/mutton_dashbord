@@ -14,7 +14,7 @@
         { label: '網格式', value: 'gridType' }
       ]" />
         <div v-if="switchStyle === 'gridType'">
-          <grid-table :columns="columns" :rows="rows">
+          <grid-table :multipleColumns="multipleColumns" :rows="rows" :sliceNumber="2">
             <template #action="{ row }">
               <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
               <delete-icon-button @click="onDelete(row)" />
@@ -49,8 +49,44 @@ const dialog = ref()
 const switchStyle = ref('gridType')
 
 const columns = [
-  { name: 'title', label: '分類名稱', field: 'title', align: 'center' },
-  { name: 'unit', label: '單位', field: 'contact', align: 'center' }
+  {
+    name: 'title',
+    label: '分類名稱',
+    field: 'title',
+    align: 'center'
+  },
+  {
+    name: 'unit',
+    label: '單位',
+    field: 'unit',
+    align: 'center'
+  }
+]
+const multipleColumns = [
+  {
+    name: 'title',
+    label: '分類名稱',
+    field: 'title',
+    align: 'center'
+  },
+  {
+    name: 'unit',
+    label: '單位',
+    field: 'unit',
+    align: 'center'
+  },
+  {
+    name: 'unit',
+    label: '其他單位名稱',
+    field: 'unit',
+    align: 'center'
+  },
+  {
+    name: 'size',
+    label: '數量',
+    field: 'size',
+    align: 'center'
+  },
 ]
 
 onMounted(async () => {
@@ -61,7 +97,10 @@ const readListFetch = async (payload) => {
   loading.value = true
   try {
     const res = await getList(payload)
-    rows.value = res
+    rows.value = res.map((item) => ({
+      ...item,
+      contents: item.packages
+    }))
   } finally {
     loading.value = false
   }
