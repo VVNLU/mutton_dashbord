@@ -239,8 +239,8 @@ const onSubmit = async () => {
 
 const onCheckout = async () => {
   rows.value.state = '已完成'
-  rows.value.isPaid = '已完成'
-  rows.value.isShipped = '已完成'
+  rows.value.isPaid = '已收款'
+  rows.value.isShipped = '已出貨'
 
   form.value.validate().then(async (success) => {
     if (success) {

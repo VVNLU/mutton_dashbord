@@ -20,7 +20,7 @@
           </grid-table>
         </div>
         <div v-else>
-          <data-table :columns="columns" :rows="rows" :loading="loading">
+          <data-table :columns="columns" :rows="rowsWithStyleColor" :loading="loading">
             <template #props="{ row }">
               <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
             </template>
@@ -29,7 +29,7 @@
       </card-body>
     </q-card>
 
-    <order-edit ref="dialog" @delete="refreshFetch" />
+    <order-edit ref="dialog" @delete="refreshFetch" @update="refreshFetch" />
   </q-page>
 </template>
 

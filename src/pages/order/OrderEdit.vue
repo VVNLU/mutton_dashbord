@@ -143,7 +143,7 @@ import useMessageDialog from '@/hooks/useMessageDialog'
 import useCRUD from '@/hooks/useCRUD'
 
 export default defineComponent({
-  emits: ['delete'],
+  emits: ['delete', 'update'],
   setup(props, { emit }) {
     const $q = useQuasar()
     const clientData = ref([])
@@ -217,7 +217,10 @@ export default defineComponent({
         const id = currentId.value
         const response = await callUpdateFetch(id, { ...payload })
 
-        if (response) return await readFetch(id)
+        if (response) {
+          await readFetch(id)
+          emit('update')
+        }
       }
     }
 
@@ -236,7 +239,10 @@ export default defineComponent({
         const id = currentId.value
         const response = await callUpdateFetch(id, { ...payload })
 
-        if (response) return await readFetch(id)
+        if (response) {
+          await readFetch(id)
+          emit('update')
+        }
       }
     }
 
@@ -266,24 +272,34 @@ export default defineComponent({
       return iconMap[status] || iconMap.default
     }
 
-    // 付款及出貨改為「已完成」時，狀態自動改成「已完成」
+    // 收款及出貨改為「已完成」時，狀態自動改成「已完成」
     watch(
       () => ({
         isPaid: clientData.value.isPaid,
         isShipped: clientData.value.isShipped
       }),
-      (newValues) => {
-        const { isPaid, isShipped } = newValues
+      async (newValues) => {
+        const { isPaid, isShipped } = newValues;
 
         if (isPaid === '已收款' && isShipped === '已出貨') {
-          clientData.value.state = '已完成'
+          clientData.value.state = '已完成';
         } else if (isPaid === '未收款' || isShipped === '未出貨') {
-          clientData.value.state = '處理中'
+          clientData.value.state = '處理中';
+        }
+
+        const payload = {
+          ...clientData.value,
+        };
+        const id = currentId.value;
+
+        try {
+          await updateFetch(id, payload)
+        } catch (error) {
+          console.error('Failed to update state to backend:', error)
         }
       },
       { deep: true }
     )
-
 
     const totalAmount = computed(() => {
       return clientData.value.contents.reduce((sum, item) => {
