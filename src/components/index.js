@@ -40,6 +40,7 @@ import ImageUploader from './uploader/ImageUploader.vue'
 import DataTable from './table/DataTable.vue'
 import PopupDataTable from './table/PopupDataTable.vue'
 import GridTable from './table/GridTable.vue'
+import EditableGridTable from './table/EditableGridTable.vue'
 
 export default {
   install(app) {
@@ -85,5 +86,6 @@ export default {
     app.component('DataTable', DataTable)
     app.component('PopupDataTable', PopupDataTable)
     app.component('GridTable', GridTable)
+    app.component('EditableGridTable', EditableGridTable)
   }
 }
