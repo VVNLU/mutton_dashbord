@@ -44,11 +44,11 @@
                     { label: '網格式', value: 'gridType' }
                   ]" />
                   <div v-if="switchStyle === 'gridType'">
-                    <grid-table :columns="columns" :rows="rows.items">
+                    <editable-grid-table :columns="columns" :rows="rows.items">
                       <template #action="{ row }">
                         <delete-icon-button @click="onDelete(row)" />
                       </template>
-                    </grid-table>
+                    </editable-grid-table>
                   </div>
                   <div v-else>
                     <popup-data-table :columns="columns" :rows="rows.items">
@@ -104,13 +104,15 @@ const columns = [
     label: '數量',
     field: 'quantity',
     align: 'center',
-    isPopupEdit: true
+    isPopupEdit: true,
+    format: (val) => Math.abs(val)
   },
   {
     name: 'unit',
     label: '單位',
     field: 'unit',
-    align: 'center'
+    align: 'center',
+    isSelected: true
   },
   {
     name: 'total',
@@ -136,13 +138,13 @@ const addNewData = async (item) => {
     notifyAPIError({ message: '已有 ' + `${item.title}` + ' 原物料了' })
     return
   }
-
   rows.value.items.push({
     id: item.id,
     title: item.title,
     quantity: 0,
     unit: item.unit,
-    total: 0
+    total: 0,
+    packages: item.packages
   })
 }
 
@@ -163,7 +165,8 @@ const readListMaterialCategoryFetch = async () => {
   materialCategoryData.value = res.map((item) => ({
     id: item.id,
     title: item.title,
-    unit: item.unit
+    unit: item.unit,
+    packages: item.packages
   }))
 }
 
@@ -180,6 +183,12 @@ const refreshReadData = async (id) => {
 const onSubmit = async () => {
   form.value.validate().then(async (success) => {
     if (success) {
+      rows.value.items.forEach((item) => {
+        if (item.quantity > 0) {
+          item.quantity = -item.quantity
+        }
+      })
+
       const payload = {
         ...rows.value,
         items: rows.value.items
@@ -233,6 +242,6 @@ const {
 
 <style lang="scss" scoped>
 .classification-btn {
-  margin-right: 10px;
+  margin-right: 10px
 }
 </style>
