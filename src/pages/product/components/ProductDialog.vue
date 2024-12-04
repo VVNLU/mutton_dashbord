@@ -1,10 +1,13 @@
 <template>
-  <base-dialog v-model="isShowDialog" title="選取原物料" :confirmButtonText="'送出'" :cancelButtonText="'取消'" @save="onSave"
+  <base-dialog v-model="isShowDialog" title="商品原物料" :confirmButtonText="'送出'" :cancelButtonText="'取消'" @save="onSave"
     @hide="onHide" :isReading="isReading">
     <base-form ref="form">
       <div class="row q-col-gutter-x-md q-col-gutter-y-md">
         <div class="col-12">
           <q-card class="h-full shadow-7">
+            <card-header>
+              選取原物料
+            </card-header>
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
@@ -22,11 +25,11 @@
                 text-color="primary"
                 :options="[{ label: '條列式', value: 'columnType' }, { label: '網格式', value: 'gridType' }]" />
               <div v-if="switchStyle === 'gridType'">
-                <grid-table :columns="columns" :rows="rows">
+                <editable-grid-table :columns="columns" :rows="rows">
                   <template #action="{ row }">
                     <delete-icon-button @click="onDelete(row)" />
                   </template>
-                </grid-table>
+                </editable-grid-table>
               </div>
               <div v-else>
                 <popup-data-table :columns="columns" :rows="rows">

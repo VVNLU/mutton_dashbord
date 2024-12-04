@@ -85,13 +85,14 @@
                     { label: '網格式', value: 'gridType' }
                   ]" />
                   <div v-if="switchStyle === 'gridType'">
-                    <grid-table :columns="columns" :rows="rows.items">
+                    <editable-grid-table :columns="columns" :rows="rows.items">
                       <template #action="{ row }">
                         <delete-icon-button @click="onDelete(row)" />
                       </template>
-                    </grid-table>
+                    </editable-grid-table>
                   </div>
                   <div v-else>
+
                     <popup-data-table :columns="columns" :rows="rows.items">
                       <template #props="{ row }">
                         <delete-icon-button @click="onDelete(row)" />
@@ -163,15 +164,13 @@ const columns = [
     name: 'productPrice',
     label: '售價',
     field: 'productPrice',
-    align: 'center',
-    isPopupEdit: true
+    align: 'center'
   },
   {
     name: 'subtotal',
     label: '小計',
     field: (row) => row.productQuantity * row.productPrice,
-    align: 'center',
-    isPopupEdit: true
+    align: 'center'
   },
 ]
 
