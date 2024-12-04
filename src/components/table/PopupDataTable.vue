@@ -12,7 +12,12 @@
       <q-tr :props="props">
         <q-th class="th-first" auto-width />
         <q-th v-for="col in props.cols" :key="col.name" :props="props">
+          <q-tooltip v-if="col.isPopupEdit" anchor="top middle" class="bg-grey-13 text-black shadow-4"
+            :offset="[20, 20]">
+            點擊數字可編輯
+          </q-tooltip>
           {{ col.label }}
+          <q-icon v-if="col.isPopupEdit" name="error" size="xs" color="amber" />
         </q-th>
       </q-tr>
     </template>
