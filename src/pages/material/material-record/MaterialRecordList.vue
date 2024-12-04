@@ -47,7 +47,7 @@ const rows = ref([])
 const loading = ref(true)
 const switchStyle = ref('gridType')
 
-const columns = [
+const columns = ref([
   {
     name: 'date',
     label: '日期',
@@ -104,9 +104,9 @@ const columns = [
     align: 'center',
     isMultiline: true
   }
-]
+])
 
-const multipleColumns = [
+const multipleColumns = ref([
   {
     name: 'date',
     label: '日期',
@@ -163,7 +163,7 @@ const multipleColumns = [
     align: 'center',
     isMultiline: true
   },
-]
+])
 
 onMounted(async () => {
   await readListFetch()
@@ -173,22 +173,39 @@ onMounted(async () => {
 const readListFetch = async (payload) => {
   return await getList(payload).then((result) => {
     rows.value = result.map((res) => {
-      const materialQuantities = res.items.map((res) => res.quantity)
-      const materialTotals = res.items.map((res) => res.total)
+      // 計算 materialQuantities 和 materialTotals
+      const materialQuantities = res.items.map((item) => item.quantity)
+      const materialTotals = res.items.map((item) => item.total)
 
-      // 計算 materialPrice，並設為 materialTotal / materialQuantity
+      // 計算 materialPrice
       const materialPrices = materialTotals.map((total, index) => {
         const quantity = materialQuantities[index]
         return quantity > 0 ? (total / quantity).toFixed(2) : '0.00'
       })
 
+      // 計算 calculatedColumns
+      const selectedPackageSizes = res.items
+        .map((item) => item.selectedPackage?.value).map((pkg)=>pkg?.size)
+        .filter((size) => size !== undefined)
+
+      if (selectedPackageSizes.length > 0) {
+        res.items = res.items.map((item) => {
+          const size = item.selectedPackage?.value?.size || 1
+          const quantity = item.quantity || 1
+          return {
+            ...item,
+            quantity: Math.abs(size * quantity)
+          }
+        })
+      }
+
       return {
         ...res,
         contents: res.items,
-        materialTitle: res.items.map((res) => res.title).join('<br>'),
+        materialTitle: res.items.map((item) => item.title).join('<br>'),
         materialQuantity: materialQuantities.join('<br>'),
         materialTotal: materialTotals.join('<br>'),
-        materialUnit: res.items.map((res) => res.unit).join('<br>'),
+        materialUnit: res.items.map((item) => item.unit).join('<br>'),
         materialPrice: materialPrices.join('<br>')
       }
     })
