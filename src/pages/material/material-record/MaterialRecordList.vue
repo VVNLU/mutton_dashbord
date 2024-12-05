@@ -185,7 +185,7 @@ const readListFetch = async (payload) => {
 
       // 計算 calculatedColumns
       const selectedPackageSizes = res.items
-        .map((item) => item.selectedPackage?.value).map((pkg)=>pkg?.size)
+        .map((item) => item.selectedPackage?.value).map((pkg) => pkg?.size)
         .filter((size) => size !== undefined)
 
       if (selectedPackageSizes.length > 0) {
@@ -195,6 +195,13 @@ const readListFetch = async (payload) => {
           return {
             ...item,
             quantity: Math.abs(size * quantity)
+          }
+        })
+      } else {
+        res.items = res.items.map((item) => {
+          return {
+            ...item,
+            quantity: Math.abs(item.quantity)
           }
         })
       }
