@@ -174,7 +174,7 @@ const readListFetch = async (payload) => {
   return await getList(payload).then((result) => {
     rows.value = result.map((res) => {
       // 計算 materialQuantities 和 materialTotals
-      const materialQuantities = res.items.map((item) => item.quantity)
+      const materialQuantities = res.items.map((item) => Math.abs(item.quantity))
       const materialTotals = res.items.map((item) => item.total)
 
       // 計算 materialPrice
