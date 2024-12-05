@@ -1,5 +1,5 @@
 <template>
-  <q-table :rows="rows" :columns="columns" row-key="name" :filter="filter" binary-state-sort>
+  <q-table :rows="formattedRows" :columns="columns" row-key="name" :filter="filter" binary-state-sort>
     <!-- 沒有資料的提示 -->
     <template v-slot:no-data>
       <div class="full-width row flex-center text-indigo q-gutter-sm">
@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue'
+import { computed, defineProps, ref } from 'vue'
 
 const props = defineProps({
   rows: {
@@ -66,4 +66,11 @@ const props = defineProps({
 })
 
 const filter = ref('')
+
+const formattedRows = computed(() =>
+  props.rows.map(row => ({
+    ...row,
+    quantity: row.quantity !== undefined ? Math.abs(row.quantity) : row.quantity
+  }))
+)
 </script>
