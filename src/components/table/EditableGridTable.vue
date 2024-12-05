@@ -25,10 +25,12 @@
     <q-card v-for="(row, index) in formattedRows" :key="index" flat bordered class="q-mb-sm col-12">
       <div class="row">
         <div v-for="column in columns" :key="column.name" class="col-xs-5 col-sm-5 col-md-4 q-pa-sm">
-          <q-input v-if="column.isPopupEdit" v-model.number="row[column.name]" :label="column.label" type="number"
+          <q-input v-if="column.isPopupEdit" :model-value="row[column.name]"
+            @update:model-value="updateRowValue(index, column.name, $event)" :label="column.label" type="number"
             clearable autofocus />
-          <q-select v-else-if="column.isSelected" v-model="row.selectedPackage" :options="mergeUnitsAndPackages(row)"
-            :label="column.label" clearable />
+          <q-select v-else-if="column.isSelected" v-if="column.isSelected" v-model="row.selectedPackage"
+            :options="mergeUnitsAndPackages(row)" :label="column.label" clearable
+            @update:model-value="updateSelectedPackage(index, $event)" />
           <q-field v-else :label="column.label" stack-label>
             <template v-slot:control>
               <div class="self-center full-width no-outline">
@@ -46,7 +48,7 @@
   </div>
 </template>
 <script setup>
-import { defineProps, ref, computed } from 'vue'
+import { defineProps, ref, computed, onMounted } from 'vue'
 
 const props = defineProps({
   columns: { type: Array, default: () => [] },
@@ -54,6 +56,21 @@ const props = defineProps({
 })
 
 const searchQuery = ref('')
+const localSelectedPackage = ref([])
+
+onMounted(() => {
+  localSelectedPackage.value = props.rows.map(
+    (row) => row.selectedPackage || { label: null, value: { size: null, unit: null } }
+  )
+})
+
+const updateRowValue = (index, columnName, newValue) => {
+  props.rows[index][columnName] = newValue
+}
+
+const updateSelectedPackage = (index, newValue) => {
+  props.rows[index].selectedPackage = newValue
+}
 
 const filteredRows = computed(() => {
   const query = (searchQuery.value || "").trim().toLowerCase()
