@@ -26,7 +26,7 @@
       <div class="row">
         <div v-for="column in columns" :key="column.name" class="col-xs-5 col-sm-5 col-md-4 q-pa-sm">
           <q-input v-if="column.isPopupEdit" :model-value="row[column.name]"
-            @update:model-value="updateRowValue(index, column.name, $event)" :label="column.label" type="number"
+            @update:model-value="updateNumericValue(index, column.name, $event)" :label="column.label" type="number"
             clearable autofocus />
           <q-select v-else-if="column.isSelected" v-if="column.isSelected" v-model="row.selectedPackage"
             :options="mergeUnitsAndPackages(row)" :label="column.label" clearable
@@ -64,8 +64,11 @@ onMounted(() => {
   )
 })
 
-const updateRowValue = (index, columnName, newValue) => {
-  props.rows[index][columnName] = newValue
+const updateNumericValue = (index, columnName, newValue) => {
+  const stringValue = String(newValue).replace(/^0+/, '')
+  const numericValue = stringValue === '' ? null : Number(stringValue)
+
+  props.rows[index][columnName] = numericValue
 }
 
 const updateSelectedPackage = (index, newValue) => {
