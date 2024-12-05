@@ -50,10 +50,10 @@ export default function useMessageDialog() {
       message,
       persistent: true,
       confirmButtonText: confirmButtonText,
-      confirmButtonColor: confirmButtonColor || 'primary',
+      confirmButtonColor: confirmButtonColor || 'negative',
       showCancel: true,
       cancelButtonText: cancelButtonText,
-      cancelButtonColor: 'negative'
+      cancelButtonColor: 'primary'
     })
 
   return {
