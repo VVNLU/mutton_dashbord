@@ -104,8 +104,7 @@ const columns = [
     label: '數量',
     field: 'quantity',
     align: 'center',
-    isPopupEdit: true,
-    format: (val) => Math.abs(val)
+    isPopupEdit: true
   },
   {
     name: 'unit',
@@ -216,10 +215,9 @@ const onDelete = async (row) => {
     cancelButtonText: '取消'
   })
   if (!res) return
-
-  const index = rows.value.indexOf(row)
+  const index = rows.value.items.findIndex((item) => item.id === row.id)
   if (index !== -1) {
-    rows.value.splice(index, 1)
+    rows.value.items.splice(index, 1)
   }
   await callDeleteFetch()
 }

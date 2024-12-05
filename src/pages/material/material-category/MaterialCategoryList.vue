@@ -51,7 +51,7 @@ const switchStyle = ref('gridType')
 const columns = [
   {
     name: 'title',
-    label: '分類名稱',
+    label: '原物料名稱',
     field: 'title',
     align: 'center'
   },
@@ -60,12 +60,26 @@ const columns = [
     label: '單位',
     field: 'unit',
     align: 'center'
-  }
+  },
+  {
+    name: 'packageUnit',
+    label: '其他單位名稱',
+    field: 'packageUnit',
+    align: 'center',
+    isMultiline: true
+  },
+  {
+    name: 'packageSize',
+    label: '數量',
+    field: 'packageSize',
+    align: 'center',
+    isMultiline: true
+  },
 ]
 const multipleColumns = [
   {
     name: 'title',
-    label: '分類名稱',
+    label: '原物料名稱',
     field: 'title',
     align: 'center'
   },
@@ -99,7 +113,9 @@ const readListFetch = async (payload) => {
     const res = await getList(payload)
     rows.value = res.map((item) => ({
       ...item,
-      contents: item.packages
+      contents: item.packages,
+      packageUnit: item.packages.map((pkg)=>pkg.unit).join('<br>'),
+      packageSize: item.packages.map((pkg)=>pkg.size).join('<br>'),
     }))
   } finally {
     loading.value = false
