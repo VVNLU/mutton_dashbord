@@ -14,10 +14,16 @@
         { label: '網格式', value: 'gridType' }
       ]" />
         <div v-if="switchStyle === 'gridType'">
-          <grid-table :rows="rows" :multipleColumns="multipleColumns">
+          <grid-table :rows="rows" :multipleColumns="multipleColumns" :sliceNumber="4">
             <template #action="{ row }">
-              <edit-icon-button :to="'/material-record/edit/' + row.id" />
-              <delete-icon-button @click="onDelete(row)" />
+              <div v-if="row.type === '進貨'">
+                <edit-icon-button :to="'/material-record/edit/' + row.id" />
+                <delete-icon-button @click="onDelete(row)" />
+              </div>
+              <div v-else>
+                <q-btn icon="search" color="primary" flat round
+                  @click="showDialog({ id: row.orderId, mode: 'edit', callRead: true })" />
+              </div>
             </template>
           </grid-table>
         </div>
@@ -27,13 +33,21 @@
               <div v-html="row.materialTitle"></div>
             </template>
             <template #props="{ row }">
-              <edit-icon-button :to="'/material-record/edit/' + row.id" />
-              <delete-icon-button @click="onDelete(row)" />
+              <div v-if="row.type === '進貨'">
+                <edit-icon-button :to="'/material-record/edit/' + row.id" />
+                <delete-icon-button @click="onDelete(row)" />
+              </div>
+              <div v-else align="center">
+                <q-btn icon="search" color="primary" flat round
+                  @click="showDialog({ id: row.orderId, mode: 'edit', callRead: true })" />
+              </div>
             </template>
           </data-table>
         </div>
       </card-body>
     </q-card>
+
+    <order-edit ref="dialog" />
   </q-page>
 </template>
 
@@ -42,10 +56,12 @@ import { ref, onMounted } from 'vue'
 import { getList, updateData, deleteData } from '@/api/materialRecord'
 import useMessageDialog from '@/hooks/useMessageDialog'
 import useCRUD from '@/hooks/useCRUD'
+import OrderEdit from '@/pages/order/OrderEdit.vue'
 
 const rows = ref([])
 const loading = ref(true)
 const switchStyle = ref('gridType')
+const dialog = ref()
 
 const columns = ref([
   {
@@ -56,9 +72,15 @@ const columns = ref([
     sortable: true
   },
   {
-    name: 'orderId',
+    name: 'type',
+    label: '類型',
+    field: 'type',
+    align: 'center'
+  },
+  {
+    name: 'orderNumber',
     label: '訂單單號',
-    field: 'orderId',
+    field: 'orderNumber',
     align: 'center',
     isMultiline: true
   },
@@ -83,13 +105,13 @@ const columns = ref([
     align: 'center',
     isMultiline: true
   },
-  {
-    name: 'materialPrice',
-    label: '單價',
-    field: 'materialPrice',
-    align: 'center',
-    isMultiline: true
-  },
+  // {
+  //   name: 'materialPrice',
+  //   label: '單價',
+  //   field: 'materialPrice',
+  //   align: 'center',
+  //   isMultiline: true
+  // },
   {
     name: 'materialTotal',
     label: '總價',
@@ -115,9 +137,15 @@ const multipleColumns = ref([
     sortable: true
   },
   {
-    name: 'orderId',
+    name: 'type',
+    label: '類型',
+    field: 'type',
+    align: 'center'
+  },
+  {
+    name: 'orderNumber',
     label: '訂單單號',
-    field: 'orderId',
+    field: 'orderNumber',
     align: 'center',
     isMultiline: true
   },
@@ -185,23 +213,23 @@ const readListFetch = async (payload) => {
 
       // 計算 calculatedColumns
       const selectedPackageSizes = res.items
-        .map((item) => item.selectedPackage?.value).map((pkg) => pkg?.size)
+        .map((item) => item.selectedPackage).map((pkg) => pkg?.size)
         .filter((size) => size !== undefined)
 
       if (selectedPackageSizes.length > 0) {
         res.items = res.items.map((item) => {
-          const size = item.selectedPackage?.value?.size || 1
+          const size = item.selectedPackage?.size || 1
           const quantity = item.quantity || 1
           return {
             ...item,
-            quantity: Math.abs(size * quantity)
+            quantity: Math.abs(size * quantity),
           }
         })
       } else {
         res.items = res.items.map((item) => {
           return {
             ...item,
-            quantity: Math.abs(item.quantity)
+            quantity: Math.abs(item.quantity),
           }
         })
       }
@@ -239,6 +267,10 @@ const onDelete = async (row) => {
   if (delRes) {
     callReadListFetch()
   }
+}
+
+const showDialog = ({ id, mode, callRead }) => {
+  dialog.value.showDialog({ id, mode, callRead })
 }
 
 const { callReadListFetch, callDeleteFetch } = useCRUD({

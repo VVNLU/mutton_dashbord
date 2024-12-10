@@ -44,7 +44,8 @@
                     { label: '網格式', value: 'gridType' }
                   ]" />
                   <div v-if="switchStyle === 'gridType'">
-                    <editable-grid-table :columns="columns" :rows="rows.items">
+                    <editable-grid-table :columns="columns" :rows="rows.items"
+                      :materialCategoryData="materialCategoryData">
                       <template #action="{ row }">
                         <delete-icon-button @click="onDelete(row)" />
                       </template>
@@ -182,15 +183,19 @@ const refreshReadData = async (id) => {
 const onSubmit = async () => {
   form.value.validate().then(async (success) => {
     if (success) {
-      rows.value.items.forEach((item) => {
-        if (item.quantity > 0) {
-          item.quantity = -item.quantity
-        }
-      })
+      const selectedItems = rows.value.items.map((item) => ({
+        id: item.id,
+        quantity: item.quantity,
+        selectedPackage: item.selectedPackage,
+        title: item.title,
+        total: item.total,
+        unit: item.unit
+      }))
 
       const payload = {
         ...rows.value,
-        items: rows.value.items
+        type: '進貨',
+        items: selectedItems
       }
       const urlObj = {
         create: () => {
