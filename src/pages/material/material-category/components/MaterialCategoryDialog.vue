@@ -9,10 +9,10 @@
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
-                  <q-btn v-for="item in vendorData" :key="item.vendor_id" :label="item.title" outline rounded
-                    :text-color="data.state.vendorIds.includes(item.vendor_id) ? 'white' : 'primary'"
-                    :class="[data.state.vendorIds.includes(item.vendor_id) ? 'bg-primary' : '', 'q-ma-xs']"
-                    @click="toggleVendorSelection(item.vendor_id)" />
+                  <q-btn v-for="item in vendorData" :key="item.vendorId" :label="item.vendorTitle" outline rounded
+                    :text-color="data.state.vendorItems.includes(item) ? 'white' : 'primary'"
+                    :class="[data.state.vendorItems.includes(item) ? 'bg-primary' : '', 'q-ma-xs']"
+                    @click="toggleVendorSelection(item)" />
                 </div>
               </div>
             </card-body>
@@ -102,8 +102,9 @@ export default defineComponent({
     const readListVendorDataFetch = async () => {
       const res = await getList()
       vendorData.value = res.map((item) => ({
-        vendor_id: item.id,
-        title: item.title
+        vendorId: item.id,
+        vendorTitle: item.title,
+        vendorTel: item.tel
       }))
     }
 
@@ -117,14 +118,14 @@ export default defineComponent({
       })
     }
 
-    const toggleVendorSelection = (vendorId) => {
-      const index = data.state.vendorIds.indexOf(vendorId)
+    const toggleVendorSelection = (item) => {
+      const index = data.state.vendorItems.indexOf(vendor => vendor.vendor_id === item.vendor_id)
       if (index === -1) {
         // 新增
-        data.state.vendorIds.push(vendorId)
+        data.state.vendorItems.push(item)
       } else {
         // 移除
-        data.state.vendorIds.splice(index, 1)
+        data.state.vendorItems.splice(index, 1)
       }
     }
 
