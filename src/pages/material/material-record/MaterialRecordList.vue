@@ -16,7 +16,7 @@
         <div v-if="switchStyle === 'gridType'">
           <grid-table :rows="rows" :multipleColumns="multipleColumns" :sliceNumber="4">
             <template #action="{ row }">
-              <div v-if="row.type === '進貨'">
+              <div v-if="row.type !== '銷貨'">
                 <edit-icon-button :to="'/material-record/edit/' + row.id" />
                 <delete-icon-button @click="onDelete(row)" />
               </div>
