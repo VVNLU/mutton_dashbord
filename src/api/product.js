@@ -14,10 +14,19 @@ import {
 // 時間戳
 export const addDataWithTimestamp = async (data) => {
   try {
+    const processedMaterialItems = data.materialItems.map(item => ({
+      materialRef: doc(db, 'material_category', item.id), // 創建 Reference
+      materialQuantity: item.materialQuantity,
+      materialTitle: item.materialTitle,
+      materialUnit: item.materialUnit
+    }))
+
+
     const docRef = await addDoc(collection(db, 'product'), {
       ...data,
       createdAt: Timestamp.now(),
-      updateAt: Timestamp.now()
+      updateAt: Timestamp.now(),
+      materialItems: processedMaterialItems
     })
     return docRef
   } catch (error) {
@@ -41,7 +50,24 @@ export const addData = async (data) => {
 export const getData = async (id) => {
   try {
     const docRef = await getDoc(doc(db, 'product', id))
-    return docRef.data()
+    const productData = docRef.data()
+
+    // 獲取原物料詳細資訊
+    if (productData.materialItems && productData.materialItems.length > 0) {
+      const productsDetails = await Promise.all(
+        productData.materialItems.map(async (item) => {
+          const productSnapshot = await getDoc(item.materialRef)
+          return {
+            ...item,
+            productDetails: productSnapshot.data()
+          }
+        })
+      )
+      return {
+        ...productData,
+        materialItems: productsDetails
+      }
+    }
   } catch (error) {
     console.error('Error getting documents: ', error)
     throw error
@@ -52,7 +78,28 @@ export const getData = async (id) => {
 export const getList = async () => {
   try {
     const docRef = await getDocs(collection(db, 'product'))
-    const data = docRef.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    const data = await Promise.all(
+      docRef.docs.map(async (doc) => {
+        const productData = { id: doc.id, ...doc.data() }
+
+        // 獲取原物料詳細資訊
+        if (productData.materialItems && productData.materialItems.length > 0) {
+          const materialsDetails = await Promise.all(
+            productData.materialItems.map(async (item) => {
+              const productSnapshot = await getDoc(item.materialRef)
+              return {
+                ...item,
+                materialDetails: productSnapshot.data()
+              }
+            })
+          )
+
+          productData.materialItems = materialsDetails
+        }
+
+        return productData
+      })
+    )
     return data
   } catch (error) {
     console.error('Error getting list: ', error)
@@ -63,11 +110,25 @@ export const getList = async () => {
 // 更新數據
 export const updateData = async (docId, newData) => {
   try {
-    const newDocRef = await updateDoc(doc(db, 'product', docId),
-      {
+    const processedProductItems = newData.materialItems
+      ? newData.materialItems.map(item => ({
+        materialRef: doc(db, 'product', item.materialRef.id),
+        materialQuantity: item.materialQuantity,
+        materialTitle: item.materialTitle
+      }))
+      : undefined
+    const updateData = processedProductItems
+      ? {
         ...newData,
-        updateAt: Timestamp.now() // 更新時間為當前時間
-      })
+        materialItems: processedProductItems,
+        updateAt: Timestamp.now()
+      }
+      : {
+        ...newData,
+        updateAt: Timestamp.now()
+      }
+
+    const newDocRef = await updateDoc(doc(db, 'product', docId), updateData)
     return newDocRef
   } catch (error) {
     console.error('Error updating document:', error)

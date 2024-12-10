@@ -84,6 +84,12 @@ export default defineComponent({
         align: 'center',
         isPopupEdit: true
       },
+      {
+        name: 'materialUnit',
+        label: '單位',
+        field: 'materialUnit',
+        align: 'center'
+      },
     ]
 
     onMounted(async () => {
@@ -113,6 +119,7 @@ export default defineComponent({
         id: item.id,
         materialTitle: item.title,
         materialQuantity: 0,
+        materialUnit: item.unit,
       }]
     }
 
@@ -120,7 +127,8 @@ export default defineComponent({
       const result = await getList()
       materialCategoryData.value = result.map((res) => ({
         id: res.id,
-        title: res.title
+        title: res.title,
+        unit: res.unit,
       }))
     }
 

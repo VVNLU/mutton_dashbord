@@ -65,7 +65,7 @@
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue-demi'
-import { getData, addData, updateData, getDataByIds } from '@/api/materialCategory'
+import { getData, addData, updateData } from '@/api/materialCategory'
 import { getList } from '@/api/vendor'
 import MaterialCategory from '@/class/MaterialCategory'
 import useDialog from '@/hooks/useDialog'
@@ -129,16 +129,8 @@ export default defineComponent({
     }
 
     const onSave = async () => {
-      data.state =
-      {
-        ...data.state,
-      }
-      const [res] = await save()
-      if (res) {
-        emit('save')
-        data.state.vendorIds.value = []
-        data.state = new MaterialCategory() // 重置資料
-      }
+      const [res, error] = await save()
+      if (res) emit('save')
     }
 
     const onDelete = async (row) => {

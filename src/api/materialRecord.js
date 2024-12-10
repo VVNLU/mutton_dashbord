@@ -1,4 +1,5 @@
 import { db } from '@/firebase'
+import { increment } from 'firebase/firestore'
 import {
   doc,
   collection,
@@ -14,11 +15,25 @@ import {
 // 時間戳
 export const addDataWithTimestamp = async (data) => {
   try {
+    const processedMaterialItems = data.items.map(item => ({
+      ...item,
+      materialRef: doc(db, 'material_category', item.id), // 創建 Reference
+    }))
+
     const docRef = await addDoc(collection(db, 'material_record'), {
       ...data,
       createdAt: Timestamp.now(),
-      updateAt: Timestamp.now()
+      updateAt: Timestamp.now(),
+      items: processedMaterialItems
     })
+
+    for (const item of processedMaterialItems) {
+      const { materialRef, quantity } = item
+      await updateDoc(materialRef, {
+        quantity: increment(quantity) // 累加數量
+      })
+    }
+
     return docRef
   } catch (error) {
     console.error('Error written document: ', error)
