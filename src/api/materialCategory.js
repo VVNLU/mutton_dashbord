@@ -8,7 +8,6 @@ import {
   updateDoc,
   deleteDoc,
   Timestamp,
-  where
 } from 'firebase/firestore'
 
 // 時間戳
@@ -83,28 +82,6 @@ export const deleteData = async (docId) => {
     return docRef
   } catch (error) {
     console.error('Error deleting document: ', error)
-    throw error
-  }
-}
-
-// 關聯供應商
-// 讀取多筆數據（根據多個ID）
-export const getDataByIds = async (ids) => {
-  try {
-    console.log('ids', ids)
-    const querySnapshot = await getDocs(
-      collection(db, 'vendor'),
-      where('__name__', 'in', ids)
-    )
-
-    const data = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data()
-    }))
-
-    return data
-  } catch (error) {
-    console.error('Error getting documents by IDs:', error)
     throw error
   }
 }
