@@ -23,13 +23,16 @@
             <card-header>原物料資訊 </card-header>
             <card-body>
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
-                <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="col-xs-12 col-sm-4 col-md-4">
                   <text-input v-model="data.state.title" class="full-width" label="原料名稱" placeholder="請輸入原料名稱"
                     :rules="[$rules.required('原料名稱必填')]" />
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="col-xs-12 col-sm-4 col-md-4">
                   <text-input v-model="data.state.unit" class="full-width" label="最小單位" placeholder="請輸入最小單位(ex: 克、斤、箱)"
                     :rules="[$rules.required('最小單位必填')]" />
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                  <number-input v-model="data.state.quantity" class="full-width" label="庫存" placeholder="請輸入庫存" />
                 </div>
               </div>
             </card-body>
