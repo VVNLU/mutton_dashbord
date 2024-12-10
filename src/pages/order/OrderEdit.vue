@@ -28,18 +28,18 @@
             <q-card-section class="row justify-center items-center col-xs-12 col-sm-8 q-pa-none">
               <div class="q-pa-xs">
                 <!-- 收款 -->
-                <q-btn :disable="clientData.isPaid === '已收款'" icon="fa-regular fa-square-check" label="收款"
-                  @click="updatePaidStatus()" rounded color="teal" stack />
+                <q-btn :disable="clientData.isPaid === '已收款' || clientData.state === '已取消'"
+                  icon="fa-regular fa-square-check" label="收款" @click="updatePaidStatus()" rounded color="teal" stack />
               </div>
               <div class="q-pa-xs">
                 <!-- 出貨 -->
-                <q-btn :disable="clientData.isDelivered === '已出貨'" icon="fa-regular fa-square-check" label="出貨"
-                  @click="updateDeliveryStatus()" rounded color="cyan" stack />
+                <q-btn :disable="clientData.isDelivered === '已出貨' || clientData.state === '已取消'"
+                  icon="fa-regular fa-square-check" label="出貨" @click="updateDeliveryStatus()" rounded color="cyan"
+                  stack />
               </div>
               <div class="q-pa-xs">
-                <!-- 取消目前和刪除相同，之後會再添加退貨或退款 -->
-                <q-btn v-if="clientData.state === '已完成'" color="red" icon="fa-solid fa-trash-can" label="取消"
-                  @click="onDelete()" rounded stack />
+                <q-btn :disable="clientData.state === '已取消'" v-if="clientData.state !== '處理中'" color="red"
+                  icon="fa-solid fa-trash-can" label="取消" @click="cancelOrder()" rounded stack />
                 <q-btn v-else color="red" icon="fa-solid fa-trash" label="刪除" @click="onDelete()" rounded stack />
               </div>
             </q-card-section>
@@ -246,6 +246,20 @@ export default defineComponent({
       }
     }
 
+    const cancelOrder = async () => {
+      const res = await messageDelete({
+        title: '取消訂單',
+        message: '確認取消訂單？',
+        confirmButtonText: '確認',
+        cancelButtonText: '取消'
+      })
+      if (res) {
+        clientData.value.state = '已取消'
+        clientData.value.isPaid = '已取消'
+        clientData.value.isDelivered = '已取消'
+      }
+    }
+
     const getStateColor = (status) => {
       const colorMap = {
         處理中: 'bg-warning text-black',
@@ -341,6 +355,7 @@ export default defineComponent({
       getStateIcon,
       updatePaidStatus,
       updateDeliveryStatus,
+      cancelOrder,
 
       onHide,
       onDelete
