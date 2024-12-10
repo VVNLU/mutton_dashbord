@@ -254,9 +254,20 @@ export default defineComponent({
         cancelButtonText: '取消'
       })
       if (res) {
-        clientData.value.state = '已取消'
-        clientData.value.isPaid = '已取消'
-        clientData.value.isDelivered = '已取消'
+        const payload = {
+          ...clientData.value,
+          state: '已取消',
+          isPaid: '已取消',
+          isDelivered: '已取消'
+        }
+
+        const id = currentId.value
+        const response = await callUpdateFetch(id, { ...payload })
+
+        if (response) {
+          isShowDialog.value = false
+          emit('update')
+        }
       }
     }
 
@@ -293,21 +304,23 @@ export default defineComponent({
         isDelivered: clientData.value.isDelivered
       }),
       async (newValues) => {
-        const { isPaid, isDelivered } = newValues;
+        console.log('newValues', newValues)
+        const { isPaid, isDelivered } = newValues
 
         if (isPaid === '已收款' && isDelivered === '已出貨') {
-          clientData.value.state = '已完成';
+          clientData.value.state = '已完成'
         } else if (isPaid === '未收款' || isDelivered === '未出貨') {
-          clientData.value.state = '處理中';
+          clientData.value.state = '處理中'
         }
 
         const payload = {
           ...clientData.value,
-        };
-        const id = currentId.value;
+        }
+        const id = currentId.value
 
         try {
           await updateFetch(id, payload)
+          emit('update')
         } catch (error) {
           console.error('Failed to update state to backend:', error)
         }

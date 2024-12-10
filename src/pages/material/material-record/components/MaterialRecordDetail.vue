@@ -5,7 +5,7 @@
       <div class="row q-col-gutter-x-md q-col-gutter-y-md">
         <div class="col-md-6 col-sm-6 col-xs-12">
           <q-card class="h-full shadow-7">
-            <card-header> 日期及備註 </card-header>
+            <card-header> 紀錄資訊 </card-header>
             <card-body class="q-pt-none">
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -14,6 +14,14 @@
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                   <text-input v-model="rows.remark" class="w-full" label="備註" placeholder="請輸入備註" />
+                </div>
+              </div>
+            </card-body>
+            <card-body class="q-pt-none">
+              <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
+                <div class="col-md-6 col-12">
+                  <option-group v-model="rows.type" label="類型" :options="selectedType" type="radio"
+                    class="full-width" />
                 </div>
               </div>
             </card-body>
@@ -87,11 +95,17 @@ const { mode } = toRefs(props)
 const { notifyAPIError } = useNotify()
 const route = useRoute()
 const rows = ref({
-  items: []
+  items: [],
+  type: '進貨'
 })
 const materialCategoryData = ref([])
 const switchStyle = ref('gridType')
 const id = route.params.id || null
+
+const selectedType = ref([
+  { label: '進貨', value: '進貨' },
+  { label: '盤損', value: '盤損' },
+])
 
 const columns = [
   {
@@ -185,7 +199,7 @@ const onSubmit = async () => {
     if (success) {
       const selectedItems = rows.value.items.map((item) => ({
         id: item.id,
-        quantity: item.quantity,
+        quantity: rows.value.type === '盤損' ? - Math.abs(item.quantity) : item.quantity,
         selectedPackage: item.selectedPackage,
         title: item.title,
         total: item.total,
@@ -194,7 +208,6 @@ const onSubmit = async () => {
 
       const payload = {
         ...rows.value,
-        type: '進貨',
         items: selectedItems
       }
       const urlObj = {

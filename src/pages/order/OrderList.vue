@@ -91,13 +91,17 @@ const getStyleColor = (value, field) => {
         ? 'completed'
         : value === '未收款'
           ? 'processing'
-          : ''
+          : value === '已取消'
+            ? 'canceled'
+            : ''
     case 'isDelivered':
       return value === '已出貨'
         ? 'completed'
         : value === '未出貨'
           ? 'processing'
-          : ''
+          : value === '已取消'
+            ? 'canceled'
+            : ''
     default:
       return ''
   }
