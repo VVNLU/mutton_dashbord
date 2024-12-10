@@ -14,7 +14,7 @@
         { label: '網格式', value: 'gridType' }
       ]" />
         <div v-if="switchStyle === 'gridType'">
-          <grid-table :multipleColumns="multipleColumns" :rows="rows" :sliceNumber="2">
+          <grid-table :multipleColumns="multipleColumns" :rows="rows" :sliceNumber="5">
             <template #action="{ row }">
               <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
               <delete-icon-button @click="onDelete(row)" />
@@ -62,6 +62,12 @@ const columns = [
     align: 'center'
   },
   {
+    name: 'quantity',
+    label: '庫存',
+    field: 'quantity',
+    align: 'center'
+  },
+  {
     name: 'packageUnit',
     label: '其他單位名稱',
     field: 'packageUnit',
@@ -75,6 +81,19 @@ const columns = [
     align: 'center',
     isMultiline: true
   },
+  {
+    name: 'vendorTitle',
+    label: '供應商名稱',
+    field: 'vendorTitle',
+    align: 'center'
+  },
+  {
+    name: 'vendorTel',
+    label: '供應商電話',
+    field: 'vendorTel',
+    align: 'center'
+  },
+
 ]
 const multipleColumns = [
   {
@@ -84,9 +103,27 @@ const multipleColumns = [
     align: 'center'
   },
   {
+    name: 'quantity',
+    label: '庫存',
+    field: 'quantity',
+    align: 'center'
+  },
+  {
     name: 'unit',
     label: '單位',
     field: 'unit',
+    align: 'center'
+  },
+  {
+    name: 'vendorTitle',
+    label: '供應商名稱',
+    field: 'vendorTitle',
+    align: 'center'
+  },
+  {
+    name: 'vendorTel',
+    label: '供應商電話',
+    field: 'vendorTel',
     align: 'center'
   },
   {
@@ -111,12 +148,17 @@ const readListFetch = async (payload) => {
   loading.value = true
   try {
     const res = await getList(payload)
-    rows.value = res.map((item) => ({
-      ...item,
-      contents: item.packages,
-      packageUnit: item.packages.map((pkg)=>pkg.unit).join('<br>'),
-      packageSize: item.packages.map((pkg)=>pkg.size).join('<br>'),
-    }))
+    rows.value = res.map((item) => {
+      return {
+        ...item,
+        contents: item.packages,
+        vendorItems: item.vendorItems,
+        packageUnit: item.packages.map((pkg) => pkg.unit).join('<br>'),
+        packageSize: item.packages.map((pkg) => pkg.size).join('<br>'),
+        vendorTitle: item.vendorItems.map(vendor => vendor.vendorTitle).join('<br>'),
+        vendorTel: item.vendorItems.map(vendor => vendor.vendorTel).join('<br>'),
+      }
+    })
   } finally {
     loading.value = false
   }
