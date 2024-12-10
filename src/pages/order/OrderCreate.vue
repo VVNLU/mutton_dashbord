@@ -116,9 +116,9 @@
     </base-form>
   </q-page>
   <div class="row productItems-center">
-    <fixed-footer @save="onSubmit">
+    <fixed-footer @save="onSubmit" :confirmButtonText="'稍後結帳'">
       <template #button>
-        <confirm-button v-if="rows.payment === '現金' && rows.delivery === '面交'" @click="onCheckout" label="結帳"
+        <confirm-button v-if="rows.payment === '現金' && rows.delivery === '面交'" @click="onCheckout" label="結清出貨"
           color="red" class="q-px-lg q-mr-md" />
       </template>
     </fixed-footer>
@@ -278,7 +278,7 @@ const onDelete = async (row) => {
   })
   if (!res) return
 
-  const index = rows.value.productItems.indexOf(row)
+  const index = rows.value.productItems.findIndex((item) => item.id === row.id)
   if (index !== -1) {
     rows.value.productItems.splice(index, 1)
   }
