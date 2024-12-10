@@ -11,25 +11,31 @@ import { addData } from '@/api/role'
 
 export const useUser = defineStore({
   id: 'user',
+  password: import.meta.env.VITE_PASSWORD,
   state: () => ({
     user: null,
     token: getAuthData() // 初始化 token
   }),
   actions: {
-    async login(email, password) {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        `${email}@admin.com.tw`,
-        password
-      )
+    async login(email) {
+      try {
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          `${email}@admin.com.tw`,
+          password
+        )
 
-      this.user = userCredential.user
-      this.token = userCredential.user.accessToken
-      setAuthData(userCredential.user.accessToken, userCredential.user.uid)
-      return userCredential
+        this.user = userCredential.user;
+        this.token = userCredential.user.accessToken;
+        setAuthData(userCredential.user.accessToken, userCredential.user.uid);
+        return userCredential;
+      } catch (error) {
+        console.error('Login error:', error.message)
+        throw error
+      }
     },
 
-    logout() {
+    async logout() {
       return signOut(auth).then(() => {
         this.user = null
         this.token = null
@@ -38,28 +44,28 @@ export const useUser = defineStore({
       })
     },
 
-    register(email, password, role = 'user') {
-      return createUserWithEmailAndPassword(auth, email, password).then(
-        (userCredential) => {
-          this.user = userCredential.user
-          this.token = userCredential.user.accessToken
+    // register(email, password, role = 'user') {
+    //   return createUserWithEmailAndPassword(auth, email, password).then(
+    //     (userCredential) => {
+    //       this.user = userCredential.user
+    //       this.token = userCredential.user.accessToken
 
-          return addData(userCredential.user.uid, role).then(() => {
-            this.role = role
-            setAuthData(
-              userCredential.user.accessToken,
-              userCredential.user.uid,
-              role
-            )
-          })
-        }
-      )
-    },
+    //       return addData(userCredential.user.uid, role).then(() => {
+    //         this.role = role
+    //         setAuthData(
+    //           userCredential.user.accessToken,
+    //           userCredential.user.uid,
+    //           role
+    //         )
+    //       })
+    //     }
+    //   )
+    // },
 
-    forgotPassword(email) {
-      return sendPasswordResetEmail(auth, email).then((res) => {
-        return res
-      })
-    }
+    // forgotPassword(email) {
+    //   return sendPasswordResetEmail(auth, email).then((res) => {
+    //     return res
+    //   })
+    // }
   }
 })
