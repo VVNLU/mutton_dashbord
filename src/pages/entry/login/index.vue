@@ -5,32 +5,19 @@
         <q-card class="w-3/10 <sm:w-4/5 <md:w-3/5">
           <q-card-section>
             <div class="text-center q-pt-lg">
-              <div class="col text-h5 text-bold ellipsis">羊肉爐後台管理</div>
-              <div class="col text-h6 ellipsis">登入</div>
+              <q-img src="@/assets/mutton-white.jpg" />
+              <div class="col text-h5 text-bold ellipsis">- 後台管理 -</div>
             </div>
           </q-card-section>
           <q-card-section>
             <base-form ref="form" class="q-gutter-y-md">
-              <text-input
-                v-model="formData.email"
-                :label="'Email'"
-                :placeholder="'請輸入Email'"
-                lazy-rules
-                :rules="[$rules.required('Email必填')]"
-              />
-              <password-input
-                v-model="formData.password"
-                @keyup.enter="handleLogin"
-                :rules="[$rules.required('密碼必填')]"
-              />
+              <!-- <text-input v-model="formData.email" :label="'Email'" :placeholder="'請輸入Email'" lazy-rules
+                :rules="[$rules.required('Email必填')]" /> -->
+              <text-input v-model="formData.email" @keyup.enter="handleLogin" :label="'手機號碼'" :placeholder="'請輸入手機號碼'"
+                :rules="[$rules.required('手機號碼必填')]" />
               <div>
-                <base-button
-                  class="w-full q-mb-md"
-                  :label="'登入'"
-                  style="width: 100%"
-                  @click.prevent="handleLogin"
-                />
-                <base-button
+                <base-button class="w-full q-mb-md" :label="'登入'" style="width: 100%" @click.prevent="handleLogin" />
+                <!-- <base-button
                   class="text-white q-mb-md"
                   style="width: 100%"
                   color="black"
@@ -44,7 +31,7 @@
                       立即註冊
                     </router-link>
                   </span>
-                </div>
+                </div> -->
               </div>
             </base-form>
           </q-card-section>
@@ -52,11 +39,11 @@
       </q-page>
     </q-page-container>
   </q-layout>
-  <forget-password-dialog ref="dialog" />
+  <!-- <forget-password-dialog ref="dialog" /> -->
 </template>
 
 <script setup>
-import ForgetPasswordDialog from './components/ForgetPasswordDialog.vue'
+// import ForgetPasswordDialog from './components/ForgetPasswordDialog.vue'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUser } from '@/stores/user'
@@ -102,8 +89,6 @@ const { form, callCreateFetch } = useCRUD({
 
 <style scoped>
 .bg-page {
-  background-image: url('@/assets/login-image.jpg');
-  background-size: cover;
-  opacity: 0.9;
+  background-color: #eea264;
 }
 </style>
