@@ -35,10 +35,9 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { getList, updateData, deleteData } from '@/api/order'
+import { getList, updateData } from '@/api/order'
 import OrderEdit from './OrderEdit.vue'
 import useCRUD from '@/hooks/useCRUD'
-import useMessageDialog from '@/hooks/useMessageDialog'
 
 const loading = ref(true)
 const dialog = ref()
@@ -56,7 +55,7 @@ const columns = ref([
   { name: 'isDelivered', label: '出貨狀態', field: 'isDelivered', align: 'center' },
   { name: 'delivery', label: '出貨方式', field: 'delivery', align: 'center' },
   { name: 'deliveryNumber', label: '貨運單號', field: 'deliveryNumber', align: 'center' },
-  // { name: '', label: '人員', field: '', align: 'center' },
+  { name: 'salesperson', label: '銷售員', field: 'salesperson', align: 'center' },
   { name: 'clientRemark', label: '備註', field: 'clientRemark', align: 'center' },
 ])
 
@@ -122,39 +121,18 @@ const updateFetch = async (id, payload) => {
   return await updateData(id, payload)
 }
 
-const delFetch = async (id) => {
-  return await deleteData(id)
-}
-
 const refreshFetch = async () => {
   await callReadListFetch()
-}
-
-const onDelete = async (row) => {
-  const res = await messageDelete({
-    title: '刪除',
-    message: '確認刪除訂單？',
-    confirmButtonText: '確認',
-    cancelButtonText: '取消'
-  })
-  if (!res) return
-  const [delRes] = await callDeleteFetch(row.id)
-  if (delRes) {
-    callReadListFetch()
-  }
 }
 
 const showDialog = ({ id, mode, callRead }) => {
   dialog.value.showDialog({ id, mode, callRead })
 }
 
-const { messageDelete } = useMessageDialog()
 const {
-  callDeleteFetch,
   callReadListFetch
 } = useCRUD({
   updateFetch: updateFetch,
-  deleteFetch: delFetch,
   readListFetch: readListFetch
 })
 </script>

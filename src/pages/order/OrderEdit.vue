@@ -46,12 +46,12 @@
           </q-card-section>
         </q-card>
         <div class="col-12">
-          <q-table :rows="clientData.items" :columns="columns" row-key=" name" hide-bottom>
+          <q-table :rows="clientData.productItems" :columns="columns" row-key="name" hide-bottom>
             <template v-slot:top-left>
               <q-tr>
                 <q-item-label class="text-info">
                   <q-icon name="receipt_long" class="q-pr-xs text-info" size="1.5em" />
-                  {{ currentId }}
+                  {{ clientData.orderNumber }}
                 </q-item-label>
                 <q-item-label class="text-accent text-shadow" v-if="clientData.payment">
                   <q-icon name="paid" class="q-pr-xs" size="1.5em" />
@@ -151,10 +151,10 @@ export default defineComponent({
     const expanded = ref(false)
     const columns = [
       {
-        name: 'name',
+        name: 'productTitle',
         label: '商品',
         align: 'left',
-        field: (row) => row.title
+        field: 'productTitle'
       },
       {
         label: '數量',
@@ -302,7 +302,7 @@ export default defineComponent({
     )
 
     const totalAmount = computed(() => {
-      return clientData.value.items.reduce((sum, item) => {
+      return clientData.value.productItems.reduce((sum, item) => {
         return sum + item.productQuantity * item.productPrice
       }, 0)
     })

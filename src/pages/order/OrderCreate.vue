@@ -31,6 +31,14 @@
           <q-card class="h-full shadow-7">
             <card-body>
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
+                <div class="col-md-6 col-12">
+                  <option-group v-model="rows.salesperson" label="銷售員" :options="selectedSalesperson" type="radio"
+                    class="full-width" />
+                </div>
+              </div>
+            </card-body>
+            <card-body class="q-pt-none">
+              <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-md-6 col-sm-12 col-xs-12">
                   <option-group v-model="rows.payment" label="交易方式" :options="selectedPaymentMethod" type="radio"
                     class="full-width" />
@@ -85,7 +93,7 @@
                     { label: '網格式', value: 'gridType' }
                   ]" />
                   <div v-if="switchStyle === 'gridType'">
-                    <editable-grid-table :columns="columns" :rows="rows.items">
+                    <editable-grid-table :columns="columns" :rows="rows.productItems">
                       <template #action="{ row }">
                         <delete-icon-button @click="onDelete(row)" />
                       </template>
@@ -93,7 +101,7 @@
                   </div>
                   <div v-else>
 
-                    <popup-data-table :columns="columns" :rows="rows.items">
+                    <popup-data-table :columns="columns" :rows="rows.productItems">
                       <template #props="{ row }">
                         <delete-icon-button @click="onDelete(row)" />
                       </template>
@@ -107,7 +115,7 @@
       </div>
     </base-form>
   </q-page>
-  <div class="row items-center">
+  <div class="row productItems-center">
     <fixed-footer @save="onSubmit">
       <template #button>
         <confirm-button v-if="rows.payment === '現金' && rows.delivery === '面交'" @click="onCheckout" label="結帳"
@@ -136,10 +144,10 @@ const rows = ref({
     address: '',
     remark: ''
   },
-  items: []
+  productItems: []
 })
 
-watch(rows.value.items, (newVal) => {
+watch(rows.value.productItems, (newVal) => {
   newVal.forEach((item) => {
     item.subtotal = item.productQuantity * item.productPrice
   })
@@ -185,18 +193,24 @@ const selectedDeliveryMethod = ref([
   { label: '宅配', value: '宅配' }
 ])
 
+const selectedSalesperson = ref([
+  { label: '正發', value: '正發' },
+  { label: '茮林', value: '茮林' },
+  { label: '宥延', value: '宥延' }
+])
+
 onMounted(async () => {
   readProductFetch()
 })
 
 const addNewData = async (item) => {
-  const isDuplicate = rows.value.items.some((row) => row.productTitle === item.title)
+  const isDuplicate = rows.value.productItems.some((row) => row.productTitle === item.title)
 
   if (isDuplicate) {
     notifyAPIError({ message: '已有 ' + `${item.productTitle}` + ' 商品了' })
     return
   }
-  rows.value.items.push({
+  rows.value.productItems.push({
     id: item.id,
     productTitle: item.productTitle,
     productPrice: item.productPrice,
@@ -228,7 +242,7 @@ const onSubmit = async () => {
       {
         ...rows.value,
         client: rows.value.client,
-        items: rows.value.items,
+        productItems: rows.value.productItems,
       }
       const [res] = await callCreateFetch({ ...payload })
       if (res) goBack()
@@ -247,7 +261,7 @@ const onCheckout = async () => {
       {
         ...rows.value,
         client: rows.value.client,
-        items: rows.value.items,
+        productItems: rows.value.productItems,
       }
       const [res] = await callCreateFetch({ ...payload })
       if (res) goBack()
@@ -264,15 +278,15 @@ const onDelete = async (row) => {
   })
   if (!res) return
 
-  const index = rows.value.items.indexOf(row)
+  const index = rows.value.productItems.indexOf(row)
   if (index !== -1) {
-    rows.value.items.splice(index, 1)
+    rows.value.productItems.splice(index, 1)
   }
   await callDeleteFetch()
 }
 
 const totalAmount = computed(() => {
-  return rows.value.items.reduce((sum, item) => {
+  return rows.value.productItems.reduce((sum, item) => {
     return sum + item.productQuantity * item.productPrice
   }, 0)
 })
