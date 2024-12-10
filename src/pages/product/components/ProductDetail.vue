@@ -37,8 +37,8 @@
                     { label: '條列式', value: 'columnType' },
                     { label: '網格式', value: 'gridType' }
                   ]" />
-                  <data-table v-if="switchStyle === 'gridType'" grid :columns="columns" :rows="rows.items" />
-                  <data-table v-else :columns="columns" :rows="rows.items" />
+                  <data-table v-if="switchStyle === 'gridType'" grid :columns="columns" :rows="rows.materialItems" />
+                  <data-table v-else :columns="columns" :rows="rows.materialItems" />
                 </div>
               </div>
             </card-body>
@@ -47,7 +47,7 @@
       </div>
     </base-form>
 
-    <product-dialog ref="dialog" v-model:detailData="rows.items" @save="handleSave" />
+    <product-dialog ref="dialog" v-model:detailData="rows.materialItems" @save="handleSave" />
   </q-page>
   <fixed-footer @save="onSubmit" />
 </template>
@@ -85,6 +85,12 @@ const columns = [
     align: 'left',
     isPopupEdit: true
   },
+  {
+    name: 'materialUnit',
+    label: '單位',
+    field: 'materialUnit',
+    align: 'left'
+  },
 ]
 
 onMounted(async () => {
@@ -94,7 +100,7 @@ onMounted(async () => {
 })
 
 const handleSave = (addData) => {
-  rows.value.items = addData
+  rows.value.materialItems = addData
 }
 
 const readFetch = async (id) => {
@@ -113,9 +119,9 @@ const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
 
   rows.value = res
-  rows.value.items = Array.isArray(rows.value.items)
-    ? rows.value.items
-    : [rows.value.items]
+  rows.value.materialItems = Array.isArray(rows.value.materialItems)
+    ? rows.value.materialItems
+    : [rows.value.materialItems]
 }
 
 const onSubmit = async () => {
@@ -124,7 +130,7 @@ const onSubmit = async () => {
       const payload =
       {
         ...rows.value,
-        items: rows.value.items
+        materialItems: rows.value.materialItems
       }
       const urlObj = {
         create: () => {
@@ -142,7 +148,7 @@ const onSubmit = async () => {
 }
 
 const showDialog = () => {
-  dialog.value.showDialog({ rows: rows.value.items })
+  dialog.value.showDialog({ rows: rows.value.materialItems })
 }
 
 const { goBack } = useGoBack()
@@ -153,7 +159,7 @@ const { form, callReadFetch, callCreateFetch, callUpdateFetch } = useCRUD({
 })
 
 watch(
-  () => rows.value.items,
+  () => rows.value.materialItems,
   (newContents) => {
     if (dialog.value) {
       dialog.value.$emit('update:detailData', newContents)
