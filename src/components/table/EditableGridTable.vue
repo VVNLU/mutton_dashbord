@@ -29,8 +29,8 @@
             @update:model-value="updateNumericValue(index, column.name, $event)" :label="column.label" type="number"
             clearable autofocus />
           <q-select v-else-if="column.isSelected" v-if="column.isSelected" v-model="row.selectedPackage"
-            :options="mergeUnitsAndPackages(row)" :label="column.label" clearable
-            @update:model-value="updateSelectedPackage(index, $event)" />
+            :options="mergeUnitsAndPackages(row)" :label="column.label"
+            @update:model-value="updateSelectedPackage(index, $event)" map-options clearable />
           <q-field v-else :label="column.label" stack-label>
             <template v-slot:control>
               <div class="self-center full-width no-outline">
@@ -53,6 +53,7 @@ import { defineProps, ref, computed, onMounted } from 'vue'
 const props = defineProps({
   columns: { type: Array, default: () => [] },
   rows: { type: Array, default: () => [] },
+  materialCategoryData: { type: Array, default: () => [] },
 })
 
 const searchQuery = ref('')
@@ -72,7 +73,7 @@ const updateNumericValue = (index, columnName, newValue) => {
 }
 
 const updateSelectedPackage = (index, newValue) => {
-  props.rows[index].selectedPackage = newValue
+  props.rows[index].selectedPackage = newValue ? newValue.value : null
 }
 
 const filteredRows = computed(() => {
@@ -80,19 +81,34 @@ const filteredRows = computed(() => {
 
   if (!query) {
     return props.rows
-  } return props.rows.filter(row => {
-    return Object.values(row).some(value =>
+  }
+  return props.rows.filter(row => {
+    Object.values(row).some(value =>
       String(value).toLowerCase().includes(query)
     )
   })
 })
 
 const formattedRows = computed(() =>
-  filteredRows.value.map((row) => ({
-    ...row,
-    quantity: Math.abs(row.quantity), // 將 quantity 處理為正數
-  }))
-)
+  filteredRows.value.map((row) => {
+    if (props.materialCategoryData) {
+      const matchedCategory = props.materialCategoryData.find(
+        (category) => category.id === row.id
+      );
+      return {
+        ...row,
+        quantity: Math.abs(row.quantity), // 將 quantity 處理為正數
+        packages: matchedCategory ? matchedCategory.packages : row.packages,
+        unit: matchedCategory ? matchedCategory.unit : row.unit,
+      };
+    }
+
+    return {
+      ...row,
+      quantity: Math.abs(row.quantity), // 將 quantity 處理為正數
+    };
+  })
+);
 
 const mergeUnitsAndPackages = (row) => {
   const packageOptions = row.packages.map((pkg) => ({
@@ -101,7 +117,7 @@ const mergeUnitsAndPackages = (row) => {
   }))
 
   return [
-    { label: row.unit, value: null }, // 選擇 units，值為 null
+    { label: row.unit, value: { size: null, unit: row.unit } }, // 選擇 units，值為 null
     ...packageOptions,
   ]
 }

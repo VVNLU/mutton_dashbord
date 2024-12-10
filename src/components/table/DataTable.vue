@@ -4,9 +4,8 @@
       :loading="loading" :pagination="initialPagination" flat bordered>
       <!-- 搜尋欄位 -->
       <template v-slot:top-left>
-        <q-input dense debounce="300" v-model="filter" placeholder="搜尋">
+        <q-input dense debounce="300" v-model="filter" placeholder="搜尋" clearable>
           <template v-slot:append>
-            <q-icon name="cancel" @click="onCancel" size="0.8em" />
             <q-icon name="search" />
           </template>
         </q-input>
