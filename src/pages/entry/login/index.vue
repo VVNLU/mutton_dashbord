@@ -13,8 +13,8 @@
             <base-form ref="form" class="q-gutter-y-md">
               <!-- <text-input v-model="formData.email" :label="'Email'" :placeholder="'請輸入Email'" lazy-rules
                 :rules="[$rules.required('Email必填')]" /> -->
-              <text-input v-model="formData.email" @keyup.enter="handleLogin" :label="'手機號碼'" :placeholder="'請輸入手機號碼'"
-                :rules="[$rules.required('手機號碼必填')]" />
+              <text-input v-model="formData.email" @keyup.enter="handleLogin" :label="'帳號'" :placeholder="'請輸入帳號'"
+                :rules="[$rules.required('帳號必填')]" />
               <div>
                 <base-button class="w-full q-mb-md" :label="'登入'" style="width: 100%" @click.prevent="handleLogin" />
                 <!-- <base-button
