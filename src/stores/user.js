@@ -9,9 +9,9 @@ import { auth } from '@/firebase'
 import { setAuthData, getAuthData, removeAuthData } from '@/utils/auth'
 import { addData } from '@/api/role'
 
+const password = import.meta.env.VITE_PASSWORD
 export const useUser = defineStore({
   id: 'user',
-  password: import.meta.env.VITE_PASSWORD,
   state: () => ({
     user: null,
     token: getAuthData() // 初始化 token
