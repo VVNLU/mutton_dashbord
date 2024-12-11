@@ -4,7 +4,7 @@
     <base-form ref="form">
       <div class="row q-col-gutter-x-md">
         <div class="row q-col-gutter-x-md">
-          <div class="col-xs-12 col-sm-6 col-md-6">
+          <div class="col-xs-12 col-sm-6 col-md-6 ">
             <text-input v-model="data.state.title" class="full-width" label="公司名稱 *" placeholder="請輸入公司名稱"
               :required="true" />
           </div>
@@ -18,7 +18,7 @@
           </div>
           <div class="col-xs-12 col-sm-6 col-md-6">
             <text-input v-model="data.state.tel" class="full-width" label="聯絡電話 *" placeholder="請輸入聯絡電話"
-              :required="true" />
+              :required="true" :showNumberBox="true" />
           </div>
           <div class="col-xs-12 col-sm-6 col-md-6">
             <text-input v-model="data.state.address" class="full-width" label="公司地址" placeholder="請輸入公司地址"

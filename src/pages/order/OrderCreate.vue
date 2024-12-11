@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12">
                   <text-input v-model="rows.client.tel" label="電話" placeholder="請輸入電話" :maxLength="10"
-                    :required="isDeliveryRequired" />
+                    :required="isDeliveryRequired" :showNumberBox="true" />
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12">
                   <text-input v-model="rows.client.address" label="地址" placeholder="請輸入地址"
@@ -45,7 +45,7 @@
                 </div>
                 <div v-if="rows.payment === '轉帳'" class="q-mt-md col-md-6 col-sm-12 col-xs-12">
                   <text-input v-model="rows.accountLastFive" label="帳號後五碼" placeholder="請輸入帳號後五碼" :required="true"
-                    :maxLength="5" :minLength="5" />
+                    :maxLength="5" :minLength="5" :showNumberBox="true" />
                 </div>
               </div>
             </card-body>
