@@ -41,6 +41,8 @@ import DataTable from './table/DataTable.vue'
 import PopupDataTable from './table/PopupDataTable.vue'
 import GridTable from './table/GridTable.vue'
 import EditableGridTable from './table/EditableGridTable.vue'
+import Calculator from './Calculator.vue'
+import NumberBox from './NumberBox.vue'
 
 export default {
   install(app) {
@@ -87,5 +89,7 @@ export default {
     app.component('PopupDataTable', PopupDataTable)
     app.component('GridTable', GridTable)
     app.component('EditableGridTable', EditableGridTable)
+    app.component('Calculator', Calculator)
+    app.component('NumberBox', NumberBox)
   }
 }
