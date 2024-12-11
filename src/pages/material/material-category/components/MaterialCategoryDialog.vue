@@ -10,8 +10,8 @@
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
                   <q-btn v-for="item in vendorData" :key="item.vendorId" :label="item.vendorTitle" outline rounded
-                    :text-color="data.state.vendorItems.includes(item) ? 'white' : 'primary'"
-                    :class="[data.state.vendorItems.includes(item) ? 'bg-primary' : '', 'q-ma-xs']"
+                    :text-color="data.state.vendorItems.some(vendor => vendor.vendorId === item.vendorId) ? 'white' : 'primary'"
+                    :class="[data.state.vendorItems.some(vendor => vendor.vendorId === item.vendorId) ? 'bg-primary' : '', 'q-ma-xs']"
                     @click="toggleVendorSelection(item)" />
                 </div>
               </div>
@@ -51,7 +51,8 @@
                 <div class="q-pa-xs row items-center full-width">
                   <q-input dense label="單位名稱" v-model="item.unit" class="col-sm-4 col-xs-3" />
                   <span class="q-ma-xs col-1">＝</span>
-                  <q-input dense type="number" label="比例" v-model="item.size" class="col-sm-4 col-xs-3" />
+                  <number-input label="比例" v-model="item.size" class="col-sm-4 col-xs-3" :outlined="false"
+                    :dense="true" />
                   <q-chip>{{ data.state.unit }}</q-chip>
                   <delete-icon-button class="col-1" @click="onDelete(row)" />
                 </div>
@@ -122,7 +123,7 @@ export default defineComponent({
     }
 
     const toggleVendorSelection = (item) => {
-      const index = data.state.vendorItems.indexOf(vendor => vendor.vendor_id === item.vendor_id)
+      const index = data.state.vendorItems.findIndex(vendor => vendor.vendorId === item.vendorId)
       if (index === -1) {
         // 新增
         data.state.vendorItems.push(item)

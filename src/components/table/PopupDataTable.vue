@@ -32,7 +32,7 @@
           <div v-if="col.isPopupEdit">
             {{ props.row[col.name] }}
             <q-popup-edit v-model="props.row[col.name]" v-slot="scope" buttons>
-              <q-input type="number" v-model.number="scope.value" dense autofocus />
+              <q-input type="number" v-model.number="scope.value" dense />
             </q-popup-edit>
           </div>
           <div v-else>
