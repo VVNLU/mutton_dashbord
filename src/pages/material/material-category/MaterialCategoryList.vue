@@ -14,7 +14,7 @@
         { label: '網格式', value: 'gridType' }
       ]" />
         <div v-if="switchStyle === 'gridType'">
-          <grid-table :multipleColumns="multipleColumns" :rows="rows" :sliceNumber="5">
+          <grid-table :multipleColumns="multipleColumns" :rows="rows" :sliceNumber="3" :lastSliceNumber="5">
             <template #action="{ row }">
               <edit-icon-button @click="showDialog({ id: row.id, mode: 'edit', callRead: true })" />
               <delete-icon-button @click="onDelete(row)" />
@@ -85,13 +85,15 @@ const columns = [
     name: 'vendorTitle',
     label: '供應商名稱',
     field: 'vendorTitle',
-    align: 'center'
+    align: 'center',
+    isMultiline: true
   },
   {
     name: 'vendorTel',
     label: '供應商電話',
     field: 'vendorTel',
-    align: 'center'
+    align: 'center',
+    isMultiline: true
   },
 
 ]
@@ -115,18 +117,6 @@ const multipleColumns = [
     align: 'center'
   },
   {
-    name: 'vendorTitle',
-    label: '供應商名稱',
-    field: 'vendorTitle',
-    align: 'center'
-  },
-  {
-    name: 'vendorTel',
-    label: '供應商電話',
-    field: 'vendorTel',
-    align: 'center'
-  },
-  {
     name: 'unit',
     label: '其他單位名稱',
     field: 'unit',
@@ -136,6 +126,18 @@ const multipleColumns = [
     name: 'size',
     label: '數量',
     field: 'size',
+    align: 'center'
+  },
+  {
+    name: 'vendorTitle',
+    label: '供應商名稱',
+    field: 'vendorTitle',
+    align: 'center'
+  },
+  {
+    name: 'vendorTel',
+    label: '供應商電話',
+    field: 'vendorTel',
     align: 'center'
   },
 ]
@@ -152,6 +154,7 @@ const readListFetch = async (payload) => {
       return {
         ...item,
         contents: item.packages,
+        otherContents: item.vendorItems,
         vendorItems: item.vendorItems,
         packageUnit: item.packages.map((pkg) => pkg.unit).join('<br>'),
         packageSize: item.packages.map((pkg) => pkg.size).join('<br>'),

@@ -25,9 +25,9 @@
     <q-card v-for="(row, index) in formattedRows" :key="index" flat bordered class="q-mb-sm col-12">
       <div class="row">
         <div v-for="column in columns" :key="column.name" class="col-xs-5 col-sm-5 col-md-4 q-pa-sm">
-          <q-input v-if="column.isPopupEdit" :model-value="row[column.name]"
-            @update:model-value="updateNumericValue(index, column.name, $event)" :label="column.label" type="number"
-            clearable autofocus />
+          <number-input v-if="column.isPopupEdit" :model-value="row[column.name]"
+            @update:model-value="updateNumericValue(index, column.name, $event)" :label="column.label" clearable
+            :outlined="false" />
           <q-select v-else-if="column.isSelected" v-if="column.isSelected" v-model="row.selectedPackage"
             :options="mergeUnitsAndPackages(row)" :label="column.label"
             @update:model-value="updateSelectedPackage(index, $event)" map-options clearable />

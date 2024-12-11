@@ -304,7 +304,6 @@ export default defineComponent({
         isDelivered: clientData.value.isDelivered
       }),
       async (newValues) => {
-        console.log('newValues', newValues)
         const { isPaid, isDelivered } = newValues
 
         if (isPaid === '已收款' && isDelivered === '已出貨') {

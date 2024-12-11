@@ -14,7 +14,7 @@
               <!-- <text-input v-model="formData.email" :label="'Email'" :placeholder="'請輸入Email'" lazy-rules
                 :rules="[$rules.required('Email必填')]" /> -->
               <text-input v-model="formData.email" @keyup.enter="handleLogin" :label="'帳號'" :placeholder="'請輸入帳號'"
-                :rules="[$rules.required('帳號必填')]" />
+                :rules="[$rules.required('帳號必填')]" :showNumberBox="true" />
               <div>
                 <base-button class="w-full q-mb-md" :label="'登入'" style="width: 100%" @click.prevent="handleLogin" />
                 <!-- <base-button

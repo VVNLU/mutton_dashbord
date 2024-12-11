@@ -65,7 +65,21 @@
                   <q-card-section v-for="(content, index) in props.item.contents" :key="index" class="col-12">
                     <q-card flat bordered>
                       <div class="row col-6">
-                        <q-field v-for="(column, colIndex) in multipleColumns.slice(sliceNumber)" :key="colIndex"
+                        <q-field v-for="(column, colIndex) in multipleColumns.slice(sliceNumber, lastSliceNumber)"
+                          :key="colIndex" :label="column.label" stack-label class="col-6 q-pa-sm">
+                          <template v-slot:control>
+                            <div class="self-center full-width no-outline" tabindex="0">
+                              {{ content[column.name] }}
+                            </div>
+                          </template>
+                        </q-field>
+                      </div>
+                    </q-card>
+                  </q-card-section>
+                  <q-card-section v-for="(content, index) in props.item.otherContents" :key="index" class="col-12">
+                    <q-card flat bordered>
+                      <div class="row col-6">
+                        <q-field v-for="(column, colIndex) in multipleColumns.slice(lastSliceNumber)" :key="colIndex"
                           :label="column.label" stack-label class="col-6 q-pa-sm">
                           <template v-slot:control>
                             <div class="self-center full-width no-outline" tabindex="0">
@@ -119,6 +133,7 @@ const props = defineProps({
   multipleColumns: { type: Array, default: () => [] },
   rows: { type: Array, default: () => [] },
   sliceNumber: { type: Number, default: 3 },
+  lastSliceNumber: { type: Number }
 })
 
 const expandedRows = reactive({})
