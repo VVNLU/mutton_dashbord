@@ -146,12 +146,6 @@ onMounted(async () => {
 })
 
 const addNewData = async (item) => {
-  const isDuplicate = rows.value.items.some((row) => row.id === item.id)
-
-  if (isDuplicate) {
-    notifyAPIError({ message: '已有 ' + `${item.title}` + ' 原物料了' })
-    return
-  }
   rows.value.items.push({
     id: item.id,
     title: item.title,
