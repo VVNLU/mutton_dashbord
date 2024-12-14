@@ -25,7 +25,7 @@ const { notify } = useNotify()
 
 const display = ref("") // 顯示的輸入
 const currentInput = ref("") // 當前輸入的運算式
-const fontSize = ref("3rem")
+const fontSize = ref("2rem")
 
 const buttons = [
   { label: "1", color: "#777677" },
