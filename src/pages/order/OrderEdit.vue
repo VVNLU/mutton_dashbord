@@ -38,9 +38,10 @@
                   stack />
               </div>
               <div class="q-pa-xs">
-                <q-btn :disable="clientData.state === '已取消'" v-if="clientData.state !== '處理中'" color="red"
-                  icon="fa-solid fa-trash-can" label="取消" @click="cancelOrder()" rounded stack />
-                <q-btn v-else color="red" icon="fa-solid fa-trash" label="刪除" @click="onDelete()" rounded stack />
+                <q-btn v-if="clientData.isPaid === '未收款' && clientData.isDelivered === '未出貨'" color="red"
+                  icon="fa-solid fa-trash" label="刪除" @click="onDelete()" rounded stack />
+                <q-btn v-else :disable="clientData.state === '已取消'" color="red" icon="fa-solid fa-trash-can" label="取消"
+                  @click="cancelOrder()" rounded stack />
               </div>
             </q-card-section>
           </q-card-section>
@@ -133,6 +134,23 @@
       </div>
     </base-form>
   </base-dialog>
+  <template>
+    <q-dialog v-model="isCancelDialogVisible">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">取消原因</div>
+        </q-card-section>
+        <q-card-section>
+          <text-input v-model="cancelReason" :label="'取消的原因'" :placeholder="'請輸入取消的原因'" outlined />
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="確認" color="red" @click="submitCancelReason" />
+          <q-btn flat label="取消" color="primary" @click="isCancelDialogVisible = false" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </template>
+
 </template>
 <script>
 import { defineComponent, ref, watch, computed } from 'vue-demi'
@@ -149,6 +167,8 @@ export default defineComponent({
     const clientData = ref([])
     const currentId = ref(null)
     const expanded = ref(false)
+    const isCancelDialogVisible = ref(false)
+    const cancelReason = ref('')
     const columns = [
       {
         name: 'productTitle',
@@ -254,20 +274,27 @@ export default defineComponent({
         cancelButtonText: '取消'
       })
       if (res) {
-        const payload = {
-          ...clientData.value,
-          state: '已取消',
-          isPaid: '已取消',
-          isDelivered: '已取消'
-        }
+        isCancelDialogVisible.value = true
+      }
+    }
 
-        const id = currentId.value
-        const response = await callUpdateFetch(id, { ...payload })
+    const submitCancelReason = async () => {
+      const payload = {
+        ...clientData.value,
+        state: '已取消',
+        isPaid: '已取消',
+        isDelivered: '已取消',
+        cancelReason: cancelReason.value
+      }
 
-        if (response) {
-          isShowDialog.value = false
-          emit('update')
-        }
+      const id = currentId.value
+      const response = await callUpdateFetch(id, { ...payload })
+
+      if (response) {
+        isShowDialog.value = false
+        isCancelDialogVisible.value = false
+        cancelReason.value = ''
+        emit('update')
       }
     }
 
@@ -354,6 +381,8 @@ export default defineComponent({
       clientData,
       currentId,
       expanded,
+      isCancelDialogVisible,
+      cancelReason,
       columns,
       totalAmount,
       isSmScreen,
@@ -363,6 +392,7 @@ export default defineComponent({
       showDialog,
       hideDialog,
 
+      submitCancelReason,
       getStateColor,
       getStateIcon,
       updatePaidStatus,
