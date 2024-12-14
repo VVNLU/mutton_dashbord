@@ -6,9 +6,9 @@
           <q-input v-model="display" :style="{ fontSize: fontSize }" outlined readonly />
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <div class="row q-gutter-sm">
+          <div class="grid-container">
             <q-btn v-for="btn in buttons" :key="btn.label" :label="btn.label" :style="getButtonStyle(btn)"
-              @click="handleButtonClick(btn)" class="button-custom" rounded />
+              :class="[{ 'span-vertical': btn.span }, 'button-custom']" @click="handleButtonClick(btn)" rounded />
           </div>
         </q-card-section>
       </q-card>
@@ -28,20 +28,22 @@ const currentInput = ref("") // 當前輸入的運算式
 const fontSize = ref("3rem")
 
 const buttons = [
-  { label: "7", color: "#777677" },
-  { label: "8", color: "#777677" },
-  { label: "9", color: "#777677" },
-  { label: "4", color: "#777677" },
-  { label: "5", color: "#777677" },
-  { label: "6", color: "#777677" },
   { label: "1", color: "#777677" },
   { label: "2", color: "#777677" },
   { label: "3", color: "#777677" },
   { label: "←", color: "#ff9e0b" },
+  { label: "4", color: "#777677" },
+  { label: "5", color: "#777677" },
+  { label: "6", color: "#777677" },
+  { label: "+/-", color: "#ff9e0b" },
+  { label: "7", color: "#777677" },
+  { label: "8", color: "#777677" },
+  { label: "9", color: "#777677" },
+  { label: "↵", color: "#ff9e0b", span: true },
+  { label: "AC", color: "#ff9e0b" },
   { label: "0", color: "#777677" },
-  { label: "↵", color: "#ff9e0b" },
+  { label: ".", color: "#ff9e0b" },
 ]
-
 
 const getButtonStyle = (btn) => ({
   backgroundColor: btn.color,
@@ -73,6 +75,24 @@ const handleButtonClick = (btn) => {
     return
   }
 
+  if (label === "AC") {
+    currentInput.value = ""
+    display.value = "0"
+    return
+  }
+
+  if (label === "+/-") {
+    if (!currentInput.value || currentInput.value === "0") {
+      return
+    }
+    if (currentInput.value.startsWith("-")) {
+      currentInput.value = currentInput.value.slice(1)
+    } else {
+      currentInput.value = `-${currentInput.value}`
+    }
+    display.value = currentInput.value
+    return
+  }
 
   if (currentInput.value === "0" && label === "0") {
     currentInput.value += label
@@ -86,9 +106,18 @@ const handleButtonClick = (btn) => {
 </script>
 
 <style scoped>
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 60px;
+  gap: 5px;
+}
+
 .button-custom {
-  flex: 1 0 25%;
-  height: 60px;
   font-size: 1.4rem;
+}
+
+.span-vertical {
+  grid-row: span 2;
 }
 </style>

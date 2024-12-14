@@ -36,7 +36,8 @@
 
     <q-dialog v-model="isCalculatorVisible" no-backdrop-dismiss persistent @click.stop>
       <div class="calculator" tabindex="0">
-        <calculator @enter="handleResult" />
+        <!-- <calculator @enter="handleResult" /> -->
+        <number-box @enter="handleResult" />
       </div>
     </q-dialog>
   </div>
