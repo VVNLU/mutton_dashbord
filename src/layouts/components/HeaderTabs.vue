@@ -1,6 +1,6 @@
 <template>
   <q-tabs class="bg-primary text-white shadow-2">
-    <q-btn flat icon="fa-solid fa-house" @click="dashboard" />
+    <q-btn flat icon="fa-solid fa-house" @click="dashboard" dense />
     <q-space />
     <template v-for="(routeItem, routeIndex) in asyncRoutes" :key="routeIndex">
       <!-- group 有多個元素，則使用下拉選單 -->
@@ -30,7 +30,7 @@
       </template>
     </template>
     <q-space />
-    <q-btn flat icon="logout" @click="logout" />
+    <q-btn flat icon="logout" @click="logout" dense />
   </q-tabs>
 </template>
 
