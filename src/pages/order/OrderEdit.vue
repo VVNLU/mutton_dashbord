@@ -57,7 +57,7 @@
                 <q-item-label class="text-accent text-shadow" v-if="clientData.payment">
                   <q-icon name="paid" class="q-pr-xs" size="1.5em" />
                   {{ clientData.payment }}付款
-                  <template v-if="clientData.payment === '轉帳'">: 後五碼
+                  <template v-if="clientData.payment === '轉帳' && clientData.isPaid === '已收款'">: 後五碼
                     <span class="text-bold">
                       {{ clientData.accountLastFive }}
                     </span>
@@ -66,7 +66,8 @@
                 <q-item-label class="text-secondary text-shadow" v-if="clientData.delivery">
                   <q-icon name="local_shipping" class="q-pr-xs" size="1.5em" />
                   {{ clientData.delivery }}出貨
-                  <template v-if="clientData.delivery === '宅配'">: 貨運單號
+                  <template v-if="clientData.delivery === '宅配' && clientData.isDelivered === '已出貨'">
+                    : 貨運單號
                     <span class="text-bold">
                       {{ clientData.deliveryNumber }}
                     </span>
@@ -130,10 +131,47 @@
             </div>
           </q-slide-transition>
         </q-card>
-
       </div>
+
+      <!-- 貨運單號 -->
+      <template>
+        <q-dialog v-model="isDeliveryDialogVisible">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">貨運單號</div>
+            </q-card-section>
+            <q-card-section>
+              <text-input v-model="deliveryNumber" :label="'貨運單號'" :placeholder="'請輸入貨運單號'" :required="true" outlined />
+            </q-card-section>
+            <q-card-actions align="right">
+              <q-btn flat label="確認" color="red" @click="submitDeliveryState" />
+              <q-btn flat label="取消" color="primary" @click="isDeliveryDialogVisible = false" />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+      </template>
+
+      <!-- 帳號後五碼 -->
+      <template>
+        <q-dialog v-model="isPaymentDialogVisible">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">帳號後五碼</div>
+            </q-card-section>
+            <q-card-section>
+              <text-input v-model="accountLastFive" :label="'帳號後五碼'" :placeholder="'請輸入帳號後五碼'" :required="true"
+                outlined />
+            </q-card-section>
+            <q-card-actions align="right">
+              <q-btn flat label="確認" color="red" @click="submitPaymentState" />
+              <q-btn flat label="取消" color="primary" @click="isPaymentDialogVisible = false" />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+      </template>
     </base-form>
   </base-dialog>
+  <!-- 取消原因 -->
   <template>
     <q-dialog v-model="isCancelDialogVisible">
       <q-card>
@@ -169,6 +207,10 @@ export default defineComponent({
     const expanded = ref(false)
     const isCancelDialogVisible = ref(false)
     const cancelReason = ref('')
+    const isDeliveryDialogVisible = ref(false)
+    const deliveryNumber = ref('')
+    const isPaymentDialogVisible = ref(false)
+    const accountLastFive = ref('')
     const columns = [
       {
         name: 'productTitle',
@@ -222,28 +264,6 @@ export default defineComponent({
       }
     }
 
-    const updatePaidStatus = async () => {
-      const res = await messageDelete({
-        title: '收款',
-        message: '確認已收款？',
-        confirmButtonText: '確認',
-        cancelButtonText: '取消'
-      })
-      if (res) {
-        const payload = {
-          ...clientData.value,
-          isPaid: "已收款"
-        }
-        const id = currentId.value
-        const response = await callUpdateFetch(id, { ...payload })
-
-        if (response) {
-          await readFetch(id)
-          emit('update')
-        }
-      }
-    }
-
     const updateDeliveryStatus = async () => {
       const res = await messageDelete({
         title: '出貨',
@@ -252,16 +272,55 @@ export default defineComponent({
         cancelButtonText: '取消'
       })
       if (res) {
-        const payload = {
-          ...clientData.value,
-          isDelivered: "已出貨"
-        }
-        const id = currentId.value
-        const response = await callUpdateFetch(id, { ...payload })
+        if (clientData.value.delivery === '宅配') {
+          isDeliveryDialogVisible.value = true
+        } else {
+          const payload = {
+            ...clientData.value,
+            isDelivered: '已出貨',
+            deliveryNumber: deliveryNumber.value
+          }
 
-        if (response) {
-          await readFetch(id)
-          emit('update')
+          const id = currentId.value
+          const response = await callUpdateFetch(id, { ...payload })
+
+          if (response) {
+            isShowDialog.value = false
+            isDeliveryDialogVisible.value = false
+            deliveryNumber.value = ''
+            await readFetch(id)
+            emit('update')
+          }
+
+        }
+      }
+    }
+
+    const updatePaidStatus = async () => {
+      const res = await messageDelete({
+        title: '收款',
+        message: '確認已收款？',
+        confirmButtonText: '確認',
+        cancelButtonText: '取消'
+      })
+      if (res) {
+        if (clientData.value.payment === '轉帳') {
+          isPaymentDialogVisible.value = true;
+        } else {
+          const payload = {
+            ...clientData.value,
+            isPaid: '已收款',
+          }
+
+          const id = currentId.value
+          const response = await callUpdateFetch(id, { ...payload })
+
+          if (response) {
+            isShowDialog.value = false
+            isPaymentDialogVisible.value = false
+            await readFetch(id)
+            emit('update')
+          }
         }
       }
     }
@@ -296,6 +355,52 @@ export default defineComponent({
         cancelReason.value = ''
         emit('update')
       }
+    }
+
+    const submitDeliveryState = async () => {
+      form.value.validate().then(async (success) => {
+        if (success) {
+          const payload = {
+            ...clientData.value,
+            isDelivered: '已出貨',
+            deliveryNumber: deliveryNumber.value
+          }
+
+          const id = currentId.value
+          const response = await callUpdateFetch(id, { ...payload })
+
+          if (response) {
+            isShowDialog.value = false
+            isDeliveryDialogVisible.value = false
+            deliveryNumber.value = ''
+            await readFetch(id)
+            emit('update')
+          }
+        }
+      })
+    }
+
+    const submitPaymentState = async () => {
+      form.value.validate().then(async (success) => {
+        if (success) {
+          const payload = {
+            ...clientData.value,
+            isPaid: '已收款',
+            accountLastFive: accountLastFive.value
+          }
+
+          const id = currentId.value
+          const response = await callUpdateFetch(id, { ...payload })
+
+          if (response) {
+            isShowDialog.value = false
+            isPaymentDialogVisible.value = false
+            accountLastFive.value = ''
+            await readFetch(id)
+            emit('update')
+          }
+        }
+      })
     }
 
     const getStateColor = (status) => {
@@ -383,6 +488,10 @@ export default defineComponent({
       expanded,
       isCancelDialogVisible,
       cancelReason,
+      isDeliveryDialogVisible,
+      deliveryNumber,
+      isPaymentDialogVisible,
+      accountLastFive,
       columns,
       totalAmount,
       isSmScreen,
@@ -393,10 +502,12 @@ export default defineComponent({
       hideDialog,
 
       submitCancelReason,
+      submitDeliveryState,
+      submitPaymentState,
       getStateColor,
       getStateIcon,
-      updatePaidStatus,
       updateDeliveryStatus,
+      updatePaidStatus,
       cancelOrder,
 
       onHide,
