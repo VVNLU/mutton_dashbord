@@ -43,10 +43,10 @@
                   <option-group v-model="rows.payment" label="交易方式" :options="selectedPaymentMethod" type="radio"
                     class="full-width" />
                 </div>
-                <div v-if="rows.payment === '轉帳'" class="q-mt-md col-md-6 col-sm-12 col-xs-12">
+                <!-- <div v-if="rows.payment === '轉帳'" class="q-mt-md col-md-6 col-sm-12 col-xs-12">
                   <text-input v-model="rows.accountLastFive" label="帳號後五碼" placeholder="請輸入帳號後五碼" :required="true"
                     :maxLength="5" :minLength="5" :showNumberBox="true" />
-                </div>
+                </div> -->
               </div>
             </card-body>
             <card-body class="q-pt-none">
@@ -55,9 +55,9 @@
                   <option-group v-model="rows.delivery" label="出貨方式" :options="selectedDeliveryMethod" type="radio"
                     class="full-width" />
                 </div>
-                <div v-if="rows.delivery === '宅配'" class="q-mt-md col-md-6 col-sm-12 col-xs-12">
+                <!-- <div v-if="rows.delivery === '宅配'" class="q-mt-md col-md-6 col-sm-12 col-xs-12">
                   <text-input v-model="rows.deliveryNumber" label="貨運單號" placeholder="請輸入貨運單號" :required="true" />
-                </div>
+                </div> -->
               </div>
             </card-body>
           </q-card>

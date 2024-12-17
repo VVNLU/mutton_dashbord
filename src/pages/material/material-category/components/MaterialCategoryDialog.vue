@@ -54,7 +54,7 @@
                   <number-input label="比例" v-model="item.size" class="col-sm-4 col-xs-3" :outlined="false"
                     :dense="true" />
                   <q-chip>{{ data.state.unit }}</q-chip>
-                  <delete-icon-button class="col-1" @click="onDelete(row)" />
+                  <delete-icon-button class="col-1" @click="onDelete(item)" />
                 </div>
               </q-card>
               <div>
@@ -138,7 +138,7 @@ export default defineComponent({
       if (res) emit('save')
     }
 
-    const onDelete = async (row) => {
+    const onDelete = async (item) => {
       const res = await messageDelete({
         title: '刪除',
         message: '確認刪除單位設定？',
@@ -147,7 +147,7 @@ export default defineComponent({
       })
       if (!res) return
 
-      const index = data.state.packages.indexOf(row)
+      const index = data.state.packages.indexOf(item)
       if (index !== -1) {
         data.state.packages.splice(index, 1)
       }
