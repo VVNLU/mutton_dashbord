@@ -13,10 +13,13 @@ import {
 // 時間戳
 export const addDataWithTimestamp = async (data) => {
   try {
+    const processedVendors = data.vendors.map(item => doc(db, 'vendor', item.id))
+
     const docRef = await addDoc(collection(db, 'material_category'), {
       ...data,
       createdAt: Timestamp.now(),
-      updateAt: Timestamp.now()
+      updateAt: Timestamp.now(),
+      vendors: processedVendors
     })
     return docRef
   } catch (error) {
@@ -40,7 +43,27 @@ export const addData = async (data) => {
 export const getData = async (id) => {
   try {
     const docRef = await getDoc(doc(db, 'material_category', id))
-    return docRef.data()
+    const categoryData = docRef.data()
+
+    if (categoryData.vendors && categoryData.vendors.length > 0) {
+      const categoriesDetails = await Promise.all(
+        categoryData.vendors.map(async (item) => {
+          const categorySnapshot = await getDoc(item)
+          const categoryDetails = categorySnapshot.data()
+          if (categoryDetails !== undefined) {
+            return {
+              ...item,
+              id: item.id,
+              categoryDetails
+            }
+          }
+        })
+      )
+      return {
+        ...categoryData,
+        vendors: categoriesDetails.filter(Boolean)
+      }
+    }
   } catch (error) {
     console.error('Error getting documents: ', error)
     throw error
@@ -51,7 +74,29 @@ export const getData = async (id) => {
 export const getList = async () => {
   try {
     const docRef = await getDocs(collection(db, 'material_category'))
-    const data = docRef.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    const data = await Promise.all(
+      docRef.docs.map(async (doc) => {
+        const categoryData = { id: doc.id, ...doc.data() }
+
+        // 獲取原物料詳細資訊
+        if (categoryData.vendors.length > 0) {
+          const vendorsDetails = await Promise.all(
+            categoryData.vendors.map(async (item) => {
+              const productSnapshot = await getDoc(item)
+              return {
+                ...item,
+                vendorDetails: productSnapshot.data()
+              }
+            })
+          )
+
+          categoryData.vendors = vendorsDetails
+        }
+
+        return categoryData
+      })
+    )
+
     return data
   } catch (error) {
     console.error('Error getting list: ', error)
@@ -61,11 +106,14 @@ export const getList = async () => {
 
 // 更新數據
 export const updateData = async (docId, newData) => {
+  const processedVendors = newData.vendors.map(item => doc(db, 'vendor', item.id))
+
   try {
     const newDocRef = await updateDoc(
       doc(db, 'material_category', docId),
       {
         ...newData,
+        vendors: processedVendors,
         updateAt: Timestamp.now() // 更新時間為當前時間
       })
     return newDocRef

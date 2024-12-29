@@ -181,9 +181,9 @@ const readListMaterialCategoryFetch = async () => {
 const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
   if (res) {
-    rows.value = res
-    if (!rows.value.items) {
-      rows.value.items = []
+    rows.value = {
+      ...res,
+      items: res.items?.filter(item => item.categoryDetails !== undefined) || []
     }
   }
 }

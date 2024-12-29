@@ -33,7 +33,7 @@
               <div v-html="row.materialTitle"></div>
             </template>
             <template #props="{ row }">
-              <div v-if="row.type === '進貨'">
+              <div v-if="row.type !== '銷貨'">
                 <edit-icon-button :to="'/material-record/edit/' + row.id" />
                 <delete-icon-button @click="onDelete(row)" />
               </div>
@@ -201,8 +201,12 @@ onMounted(async () => {
 const readListFetch = async (payload) => {
   return await getList(payload).then((result) => {
     rows.value = result.map((res) => {
+      res.items = res.items.filter((item) => item.categoryDetails !== undefined)
+
       // 計算 materialQuantities 和 materialTotals
+      const materialSize = res.items.map((item) => Math.abs(item.selectedPackage.size))
       const materialQuantities = res.items.map((item) => Math.abs(item.quantity))
+      const materialUnitSize = materialSize.map((size, index) => size * materialQuantities[index])
       const materialTotals = res.items.map((item) => item.total)
 
       // 計算 materialPrice
@@ -238,7 +242,7 @@ const readListFetch = async (payload) => {
         ...res,
         contents: res.items,
         materialTitle: res.items.map((item) => item.title).join('<br>'),
-        materialQuantity: materialQuantities.join('<br>'),
+        materialQuantity: materialUnitSize.join('<br>'),
         materialTotal: materialTotals.join('<br>'),
         materialUnit: res.items.map((item) => item.unit).join('<br>'),
         materialPrice: materialPrices.join('<br>')

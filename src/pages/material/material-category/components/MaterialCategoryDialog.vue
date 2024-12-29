@@ -10,8 +10,8 @@
               <div class="row q-col-gutter-x-md q-col-gutter-y-sm">
                 <div class="col-12">
                   <q-btn v-for="item in vendorData" :key="item.vendorId" :label="item.vendorTitle" outline rounded
-                    :text-color="data.state.vendorItems.some(vendor => vendor.vendorId === item.vendorId) ? 'white' : 'primary'"
-                    :class="[data.state.vendorItems.some(vendor => vendor.vendorId === item.vendorId) ? 'bg-primary' : '', 'q-ma-xs']"
+                    :text-color="data.state.vendors.some(vendor => vendor.id === item.vendorId) ? 'white' : 'primary'"
+                    :class="[data.state.vendors.some(vendor => vendor.id === item.vendorId) ? 'bg-primary' : '', 'q-ma-xs']"
                     @click="toggleVendorSelection(item)" />
                 </div>
               </div>
@@ -123,13 +123,13 @@ export default defineComponent({
     }
 
     const toggleVendorSelection = (item) => {
-      const index = data.state.vendorItems.findIndex(vendor => vendor.vendorId === item.vendorId)
+      const index = data.state.vendors.findIndex(vendor => vendor.id === item.vendorId)
       if (index === -1) {
         // 新增
-        data.state.vendorItems.push(item)
+        data.state.vendors.push({ id: item.vendorId })
       } else {
         // 移除
-        data.state.vendorItems.splice(index, 1)
+        data.state.vendors.splice(index, 1)
       }
     }
 

@@ -4,7 +4,7 @@ class MaterialCategory {
   unit = ''
   quantity = 0
   packages = []
-  vendorItems = []
+  vendors = []
 
   constructor(obj) {
     if (obj) {
@@ -12,7 +12,7 @@ class MaterialCategory {
       this.unit = obj?.unit
       this.quantity = obj?.quantity
       this.packages = obj?.packages
-      this.vendorItems = obj?.vendorItems
+      this.vendors = obj?.vendors
     }
   }
 }
