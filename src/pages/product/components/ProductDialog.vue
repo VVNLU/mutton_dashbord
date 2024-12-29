@@ -72,22 +72,22 @@ export default defineComponent({
 
     const columns = [
       {
-        name: 'materialTitle',
-        label: '項目',
-        field: 'materialTitle',
+        name: 'title',
+        label: '原物料名稱',
+        field: 'title',
         align: 'center'
       },
       {
-        name: 'materialQuantity',
+        name: 'quantity',
         label: '數量',
-        field: 'materialQuantity',
+        field: 'quantity',
         align: 'center',
         isPopupEdit: true
       },
       {
-        name: 'materialUnit',
+        name: 'unit',
         label: '單位',
-        field: 'materialUnit',
+        field: 'unit',
         align: 'center'
       },
     ]
@@ -108,7 +108,12 @@ export default defineComponent({
     )
 
     const addNewData = async (item) => {
-      const isDuplicate = rows.value.some((row) => row.id === item.id)
+      const isDuplicate = rows.value.some((row) => {
+        if (row.categoryRef) {
+          return row.categoryRef.id === item.id
+        }
+        return row.id === item.id
+      })
 
       if (isDuplicate) {
         notifyAPIError({ message: '已有 ' + `${item.title}` + ' 原物料了' })
@@ -117,9 +122,9 @@ export default defineComponent({
 
       rows.value = [...rows.value, {
         id: item.id,
-        materialTitle: item.title,
-        materialQuantity: 0,
-        materialUnit: item.unit,
+        title: item.title,
+        quantity: 0,
+        unit: item.unit,
       }]
     }
 
@@ -147,8 +152,7 @@ export default defineComponent({
         cancelButtonText: '取消'
       })
       if (!result) return
-
-      const index = rows.value.indexOf(row)
+      const index = rows.value.findIndex((item) => item.id === row.id)
       if (index !== -1) {
         rows.value.splice(index, 1)
       }

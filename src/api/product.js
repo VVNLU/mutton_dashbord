@@ -14,19 +14,18 @@ import {
 // 時間戳
 export const addDataWithTimestamp = async (data) => {
   try {
-    const processedMaterialItems = data.materialItems.map(item => ({
+    const processedCategory = data.materialItems.map(item => ({
       materialRef: doc(db, 'material_category', item.id), // 創建 Reference
       materialQuantity: item.materialQuantity,
       materialTitle: item.materialTitle,
       materialUnit: item.materialUnit
     }))
 
-
     const docRef = await addDoc(collection(db, 'product'), {
       ...data,
       createdAt: Timestamp.now(),
       updateAt: Timestamp.now(),
-      materialItems: processedMaterialItems
+      materials: processedCategory
     })
     return docRef
   } catch (error) {
@@ -53,19 +52,24 @@ export const getData = async (id) => {
     const productData = docRef.data()
 
     // 獲取原物料詳細資訊
-    if (productData.materialItems && productData.materialItems.length > 0) {
-      const productsDetails = await Promise.all(
-        productData.materialItems.map(async (item) => {
-          const productSnapshot = await getDoc(item.materialRef)
-          return {
-            ...item,
-            productDetails: productSnapshot.data()
+    if (productData.materials && productData.materials.length > 0) {
+      const categoriesDetails = await Promise.all(
+        productData.materials.map(async (item) => {
+          const categorySnapshot = await getDoc(item.categoryRef)
+          const categoryDetails = categorySnapshot.data()
+          if (categoryDetails !== undefined) {
+            return {
+              ...item,
+              categoryDetails,
+              title: categoryDetails.title,
+              unit: categoryDetails.unit,
+            }
           }
         })
       )
       return {
         ...productData,
-        materialItems: productsDetails
+        materials: categoriesDetails
       }
     }
   } catch (error) {
@@ -83,10 +87,10 @@ export const getList = async () => {
         const productData = { id: doc.id, ...doc.data() }
 
         // 獲取原物料詳細資訊
-        if (productData.materialItems && productData.materialItems.length > 0) {
+        if (productData.materials && productData.materials.length > 0) {
           const materialsDetails = await Promise.all(
-            productData.materialItems.map(async (item) => {
-              const productSnapshot = await getDoc(item.materialRef)
+            productData.materials.map(async (item) => {
+              const productSnapshot = await getDoc(item.categoryRef)
               return {
                 ...item,
                 materialDetails: productSnapshot.data()
@@ -94,7 +98,7 @@ export const getList = async () => {
             })
           )
 
-          productData.materialItems = materialsDetails
+          productData.materials = materialsDetails
         }
 
         return productData
@@ -109,26 +113,27 @@ export const getList = async () => {
 
 // 更新數據
 export const updateData = async (docId, newData) => {
-  try {
-    const processedProductItems = newData.materialItems
-      ? newData.materialItems.map(item => ({
-        materialRef: doc(db, 'product', item.materialRef.id),
-        materialQuantity: item.materialQuantity,
-        materialTitle: item.materialTitle
-      }))
-      : undefined
-    const updateData = processedProductItems
-      ? {
-        ...newData,
-        materialItems: processedProductItems,
-        updateAt: Timestamp.now()
+  const processedCategory = newData.materials.map(item => {
+    if (!item.categoryRef) {
+      return {
+        categoryRef: doc(db, 'material_category', item.id),
+        quantity: item.quantity
       }
-      : {
-        ...newData,
-        updateAt: Timestamp.now()
+    } else {
+      return {
+        categoryRef: item.categoryRef,
+        quantity: item.quantity
       }
+    }
+  })
 
-    const newDocRef = await updateDoc(doc(db, 'product', docId), updateData)
+  try {
+    const newDocRef = await updateDoc(doc(db, 'product', docId), {
+      ...newData,
+      materials: processedCategory,
+      updateAt: Timestamp.now() // 更新時間為當前時間
+
+    })
     return newDocRef
   } catch (error) {
     console.error('Error updating document:', error)

@@ -37,8 +37,8 @@
                     { label: '條列式', value: 'columnType' },
                     { label: '網格式', value: 'gridType' }
                   ]" />
-                  <data-table v-if="switchStyle === 'gridType'" grid :columns="columns" :rows="rows.materialItems" />
-                  <data-table v-else :columns="columns" :rows="rows.materialItems" />
+                  <data-table v-if="switchStyle === 'gridType'" grid :columns="columns" :rows="rows.materials" />
+                  <data-table v-else :columns="columns" :rows="rows.materials" />
                 </div>
               </div>
             </card-body>
@@ -47,7 +47,7 @@
       </div>
     </base-form>
 
-    <product-dialog ref="dialog" v-model:detailData="rows.materialItems" @save="handleSave" />
+    <product-dialog ref="dialog" v-model:detailData="rows.materials" @save="handleSave" />
   </q-page>
   <fixed-footer @save="onSubmit" />
 </template>
@@ -73,22 +73,22 @@ const switchStyle = ref('gridType')
 
 const columns = [
   {
-    name: 'materialTitle',
-    label: '項目',
-    field: 'materialTitle',
+    name: 'title',
+    label: '原物料名稱',
+    field: 'title',
     align: 'left'
   },
   {
-    name: 'materialQuantity',
+    name: 'quantity',
     label: '數量',
-    field: 'materialQuantity',
+    field: 'quantity',
     align: 'left',
     isPopupEdit: true
   },
   {
-    name: 'materialUnit',
+    name: 'unit',
     label: '單位',
-    field: 'materialUnit',
+    field: 'unit',
     align: 'left'
   },
 ]
@@ -100,7 +100,7 @@ onMounted(async () => {
 })
 
 const handleSave = (addData) => {
-  rows.value.materialItems = addData
+  rows.value.materials = addData
 }
 
 const readFetch = async (id) => {
@@ -117,11 +117,12 @@ const updateFetch = async (id, payload) => {
 
 const refreshReadData = async (id) => {
   const [res] = await callReadFetch(id)
-
-  rows.value = res
-  rows.value.materialItems = Array.isArray(rows.value.materialItems)
-    ? rows.value.materialItems
-    : [rows.value.materialItems]
+  if (res.materials) {
+    const validMaterials = res.materials.filter(material => material !== undefined && material !== null && material !== '')
+    rows.value = { ...res, materials: validMaterials.length > 0 ? validMaterials : [] }
+  } else {
+    rows.value = { ...res, materials: [] }
+  }
 }
 
 const onSubmit = async () => {
@@ -130,7 +131,7 @@ const onSubmit = async () => {
       const payload =
       {
         ...rows.value,
-        materialItems: rows.value.materialItems
+        materials: rows.value.materials
       }
       const urlObj = {
         create: () => {
@@ -148,7 +149,7 @@ const onSubmit = async () => {
 }
 
 const showDialog = () => {
-  dialog.value.showDialog({ rows: rows.value.materialItems })
+  dialog.value.showDialog({ rows: rows.value.materials })
 }
 
 const { goBack } = useGoBack()
@@ -159,7 +160,7 @@ const { form, callReadFetch, callCreateFetch, callUpdateFetch } = useCRUD({
 })
 
 watch(
-  () => rows.value.materialItems,
+  () => rows.value.materials,
   (newContents) => {
     if (dialog.value) {
       dialog.value.$emit('update:detailData', newContents)
