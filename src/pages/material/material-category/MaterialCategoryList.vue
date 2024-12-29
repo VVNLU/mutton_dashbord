@@ -56,15 +56,15 @@ const columns = [
     align: 'center'
   },
   {
-    name: 'unit',
-    label: '單位',
-    field: 'unit',
-    align: 'center'
-  },
-  {
     name: 'quantity',
     label: '庫存',
     field: 'quantity',
+    align: 'center'
+  },
+  {
+    name: 'unit',
+    label: '單位',
+    field: 'unit',
     align: 'center'
   },
   {
@@ -154,12 +154,21 @@ const readListFetch = async (payload) => {
       return {
         ...item,
         contents: item.packages,
-        otherContents: item.vendorItems,
-        vendorItems: item.vendorItems,
+        otherContents: item.vendors
+          .filter(vendor => vendor && vendor.vendorDetails) // 過濾掉沒有資料的vendor
+          .map(vendor => ({
+            vendorTitle: vendor.vendorDetails?.title,
+            vendorTel: vendor.vendorDetails?.tel
+          })),
+        vendors: item.vendors,
         packageUnit: item.packages.map((pkg) => pkg.unit).join('<br>'),
         packageSize: item.packages.map((pkg) => pkg.size).join('<br>'),
-        vendorTitle: item.vendorItems.map(vendor => vendor.vendorTitle).join('<br>'),
-        vendorTel: item.vendorItems.map(vendor => vendor.vendorTel).join('<br>'),
+        vendorTitle: item.vendors
+          .filter(vendor => vendor && vendor.vendorDetails)
+          .map(vendor => vendor.vendorDetails.title).join('<br>'),
+        vendorTel: item.vendors
+          .filter(vendor => vendor && vendor.vendorDetails)
+          .map(vendor => vendor.vendorDetails.tel).join('<br>'),
       }
     })
   } finally {

@@ -17,7 +17,7 @@ export const addDataWithTimestamp = async (data) => {
   try {
     const processedMaterialItems = data.items.map(item => ({
       ...item,
-      materialRef: doc(db, 'material_category', item.id), // 創建 Reference
+      categoryRef: doc(db, 'material_category', item.id), // 創建 Reference
     }))
 
     const docRef = await addDoc(collection(db, 'material_record'), {
@@ -28,10 +28,10 @@ export const addDataWithTimestamp = async (data) => {
     })
 
     for (const item of processedMaterialItems) {
-      const { materialRef, quantity, selectedPackage } = item
+      const { categoryRef, quantity, selectedPackage } = item
       const packageSize = selectedPackage.size ?? 1
 
-      await updateDoc(materialRef, {
+      await updateDoc(categoryRef, {
         quantity: increment(quantity * packageSize) // 累加數量
       })
     }
@@ -58,7 +58,25 @@ export const addData = async (data) => {
 export const getData = async (id) => {
   try {
     const docRef = await getDoc(doc(db, 'material_record', id))
-    return docRef.data()
+    const recordData = docRef.data()
+
+    // 獲取原物料詳細資訊
+    if (recordData.items && recordData.items.length > 0) {
+      const categoryDetails = await Promise.all(
+        recordData.items.map(async (item) => {
+          const recordSnapshot = await getDoc(item.categoryRef)
+          return {
+            ...item,
+            categoryDetails: recordSnapshot.data()
+          }
+        })
+      )
+      return {
+        ...recordData,
+        items: categoryDetails
+      }
+    }
+
   } catch (error) {
     console.error('Error getting documents: ', error)
     throw error
@@ -69,8 +87,32 @@ export const getData = async (id) => {
 export const getList = async () => {
   try {
     const docRef = await getDocs(collection(db, 'material_record'))
-    const data = docRef.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    const data = await Promise.all(
+      docRef.docs.map(async (doc) => {
+        const recordData = { id: doc.id, ...doc.data() }
+
+        // 獲取原物料詳細資訊
+        if (recordData.items && recordData.items.length > 0) {
+          const categoriesDetails = await Promise.all(
+            recordData.items.map(async (item) => {
+              const recordSnapshot = await getDoc(item.categoryRef)
+              return {
+                ...item,
+                categoryDetails: recordSnapshot.data()
+              }
+            })
+          )
+
+          recordData.items = categoriesDetails
+        }
+
+        return recordData
+      })
+    )
     return data
+
+    // const data = docRef.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    // return data
   } catch (error) {
     console.error('Error getting list: ', error)
     throw error
@@ -91,7 +133,7 @@ export const updateData = async (docId, newData) => {
 
     const updatedMaterialItems = newData.items.map(item => ({
       ...item,
-      materialRef: doc(db, 'material_category', item.id),
+      categoryRef: doc(db, 'material_category', item.id),
     }))
 
     // 更新原物料紀錄
@@ -107,16 +149,16 @@ export const updateData = async (docId, newData) => {
     )
 
     for (const removedItem of removedItems) {
-      const removedMaterialRef = doc(db, 'material_category', removedItem.id)
+      const removedcategoryRef = doc(db, 'material_category', removedItem.id)
       const removedPackageSize = removedItem.selectedPackage.size ?? 1
 
-      await updateDoc(removedMaterialRef, {
+      await updateDoc(removedcategoryRef, {
         quantity: increment(-removedItem.quantity * removedPackageSize),
       })
     }
 
     for (const newItem of updatedMaterialItems) {
-      const { materialRef, quantity, selectedPackage } = newItem
+      const { categoryRef, quantity, selectedPackage } = newItem
       const newPackageSize = selectedPackage.size ?? 1
       const originalItem = originalData.items.find(item => item.id === newItem.id)
 
@@ -124,14 +166,14 @@ export const updateData = async (docId, newData) => {
         const originalPackageSize = originalItem.selectedPackage.size ?? 1
 
         // originalQuantity 歸零
-        await updateDoc(materialRef, {
+        await updateDoc(categoryRef, {
           quantity: increment(-originalItem.quantity * originalPackageSize),
         })
       }
 
       const newQuantity = quantity * newPackageSize
       // 儲存新的 newQuantity
-      await updateDoc(materialRef, {
+      await updateDoc(categoryRef, {
         quantity: increment(newQuantity),
       })
     }
@@ -176,9 +218,9 @@ export const deleteData = async (docId) => {
 
     // 扣除已進貨的原物料數量
     for (const item of currentData.items) {
-      const materialRef = item.materialRef
+      const categoryRef = item.categoryRef
       const packageSize = item.selectedPackage.size ?? 1
-      await updateDoc(materialRef, {
+      await updateDoc(categoryRef, {
         quantity: increment(-item.quantity * packageSize)
       })
     }
