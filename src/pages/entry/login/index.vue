@@ -2,10 +2,10 @@
   <q-layout>
     <q-page-container>
       <q-page class="bg-page flex flex-center">
-        <q-card class="w-3/10 <sm:w-4/5 <md:w-3/5">
+        <q-card class="w-3/10 <sm:w-4/5 <md:w-3/5" style="background: rgba(255, 255, 255, 0.7);">
           <q-card-section>
             <div class="text-center q-pt-lg">
-              <q-img src="@/assets/mutton-white.jpg" />
+              <q-img src="@/assets/logo.png" style="width: 60%; height: auto;" />
               <div class="col text-h5 text-bold ellipsis">- 後台管理 -</div>
             </div>
           </q-card-section>
@@ -89,6 +89,6 @@ const { form, callCreateFetch } = useCRUD({
 
 <style scoped>
 .bg-page {
-  background-color: #eea264;
+  background-color: #e8ded5;
 }
 </style>

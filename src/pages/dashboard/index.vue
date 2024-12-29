@@ -26,7 +26,6 @@ const list = [
   { label: '原料', color: 'secondary' },
   { label: '商品', color: 'indigo' },
   { label: '訂單', color: 'amber' },
-  { label: '庫存', color: 'lime-9' },
   { label: '報表', color: 'info' },
 ]
 
