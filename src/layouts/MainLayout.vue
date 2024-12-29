@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <HeaderTabs />
-    <q-page-container>
+    <q-page-container class="content-container">
       <router-view v-slot="{ Component, route }">
         <transition name="slide-fade">
           <div :key="route">
@@ -27,5 +27,9 @@ import HeaderTabs from './components/HeaderTabs.vue'
 .slide-fade-leave-to {
   transform: translateY(20px);
   opacity: 0;
+}
+
+.content-container {
+  padding-top: var(--header-tabs-height, 60px);
 }
 </style>

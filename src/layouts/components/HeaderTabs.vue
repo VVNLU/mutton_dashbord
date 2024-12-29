@@ -1,37 +1,40 @@
 <template>
-  <q-tabs class="bg-primary text-white shadow-2">
-    <q-btn flat icon="fa-solid fa-house" @click="dashboard" dense />
-    <q-space />
-    <template v-for="(routeItem, routeIndex) in asyncRoutes" :key="routeIndex">
-      <!-- group 有多個元素，則使用下拉選單 -->
-      <template v-if="routeItem.group && routeItem.group.length > 1">
-        <q-btn-dropdown auto-close stretch flat>
-          <template v-slot:label>
-            <div>
-              <div class="row justify-around items-center no-wrap">
-                <q-icon :name="routeItem.meta.icon" />
+  <div class="fixed-container">
+    <q-tabs shrink class="bg-primary text-white shadow-2">
+      <q-btn flat icon="fa-solid fa-house" @click="dashboard" dense />
+      <q-space />
+      <template v-for="(routeItem, routeIndex) in asyncRoutes" :key="routeIndex">
+        <!-- group 有多個元素，則使用下拉選單 -->
+        <template v-if="routeItem.group && routeItem.group.length > 1">
+          <q-btn-dropdown auto-close stretch flat>
+            <template v-slot:label>
+              <div>
+                <div class="row justify-around items-center no-wrap">
+                  <q-icon :name="routeItem.meta.icon" />
+                </div>
+                <div v-show="!isXs" class="row items-center no-wrap">
+                  {{ routeItem.meta.title }}
+                </div>
               </div>
-              <div v-show="!isXs" class="row items-center no-wrap">
-                {{ routeItem.meta.title }}
-              </div>
-            </div>
-          </template>
-          <q-list>
-            <q-item v-for="(child, childIndex) in routeItem.children" :key="childIndex" clickable
-              @click="navigateTo(child.path)">
-              <q-item-section>{{ child.meta.title }}</q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
+            </template>
+            <q-list>
+              <q-item v-for="(child, childIndex) in routeItem.children" :key="childIndex" clickable
+                @click="navigateTo(child.path)">
+                <q-item-section>{{ child.meta.title }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
+        </template>
+        <!-- group 只有一個，直接渲染標籤 -->
+        <template v-else>
+          <q-route-tab :icon="routeItem.meta.icon" :label="isXs ? '' : routeItem.meta.title" :to="routeItem.path"
+            exact />
+        </template>
       </template>
-      <!-- group 只有一個，直接渲染標籤 -->
-      <template v-else>
-        <q-route-tab :icon="routeItem.meta.icon" :label="isXs ? '' : routeItem.meta.title" :to="routeItem.path" exact />
-      </template>
-    </template>
-    <q-space />
-    <q-btn flat icon="logout" @click="logout" dense />
-  </q-tabs>
+      <q-space />
+      <q-btn flat icon="logout" @click="logout" dense />
+    </q-tabs>
+  </div>
 </template>
 
 <script setup>
@@ -71,3 +74,14 @@ onUnmounted(() => {
   window.removeEventListener('resize', updateIsXs)
 })
 </script>
+
+<style scoped>
+.fixed-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  height: var(--header-tabs-height, 50px)
+}
+</style>
