@@ -61,8 +61,8 @@ export const getData = async (id) => {
     const recordData = docRef.data()
 
     // 獲取原物料詳細資訊
-    if (recordData.items && recordData.items.length > 0) {
-      const categoryDetails = await Promise.all(
+    const categoryDetails = recordData.items.length > 0
+      ? await Promise.all(
         recordData.items.map(async (item) => {
           const recordSnapshot = await getDoc(item.categoryRef)
           return {
@@ -70,13 +70,12 @@ export const getData = async (id) => {
             categoryDetails: recordSnapshot.data()
           }
         })
-      )
-      return {
-        ...recordData,
-        items: categoryDetails
-      }
-    }
+      ) : []
 
+    return {
+      ...recordData,
+      items: categoryDetails
+    }
   } catch (error) {
     console.error('Error getting documents: ', error)
     throw error
