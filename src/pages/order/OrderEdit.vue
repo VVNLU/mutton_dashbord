@@ -73,6 +73,12 @@
                     </span>
                   </template>
                 </q-item-label>
+                <q-item-label v-if="clientData.cancelReason" class="text-negative">
+                  <q-icon name="delete_forever" class="q-pr-xs text-negative" size="1.5em" />
+                  <span class="text-bold">
+                    取消原因：{{ clientData.cancelReason }}
+                  </span>
+                </q-item-label>
               </q-tr>
             </template>
             <template v-slot:top-right>
