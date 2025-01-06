@@ -78,9 +78,9 @@ export default defineComponent({
         align: 'center'
       },
       {
-        name: 'quantity',
+        name: 'materialQuantity',
         label: '數量',
-        field: 'quantity',
+        field: 'materialQuantity',
         align: 'center',
         isPopupEdit: true
       },
@@ -123,7 +123,7 @@ export default defineComponent({
       rows.value = [...rows.value, {
         id: item.id,
         title: item.title,
-        quantity: 0,
+        materialQuantity: 0,
         unit: item.unit,
       }]
     }

@@ -79,9 +79,9 @@ const columns = [
     align: 'left'
   },
   {
-    name: 'quantity',
+    name: 'materialQuantity',
     label: '數量',
-    field: 'quantity',
+    field: 'materialQuantity',
     align: 'left',
     isPopupEdit: true
   },

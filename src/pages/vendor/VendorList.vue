@@ -50,7 +50,6 @@ const switchStyle = ref('gridType')
 
 const columns = [
   { name: 'title', label: '公司名稱', field: 'title', align: 'center' },
-  { name: 'supplies', label: '供應品項', field: 'supplies', align: 'center' },
   { name: 'contact', label: '聯絡人', field: 'contact', align: 'center' },
   { name: 'tel', label: '聯絡電話', field: 'tel', align: 'center' },
   { name: 'address', label: '公司地址', field: 'address', align: 'center' },

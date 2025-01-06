@@ -45,8 +45,8 @@ export const getData = async (id) => {
     const docRef = await getDoc(doc(db, 'material_category', id))
     const categoryData = docRef.data()
 
-    if (categoryData.vendors && categoryData.vendors.length > 0) {
-      const categoriesDetails = await Promise.all(
+    const validVendors = categoryData.vendors?.length > 0
+      ? await Promise.all(
         categoryData.vendors.map(async (item) => {
           const categorySnapshot = await getDoc(item)
           const categoryDetails = categorySnapshot.data()
@@ -58,11 +58,12 @@ export const getData = async (id) => {
             }
           }
         })
-      )
-      return {
-        ...categoryData,
-        vendors: categoriesDetails.filter(Boolean)
-      }
+      ).then((result) => result.filter(Boolean))
+      : []
+
+    return {
+      ...categoryData,
+      vendors: validVendors
     }
   } catch (error) {
     console.error('Error getting documents: ', error)
