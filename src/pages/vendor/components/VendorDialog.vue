@@ -9,10 +9,6 @@
               :required="true" />
           </div>
           <div class="col-xs-12 col-sm-6 col-md-6">
-            <text-input v-model="data.state.supplies" class="full-width" label="供應品項 *" placeholder="請輸入供應品項"
-              :required="true" />
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-6">
             <text-input v-model="data.state.contact" class="full-width" label="聯絡人 *" placeholder="請輸入聯絡人"
               :required="true" />
           </div>
