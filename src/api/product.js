@@ -13,12 +13,13 @@ import {
 
 // 時間戳
 export const addDataWithTimestamp = async (data) => {
+  console.log('data', data)
   try {
-    const processedCategory = data.materialItems.map(item => ({
+    const processedCategory = data.materials.map(item => ({
       materialRef: doc(db, 'material_category', item.id), // 創建 Reference
       materialQuantity: item.materialQuantity,
-      materialTitle: item.materialTitle,
-      materialUnit: item.materialUnit
+      materialTitle: item.title,
+      materialUnit: item.unit
     }))
 
     const docRef = await addDoc(collection(db, 'product'), {
@@ -55,7 +56,7 @@ export const getData = async (id) => {
     if (productData.materials && productData.materials.length > 0) {
       const categoriesDetails = await Promise.all(
         productData.materials.map(async (item) => {
-          const categorySnapshot = await getDoc(item.categoryRef)
+          const categorySnapshot = await getDoc(item.materialRef)
           const categoryDetails = categorySnapshot.data()
           if (categoryDetails !== undefined) {
             return {
@@ -90,7 +91,7 @@ export const getList = async () => {
         if (productData.materials && productData.materials.length > 0) {
           const materialsDetails = await Promise.all(
             productData.materials.map(async (item) => {
-              const productSnapshot = await getDoc(item.categoryRef)
+              const productSnapshot = await getDoc(item.materialRef)
               return {
                 ...item,
                 materialDetails: productSnapshot.data()
@@ -114,15 +115,15 @@ export const getList = async () => {
 // 更新數據
 export const updateData = async (docId, newData) => {
   const processedCategory = newData.materials.map(item => {
-    if (!item.categoryRef) {
+    if (!item.materialRef) {
       return {
-        categoryRef: doc(db, 'material_category', item.id),
-        quantity: item.quantity
+        materialRef: doc(db, 'material_category', item.id),
+        materialQuantity: item.materialQuantity
       }
     } else {
       return {
-        categoryRef: item.categoryRef,
-        quantity: item.quantity
+        materialRef: item.materialRef,
+        materialQuantity: item.materialQuantity
       }
     }
   })
